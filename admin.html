@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>پنل مدیریت</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#5D5CDE',
+                        'dark-bg': '#181818'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Tahoma', sans-serif;
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .slide-down {
+            animation: slideDown 0.3s ease-out;
+        }
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-white dark:bg-dark-bg text-gray-900 dark:text-white transition-colors duration-300">
+
+    <!-- Login Form -->
+    <div id="loginForm" class="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800">
+        <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-2xl w-full max-w-md fade-in">
+            <div class="text-center mb-8">
+                <div class="bg-primary text-white w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-user-shield text-2xl"></i>
+                </div>
+                <h2 class="text-3xl font-bold text-gray-800 dark:text-white">پنل مدیریت</h2>
+                <p class="text-gray-600 dark:text-gray-300 mt-2">وارد حساب خود شوید</p>
+            </div>
+            
+            <form onsubmit="login(event)" class="space-y-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">نام کاربری</label>
+                    <input type="text" id="username" required 
+                           class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-700 dark:text-white text-base"
+                           placeholder="نام کاربری را وارد کنید">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">رمز عبور</label>
+                    <input type="password" id="password" required 
+                           class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-700 dark:text-white text-base"
+                           placeholder="رمز عبور را وارد کنید">
+                </div>
+                
+                <div id="errorMessage" class="text-red-500 text-sm hidden"></div>
+                
+                <button type="submit" 
+                        class="w-full bg-primary text-white py-3 rounded-lg font-semibold hover:bg-purple-700 transition-colors duration-200 transform hover:scale-105">
+                    ورود به سیستم
+                </button>
+            </form>
+            
+            <div class="mt-6 text-center text-sm text-gray-600 dark:text-gray-400">
+                <p>اطلاعات تست:</p>
+                <p>نام کاربری: <span class="font-mono bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">admin</span></p>
+                <p>رمز عبور: <span class="font-mono bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">admin</span></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Dashboard -->
+    <div id="adminDashboard" class="hidden">
+        <!-- Header -->
+        <header class="bg-white dark:bg-gray-800 shadow-lg border-b border-gray-200 dark:border-gray-700">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center h-16">
+                    <div class="flex items-center">
+                        <div class="bg-primary text-white w-10 h-10 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-cog"></i>
+                        </div>
+                        <h1 class="mr-3 text-xl font-bold">پنل مدیریت</h1>
+                    </div>
+                    
+                    <div class="flex items-center space-x-4 space-x-reverse">
+                        <div class="relative">
+                            <button onclick="toggleUserMenu()" class="flex items-center space-x-2 space-x-reverse text-gray-700 dark:text-gray-300 hover:text-primary">
+                                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='16' fill='%235D5CDE'/%3E%3Ctext x='16' y='20' text-anchor='middle' fill='white' font-size='14' font-family='Arial'%3EA%3C/text%3E%3C/svg%3E" 
+                                     alt="Admin" class="w-8 h-8 rounded-full">
+                                <span class="font-medium">مدیر</span>
+                                <i class="fas fa-chevron-down text-sm"></i>
+                            </button>
+                            
+                            <div id="userMenu" class="hidden absolute left-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 slide-down">
+                                <div class="py-2">
+                                    <a href="#" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
+                                        <i class="fas fa-user ml-2"></i>پروفایل
+                                    </a>
+                                    <a href="#" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
+                                        <i class="fas fa-cog ml-2"></i>تنظیمات
+                                    </a>
+                                    <hr class="my-1 border-gray-200 dark:border-gray-700">
+                                    <button onclick="logout()" class="block w-full text-right px-4 py-2 text-sm text-red-600 hover:bg-gray-100 dark:hover:bg-gray-700">
+                                        <i class="fas fa-sign-out-alt ml-2"></i>خروج
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Sidebar -->
+        <div class="flex">
+            <aside class="w-64 bg-gray-50 dark:bg-gray-900 min-h-screen shadow-lg">
+                <nav class="p-4">
+                    <ul class="space-y-2">
+                        <li>
+                            <button onclick="showSection('dashboard')" class="nav-item w-full text-right flex items-center space-x-3 space-x-reverse px-4 py-3 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-white dark:hover:bg-gray-800 hover:text-primary transition-colors duration-200">
+                                <i class="fas fa-tachometer-alt"></i>
+                                <span>داشبورد</span>
+                            </button>
+                        </li>
+                        <li>
+                            <button onclick="showSection('users')" class="nav-item w-full text-right flex items-center space-x-3 space-x-reverse px-4 py-3 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-white dark:hover:bg-gray-800 hover:text-primary transition-colors duration-200">
+                                <i class="fas fa-users"></i>
+                                <span>مدیریت کاربران</span>
+                            </button>
+                        </li>
+                        <li>
+                            <button onclick="showSection('content')" class="nav-item w-full text-right flex items-center space-x-3 space-x-reverse px-4 py-3 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-white dark:hover:bg-gray-800 hover:text-primary transition-colors duration-200">
+                                <i class="fas fa-file-alt"></i>
+                                <span>مدیریت محتوا</span>
+                            </button>
+                        </li>
+                        <li>
+                            <button onclick="showSection('analytics')" class="nav-item w-full text-right flex items-center space-x-3 space-x-reverse px-4 py-3 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-white dark:hover:bg-gray-800 hover:text-primary transition-colors duration-200">
+                                <i class="fas fa-chart-bar"></i>
+                                <span>آمار و گزارشات</span>
+                            </button>
+                        </li>
+                        <li>
+                            <button onclick="showSection('settings')" class="nav-item w-full text-right flex items-center space-x-3 space-x-reverse px-4 py-3 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-white dark:hover:bg-gray-800 hover:text-primary transition-colors duration-200">
+                                <i class="fas fa-cog"></i>
+                                <span>تنظیمات</span>
+                            </button>
+                        </li>
+                    </ul>
+                </nav>
+            </aside>
+
+            <!-- Main Content -->
+            <main class="flex-1 p-6">
+                <!-- Dashboard Section -->
+                <div id="dashboardSection" class="section">
+                    <div class="mb-6">
+                        <h2 class="text-2xl font-bold text-gray-800 dark:text-white">داشبورد</h2>
+                        <p class="text-gray-600 dark:text-gray-400">نمای کلی از سیستم</p>
+                    </div>
+
+                    <!-- Stats Cards -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                        <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700">
+                            <div class="flex items-center">
+                                <div class="bg-blue-100 dark:bg-blue-900 p-3 rounded-lg">
+                                    <i class="fas fa-users text-blue-600 dark:text-blue-400 text-xl"></i>
+                                </div>
+                                <div class="mr-4">
+                                    <p class="text-sm text-gray-600 dark:text-gray-400">کل کاربران</p>
+                                    <p class="text-2xl font-bold text-gray-800 dark:text-white">1,234</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700">
+                            <div class="flex items-center">
+                                <div class="bg-green-100 dark:bg-green-900 p-3 rounded-lg">
+                                    <i class="fas fa-chart-line text-green-600 dark:text-green-400 text-xl"></i>
+                                </div>
+                                <div class="mr-4">
+                                    <p class="text-sm text-gray-600 dark:text-gray-400">درآمد ماهیانه</p>
+                                    <p class="text-2xl font-bold text-gray-800 dark:text-white">$12,345</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700">
+                            <div class="flex items-center">
+                                <div class="bg-yellow-100 dark:bg-yellow-900 p-3 rounded-lg">
+                                    <i class="fas fa-shopping-cart text-yellow-600 dark:text-yellow-400 text-xl"></i>
+                                </div>
+                                <div class="mr-4">
+                                    <p class="text-sm text-gray-600 dark:text-gray-400">سفارشات جدید</p>
+                                    <p class="text-2xl font-bold text-gray-800 dark:text-white">89</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700">
+                            <div class="flex items-center">
+                                <div class="bg-red-100 dark:bg-red-900 p-3 rounded-lg">
+                                    <i class="fas fa-exclamation-triangle text-red-600 dark:text-red-400 text-xl"></i>
+                                </div>
+                                <div class="mr-4">
+                                    <p class="text-sm text-gray-600 dark:text-gray-400">مسائل فوری</p>
+                                    <p class="text-2xl font-bold text-gray-800 dark:text-white">3</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Activity -->
+                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700">
+                        <div class="p-6 border-b border-gray-200 dark:border-gray-700">
+                            <h3 class="text-lg font-semibold text-gray-800 dark:text-white">فعالیت‌های اخیر</h3>
+                        </div>
+                        <div class="p-6">
+                            <div class="space-y-4">
+                                <div class="flex items-center space-x-4 space-x-reverse">
+                                    <div class="bg-green-100 dark:bg-green-900 p-2 rounded-full">
+                                        <i class="fas fa-user-plus text-green-600 dark:text-green-400"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-gray-800 dark:text-white">کاربر جدید ثبت‌نام کرد</p>
+                                        <p class="text-sm text-gray-600 dark:text-gray-400">5 دقیقه پیش</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center space-x-4 space-x-reverse">
+                                    <div class="bg-blue-100 dark:bg-blue-900 p-2 rounded-full">
+                                        <i class="fas fa-shopping-cart text-blue-600 dark:text-blue-400"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-gray-800 dark:text-white">سفارش جدید دریافت شد</p>
+                                        <p class="text-sm text-gray-600 dark:text-gray-400">10 دقیقه پیش</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center space-x-4 space-x-reverse">
+                                    <div class="bg-yellow-100 dark:bg-yellow-900 p-2 rounded-full">
+                                        <i class="fas fa-edit text-yellow-600 dark:text-yellow-400"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-gray-800 dark:text-white">محتوای جدید به‌روزرسانی شد</p>
+                                        <p class="text-sm text-gray-600 dark:text-gray-400">1 ساعت پیش</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Users Section -->
+                <div id="usersSection" class="section hidden">
+                    <div class="mb-6">
+                        <h2 class="text-2xl font-bold text-gray-800 dark:text-white">مدیریت کاربران</h2>
+                        <p class="text-gray-600 dark:text-gray-400">مدیریت و نظارت بر کاربران سیستم</p>
+                    </div>
+
+                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700">
+                        <div class="p-6 border-b border-gray-200 dark:border-gray-700">
+                            <div class="flex justify-between items-center">
+                                <h3 class="text-lg font-semibold text-gray-800 dark:text-white">لیست کاربران</h3>
+                                <button class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors duration-200">
+                                    <i class="fas fa-plus ml-2"></i>افزودن کاربر
+                                </button>
+                            </div>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full">
+                                <thead class="bg-gray-50 dark:bg-gray-700">
+                                    <tr>
+                                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">نام</th>
+                                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">ایمیل</th>
+                                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">نقش</th>
+                                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">وضعیت</th>
+                                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">عملیات</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">احمد رضایی</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">ahmad@example.com</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">کاربر</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">فعال</span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                            <button class="text-blue-600 hover:text-blue-900 ml-3">ویرایش</button>
+                                            <button class="text-red-600 hover:text-red-900">حذف</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">مریم احمدی</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">maryam@example.com</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">مدیر</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">فعال</span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                            <button class="text-blue-600 hover:text-blue-900 ml-3">ویرایش</button>
+                                            <button class="text-red-600 hover:text-red-900">حذف</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Content Section -->
+                <div id="contentSection" class="section hidden">
+                    <div class="mb-6">
+                        <h2 class="text-2xl font-bold text-gray-800 dark:text-white">مدیریت محتوا</h2>
+                        <p class="text-gray-600 dark:text-gray-400">مدیریت مقالات و محتواهای سایت</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <div class="lg:col-span-2">
+                            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700">
+                                <div class="p-6 border-b border-gray-200 dark:border-gray-700">
+                                    <h3 class="text-lg font-semibold text-gray-800 dark:text-white">مقالات اخیر</h3>
+                                </div>
+                                <div class="p-6">
+                                    <div class="space-y-4">
+                                        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+                                            <h4 class="font-semibold text-gray-800 dark:text-white">آموزش جاوااسکریپت مقدماتی</h4>
+                                            <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">منتشر شده در 2 روز پیش</p>
+                                            <div class="flex justify-between items-center mt-3">
+                                                <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">آموزشی</span>
+                                                <div class="space-x-2 space-x-reverse">
+                                                    <button class="text-blue-600 hover:text-blue-800 text-sm">ویرایش</button>
+                                                    <button class="text-red-600 hover:text-red-800 text-sm">حذف</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+                                            <h4 class="font-semibold text-gray-800 dark:text-white">راهنمای طراحی UI/UX</h4>
+                                            <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">منتشر شده در 5 روز پیش</p>
+                                            <div class="flex justify-between items-center mt-3">
+                                                <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">طراحی</span>
+                                                <div class="space-x-2 space-x-reverse">
+                                                    <button class="text-blue-600 hover:text-blue-800 text-sm">ویرایش</button>
+                                                    <button class="text-red-600 hover:text-red-800 text-sm">حذف</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700">
+                                <div class="p-6 border-b border-gray-200 dark:border-gray-700">
+                                    <h3 class="text-lg font-semibold text-gray-800 dark:text-white">آمار محتوا</h3>
+                                </div>
+                                <div class="p-6">
+                                    <div class="space-y-4">
+                                        <div class="text-center">
+                                            <div class="text-2xl font-bold text-primary">45</div>
+                                            <div class="text-sm text-gray-600 dark:text-gray-400">کل مقالات</div>
+                                        </div>
+                                        <div class="text-center">
+                                            <div class="text-2xl font-bold text-green-600">12</div>
+                                            <div class="text-sm text-gray-600 dark:text-gray-400">منتشر شده این ماه</div>
+                                        </div>
+                                        <div class="text-center">
+                                            <div class="text-2xl font-bold text-yellow-600">8</div>
+                                            <div class="text-sm text-gray-600 dark:text-gray-400">در انتظار بررسی</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Analytics Section -->
+                <div id="analyticsSection" class="section hidden">
+                    <div class="mb-6">
+                        <h2 class="text-2xl font-bold text-gray-800 dark:text-white">آمار و گزارشات</h2>
+                        <p class="text-gray-600 dark:text-gray-400">آمار مفصل از عملکرد سیستم</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700">
+                            <div class="p-6 border-b border-gray-200 dark:border-gray-700">
+                                <h3 class="text-lg font-semibold text-gray-800 dark:text-white">بازدیدکنندگان ماهیانه</h3>
+                            </div>
+                            <div class="p-6">
+                                <div class="h-64 flex items-center justify-center bg-gray-50 dark:bg-gray-700 rounded-lg">
+                                    <p class="text-gray-500 dark:text-gray-400">نمودار آماری اینجا نمایش داده می‌شود</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700">
+                            <div class="p-6 border-b border-gray-200 dark:border-gray-700">
+                                <h3 class="text-lg font-semibold text-gray-800 dark:text-white">درآمد هفتگی</h3>
+                            </div>
+                            <div class="p-6">
+                                <div class="h-64 flex items-center justify-center bg-gray-50 dark:bg-gray-700 rounded-lg">
+                                    <p class="text-gray-500 dark:text-gray-400">نمودار درآمد اینجا نمایش داده می‌شود</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Settings Section -->
+                <div id="settingsSection" class="section hidden">
+                    <div class="mb-6">
+                        <h2 class="text-2xl font-bold text-gray-800 dark:text-white">تنظیمات</h2>
+                        <p class="text-gray-600 dark:text-gray-400">تنظیمات عمومی سیستم</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700">
+                            <div class="p-6 border-b border-gray-200 dark:border-gray-700">
+                                <h3 class="text-lg font-semibold text-gray-800 dark:text-white">تنظیمات عمومی</h3>
+                            </div>
+                            <div class="p-6 space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">نام سایت</label>
+                                    <input type="text" value="سایت من" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-700 dark:text-white text-base">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">توضیحات</label>
+                                    <textarea rows="3" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-700 dark:text-white text-base">توضیحات سایت...</textarea>
+                                </div>
+                                <button class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors duration-200">
+                                    ذخیره تغییرات
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700">
+                            <div class="p-6 border-b border-gray-200 dark:border-gray-700">
+                                <h3 class="text-lg font-semibold text-gray-800 dark:text-white">تنظیمات امنیتی</h3>
+                            </div>
+                            <div class="p-6 space-y-4">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-gray-700 dark:text-gray-300">احراز هویت دو مرحله‌ای</span>
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" class="sr-only peer">
+                                        <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                                    </label>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-gray-700 dark:text-gray-300">اعلان‌های ایمیلی</span>
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" checked class="sr-only peer">
+                                        <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                                    </label>
+                                </div>
+                                <button class="w-full bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-yellow-600 transition-colors duration-200">
+                                    تغییر رمز عبور
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        // Dark mode setup
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        }
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+            if (event.matches) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        });
+
+        // Global state
+        let isLoggedIn = false;
+        let currentUser = null;
+
+        // Login function
+        function login(event) {
+            event.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const errorMessage = document.getElementById('errorMessage');
+            
+            // Simple authentication (username: admin, password: admin)
+            if (username === 'admin' && password === 'admin') {
+                isLoggedIn = true;
+                currentUser = { username: 'admin', role: 'مدیر' };
+                
+                // Hide login form and show dashboard
+                document.getElementById('loginForm').classList.add('hidden');
+                document.getElementById('adminDashboard').classList.remove('hidden');
+                
+                // Show dashboard section by default
+                showSection('dashboard');
+                
+                errorMessage.classList.add('hidden');
+            } else {
+                errorMessage.textContent = 'نام کاربری یا رمز عبور اشتباه است';
+                errorMessage.classList.remove('hidden');
+            }
+        }
+
+        // Logout function
+        function logout() {
+            isLoggedIn = false;
+            currentUser = null;
+            
+            // Hide dashboard and show login form
+            document.getElementById('adminDashboard').classList.add('hidden');
+            document.getElementById('loginForm').classList.remove('hidden');
+            
+            // Clear form
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+            
+            // Hide user menu
+            document.getElementById('userMenu').classList.add('hidden');
+        }
+
+        // Toggle user menu
+        function toggleUserMenu() {
+            const userMenu = document.getElementById('userMenu');
+            userMenu.classList.toggle('hidden');
+        }
+
+        // Show section function
+        function showSection(sectionName) {
+            // Hide all sections
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(section => {
+                section.classList.add('hidden');
+            });
+            
+            // Remove active class from all nav items
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach(item => {
+                item.classList.remove('bg-white', 'dark:bg-gray-800', 'text-primary');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionName + 'Section').classList.remove('hidden');
+            
+            // Add active class to clicked nav item
+            event.target.closest('.nav-item').classList.add('bg-white', 'dark:bg-gray-800', 'text-primary');
+        }
+
+        // Close user menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const userMenu = document.getElementById('userMenu');
+            const userMenuButton = event.target.closest('button');
+            
+            if (!userMenuButton || !userMenuButton.onclick || userMenuButton.onclick.toString().indexOf('toggleUserMenu') === -1) {
+                userMenu.classList.add('hidden');
+            }
+        });
+
+        // Auto-focus on username input
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('username').focus();
+        });
+    </script>
+</body>
+</html>
