@@ -1219,6 +1219,50 @@
             white-space: nowrap;
             font-family: 'Vazir', 'Vazir-Local', 'Tahoma', 'Arial', sans-serif !important;
         }
+
+        /* Inbound Status Display */
+        .inbound-status {
+            background: var(--bg-secondary);
+            padding: 16px;
+            border-radius: 12px;
+            margin: 16px 0;
+            border: 1px solid var(--border-light);
+        }
+
+        .inbound-status h5 {
+            color: var(--text-primary);
+            margin-bottom: 12px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .inbound-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .inbound-tag {
+            background: var(--primary-color);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 16px;
+            font-size: 12px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .inbound-tag.loading {
+            background: var(--warning-color);
+        }
+
+        .inbound-tag.none {
+            background: var(--danger-color);
+        }
         
         /* Mobile Header */
         .mobile-header {
@@ -1359,6 +1403,14 @@
         
         .notification.error {
             background: var(--danger-color);
+        }
+
+        .notification.warning {
+            background: var(--warning-color);
+        }
+
+        .notification.info {
+            background: var(--info-color);
         }
         
         @keyframes slideInRight {
@@ -1708,6 +1760,20 @@
                 font-size: 12px;
                 margin: 0 8px;
             }
+
+            .inbound-status {
+                padding: 12px;
+                margin: 12px 0;
+            }
+
+            .inbound-list {
+                gap: 6px;
+            }
+
+            .inbound-tag {
+                padding: 3px 8px;
+                font-size: 11px;
+            }
         }
 
         @media (min-width: 769px) {
@@ -2019,6 +2085,16 @@
                     </div>
                 </div>
                 
+                <!-- Inbound Status Display -->
+                <div id="inboundStatus" class="inbound-status">
+                    <h5><i class="fas fa-server"></i> وضعیت اینباندها</h5>
+                    <div id="inboundList" class="inbound-list">
+                        <div class="inbound-tag loading">
+                            <i class="fas fa-sync-alt"></i> در حال بارگذاری...
+                        </div>
+                    </div>
+                </div>
+                
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 24px;">
                     <div class="chart-container">
                         <h4 class="chart-title">وضعیت کاربران</h4>
@@ -2064,6 +2140,16 @@
                         <i class="fas fa-sync-alt"></i>
                         بروزرسانی
                     </button>
+                </div>
+                
+                <!-- Inbound Status for New Users -->
+                <div id="addUserInboundStatus" class="inbound-status">
+                    <h5><i class="fas fa-server"></i> اینباندهای فعال برای کاربر جدید</h5>
+                    <div id="addUserInboundList" class="inbound-list">
+                        <div class="inbound-tag loading">
+                            <i class="fas fa-sync-alt"></i> در حال بارگذاری...
+                        </div>
+                    </div>
                 </div>
                 
                 <form id="addUserForm">
@@ -2793,6 +2879,7 @@
         let loginAttempts = 0;
         let sessionFingerprint = '';
         let adminInbounds = []; // Store Admin user inbounds
+        let availableInbounds = []; // Store all available inbounds
         let sectionsLoaded = {
             dashboard: false,
             users: false,
@@ -2871,6 +2958,9 @@
             if (expireDateInput) {
                 expireDateInput.value = expireDate.toISOString().split('T')[0];
             }
+            
+            // Reload inbounds
+            loadAdminInbounds();
             
             showNotification('فرم افزودن کاربر بازنشانی شد! 🔄', 'success');
         }
@@ -2959,6 +3049,7 @@
                             showPanel();
                             loadDashboardData();
                             startAutoUpdate();
+                            loadAdminInbounds();
                         } else {
                             logout();
                         }
@@ -3111,7 +3202,7 @@
                             loadDashboardData();
                             startAutoUpdate();
                             
-                            // Load Admin user inbounds
+                            // Load inbounds for new users
                             await loadAdminInbounds();
                             
                             showNotification('ورود موفقیت‌آمیز بود! 🎉', 'success');
@@ -3139,15 +3230,155 @@
             hideLoading();
         }
 
-        // Load Admin user inbounds to use for new users
+        // Enhanced Inbound Management
         async function loadAdminInbounds() {
             try {
+                console.log('🔄 شروع بارگذاری اینباندها...');
+                updateInboundDisplay('loading');
+                
+                // First try to get Admin user inbounds
                 const adminUser = await apiCall('/user/Admin');
-                if (adminUser && adminUser.inbounds && Array.isArray(adminUser.inbounds)) {
+                console.log('📊 داده‌های کاربر Admin:', adminUser);
+                
+                if (adminUser && adminUser.inbounds && Array.isArray(adminUser.inbounds) && adminUser.inbounds.length > 0) {
                     adminInbounds = adminUser.inbounds;
+                    console.log('✅ اینباندهای Admin بارگذاری شد:', adminInbounds);
+                    showNotification(`${adminInbounds.length} اینباند از Admin بارگذاری شد`, 'success');
+                    updateInboundDisplay('admin', adminInbounds);
+                    return;
                 }
+                
+                console.log('⚠️ اینباندی در کاربر Admin یافت نشد، تلاش برای دریافت اینباندهای سیستم...');
+                
+                // If Admin user has no inbounds, try to get system inbounds
+                const systemInbounds = await apiCall('/inbounds');
+                console.log('🔧 اینباندهای سیستم:', systemInbounds);
+                
+                if (systemInbounds && Array.isArray(systemInbounds) && systemInbounds.length > 0) {
+                    // Filter active inbounds and take first few
+                    availableInbounds = systemInbounds.filter(inbound => 
+                        inbound && inbound.enable !== false && inbound.tag
+                    ).slice(0, 5);
+                    
+                    if (availableInbounds.length > 0) {
+                        // Convert to Admin format
+                        adminInbounds = availableInbounds.map(inbound => ({
+                            tag: inbound.tag,
+                            protocol: inbound.protocol || 'vless'
+                        }));
+                        
+                        console.log('🚀 اینباندهای سیستم تبدیل شد:', adminInbounds);
+                        showNotification(`${adminInbounds.length} اینباند سیستم استفاده شد`, 'info');
+                        updateInboundDisplay('system', adminInbounds);
+                        return;
+                    }
+                }
+                
+                console.log('❌ هیچ اینباندی یافت نشد، استفاده از اینباندهای پیش‌فرض...');
+                
+                // Last resort: use default inbounds
+                adminInbounds = [
+                    { tag: "REALITY", protocol: "vless" },
+                    { tag: "Websocket", protocol: "vless" },
+                    { tag: "gRPC", protocol: "vless" }
+                ];
+                
+                console.log('🔄 اینباندهای پیش‌فرض تنظیم شد:', adminInbounds);
+                showNotification('اینباندهای پیش‌فرض استفاده شد', 'warning');
+                updateInboundDisplay('default', adminInbounds);
+                
             } catch (error) {
-                console.error('Failed to load Admin inbounds');
+                console.error('❌ خطا در بارگذاری اینباندها:', error);
+                
+                // Emergency fallback
+                adminInbounds = [
+                    { tag: "REALITY", protocol: "vless" },
+                    { tag: "Websocket", protocol: "vless" },
+                    { tag: "gRPC", protocol: "vless" }
+                ];
+                
+                showNotification('خطا در بارگذاری اینباندها - پیش‌فرض استفاده شد', 'error');
+                updateInboundDisplay('error', adminInbounds);
+            }
+        }
+
+        function updateInboundDisplay(status, inbounds = []) {
+            // Update dashboard inbound display
+            const inboundList = document.getElementById('inboundList');
+            if (inboundList) {
+                updateInboundList(inboundList, status, inbounds);
+            }
+            
+            // Update add user section inbound display
+            const addUserInboundList = document.getElementById('addUserInboundList');
+            if (addUserInboundList) {
+                updateInboundList(addUserInboundList, status, inbounds);
+            }
+        }
+
+        function updateInboundList(container, status, inbounds = []) {
+            if (!container) return;
+            
+            container.innerHTML = '';
+            
+            switch (status) {
+                case 'loading':
+                    const loadingTag = document.createElement('div');
+                    loadingTag.className = 'inbound-tag loading';
+                    loadingTag.innerHTML = '<i class="fas fa-sync-alt"></i> در حال بارگذاری...';
+                    container.appendChild(loadingTag);
+                    break;
+                    
+                case 'admin':
+                    inbounds.forEach(inbound => {
+                        const tag = document.createElement('div');
+                        tag.className = 'inbound-tag';
+                        tag.innerHTML = `<i class="fas fa-server"></i> ${Security.sanitizeHtml(inbound.tag)} (${Security.sanitizeHtml(inbound.protocol || 'vless')})`;
+                        container.appendChild(tag);
+                    });
+                    break;
+                    
+                case 'system':
+                    inbounds.forEach(inbound => {
+                        const tag = document.createElement('div');
+                        tag.className = 'inbound-tag';
+                        tag.style.background = 'var(--info-color)';
+                        tag.innerHTML = `<i class="fas fa-cog"></i> ${Security.sanitizeHtml(inbound.tag)} (${Security.sanitizeHtml(inbound.protocol || 'vless')})`;
+                        container.appendChild(tag);
+                    });
+                    break;
+                    
+                case 'default':
+                    inbounds.forEach(inbound => {
+                        const tag = document.createElement('div');
+                        tag.className = 'inbound-tag';
+                        tag.style.background = 'var(--warning-color)';
+                        tag.innerHTML = `<i class="fas fa-exclamation-triangle"></i> ${Security.sanitizeHtml(inbound.tag)} (${Security.sanitizeHtml(inbound.protocol || 'vless')})`;
+                        container.appendChild(tag);
+                    });
+                    break;
+                    
+                case 'error':
+                    const errorTag = document.createElement('div');
+                    errorTag.className = 'inbound-tag none';
+                    errorTag.innerHTML = '<i class="fas fa-times"></i> خطا در بارگذاری';
+                    container.appendChild(errorTag);
+                    
+                    if (inbounds.length > 0) {
+                        inbounds.forEach(inbound => {
+                            const tag = document.createElement('div');
+                            tag.className = 'inbound-tag none';
+                            tag.innerHTML = `<i class="fas fa-exclamation-triangle"></i> ${Security.sanitizeHtml(inbound.tag)} (اضطراری)`;
+                            container.appendChild(tag);
+                        });
+                    }
+                    break;
+                    
+                default:
+                    const defaultTag = document.createElement('div');
+                    defaultTag.className = 'inbound-tag none';
+                    defaultTag.innerHTML = '<i class="fas fa-question"></i> وضعیت نامشخص';
+                    container.appendChild(defaultTag);
             }
         }
 
@@ -3165,6 +3396,7 @@
             authToken = '';
             currentUsername = '';
             adminInbounds = [];
+            availableInbounds = [];
             sectionsLoaded = { dashboard: false, users: false, traffic: false, analytics: false, support: false };
             
             // Clear any sensitive form data
@@ -4412,7 +4644,7 @@
             hideMessage('editUserSuccess');
         }
 
-        // Enhanced Add User Functions (افزودن کاربر)
+        // Enhanced Add User Functions (افزودن کاربر) with Improved Inbound Integration
         async function handleAddUser(e) {
             e.preventDefault();
             
@@ -4456,6 +4688,18 @@
                 return;
             }
             
+            // Check if inbounds are available
+            if (!adminInbounds || adminInbounds.length === 0) {
+                showMessage('addUserError', 'هیچ اینباندی یافت نشد - لطفاً با پشتیبانی تماس بگیرید');
+                console.log('🚨 اینباند موجود نیست، تلاش برای بارگذاری مجدد...');
+                await loadAdminInbounds();
+                
+                if (!adminInbounds || adminInbounds.length === 0) {
+                    showMessage('addUserError', 'امکان ایجاد کاربر بدون اینباند وجود ندارد');
+                    return;
+                }
+            }
+            
             const dataLimit = dataLimitGB * 1024 * 1024 * 1024;
             const expireDate = new Date(expireDateStr);
             const expire = Math.floor(expireDate.getTime() / 1000);
@@ -4469,7 +4713,9 @@
             
             showLoading('در حال افزودن کاربر...');
             
-            // Create user data with VLESS protocol and Admin inbounds
+            // Create comprehensive user data with all inbounds
+            console.log('🔧 ایجاد کاربر با اینباندهای:', adminInbounds);
+            
             const userData = {
                 username,
                 data_limit: dataLimit,
@@ -4477,14 +4723,20 @@
                 proxies: {
                     vless: {}
                 },
-                inbounds: adminInbounds.length > 0 ? adminInbounds : undefined
+                inbounds: adminInbounds.map(inbound => ({
+                    tag: inbound.tag,
+                    protocol: inbound.protocol || 'vless'
+                }))
             };
+            
+            console.log('📤 ارسال داده‌های کاربر:', userData);
             
             try {
                 const result = await apiCall('/user', 'POST', userData);
+                console.log('📨 پاسخ سرور:', result);
                 
                 if (result) {
-                    showMessage('addUserSuccess', `کاربر ${Security.sanitizeHtml(username)} با موفقیت اضافه شد (پروتکل VLESS)`);
+                    showMessage('addUserSuccess', `کاربر ${Security.sanitizeHtml(username)} با موفقیت اضافه شد (${adminInbounds.length} اینباند)`);
                     
                     const addUserForm = document.getElementById('addUserForm');
                     if (addUserForm) addUserForm.reset();
@@ -4494,15 +4746,20 @@
                     newExpireDate.setDate(newExpireDate.getDate() + 30);
                     expireDateInput.value = newExpireDate.toISOString().split('T')[0];
                     
-                    await showNewUserConfigs(username);
+                    // Show configurations with delay to ensure user is created
+                    setTimeout(async () => {
+                        await showNewUserConfigs(username);
+                    }, 1000);
+                    
                     await loadUsers(); // Refresh users list
                     
-                    showNotification(`کاربر ${Security.sanitizeHtml(username)} با پروتکل VLESS اضافه شد`, 'success');
+                    showNotification(`✅ کاربر ${Security.sanitizeHtml(username)} با ${adminInbounds.length} اینباند اضافه شد`, 'success');
                 } else {
-                    showMessage('addUserError', 'خطا در افزودن کاربر');
+                    showMessage('addUserError', 'خطا در افزودن کاربر - لطفاً دوباره تلاش کنید');
                 }
             } catch (error) {
-                showMessage('addUserError', 'خطا در افزودن کاربر');
+                console.error('❌ خطا در افزودن کاربر:', error);
+                showMessage('addUserError', 'خطا در ارتباط با سرور - لطفاً دوباره تلاش کنید');
             }
             
             setLoadingState('addUserForm', 'addUserBtnText', 'addUserSpinner', false);
@@ -4513,14 +4770,46 @@
             if (!Security.validateInput(username, 'username')) return;
             
             try {
+                console.log('🔍 دریافت کانفیگ کاربر:', username);
                 const userData = await apiCall(`/user/${encodeURIComponent(username)}`);
-                if (!userData) return;
+                console.log('📋 اطلاعات کاربر دریافت شده:', userData);
+                
+                if (!userData) {
+                    console.warn('⚠️ اطلاعات کاربر دریافت نشد');
+                    return;
+                }
                 
                 const configsContainer = document.getElementById('newUserConfigs');
                 if (!configsContainer) return;
                 
                 configsContainer.innerHTML = '';
                 
+                // Show inbound information
+                if (adminInbounds && adminInbounds.length > 0) {
+                    const inboundInfo = document.createElement('div');
+                    inboundInfo.className = 'inbound-status';
+                    inboundInfo.style.marginBottom = '16px';
+                    
+                    const inboundTitle = document.createElement('h5');
+                    inboundTitle.innerHTML = '<i class="fas fa-server"></i> اینباندهای استفاده شده';
+                    inboundTitle.style.marginBottom = '12px';
+                    
+                    const inboundList = document.createElement('div');
+                    inboundList.className = 'inbound-list';
+                    
+                    adminInbounds.forEach(inbound => {
+                        const tag = document.createElement('div');
+                        tag.className = 'inbound-tag';
+                        tag.innerHTML = `<i class="fas fa-check"></i> ${Security.sanitizeHtml(inbound.tag)} (${Security.sanitizeHtml(inbound.protocol || 'vless')})`;
+                        inboundList.appendChild(tag);
+                    });
+                    
+                    inboundInfo.appendChild(inboundTitle);
+                    inboundInfo.appendChild(inboundList);
+                    configsContainer.appendChild(inboundInfo);
+                }
+                
+                // Show subscription URL
                 if (userData.subscription_url) {
                     const subDiv = document.createElement('div');
                     subDiv.className = 'config-display';
@@ -4541,6 +4830,7 @@
                     configsContainer.appendChild(subDiv);
                 }
                 
+                // Show individual configurations
                 if (userData.links && Array.isArray(userData.links) && userData.links.length > 0) {
                     userData.links.forEach((config, index) => {
                         const protocol = Security.sanitizeHtml(config.split('://')[0].toUpperCase());
@@ -4563,13 +4853,35 @@
                         configDiv.appendChild(configText);
                         configsContainer.appendChild(configDiv);
                     });
+                    
+                    console.log(`✅ ${userData.links.length} کانفیگ نمایش داده شد`);
+                } else {
+                    console.warn('⚠️ هیچ کانفیگی یافت نشد');
+                    const noConfigMsg = Security.safeCreateElement('p', 'در حال ایجاد کانفیگ‌ها... لطفاً چند لحظه صبر کنید');
+                    noConfigMsg.style.cssText = 'text-align: center; color: var(--text-muted); padding: 20px; font-style: italic;';
+                    configsContainer.appendChild(noConfigMsg);
+                    
+                    // Try to reload configs after a delay
+                    setTimeout(() => {
+                        showNewUserConfigs(username);
+                    }, 3000);
                 }
                 
                 const userCreationResult = document.getElementById('userCreationResult');
                 if (userCreationResult) userCreationResult.classList.remove('hidden');
                 
             } catch (error) {
-                console.error('Error showing configs');
+                console.error('❌ خطا در نمایش کانفیگ‌ها:', error);
+                
+                const configsContainer = document.getElementById('newUserConfigs');
+                if (configsContainer) {
+                    const errorMsg = Security.safeCreateElement('p', 'خطا در دریافت کانفیگ‌ها - لطفاً از بخش "کاربران" مشاهده کنید');
+                    errorMsg.style.cssText = 'text-align: center; color: var(--danger-color); padding: 20px;';
+                    configsContainer.appendChild(errorMsg);
+                    
+                    const userCreationResult = document.getElementById('userCreationResult');
+                    if (userCreationResult) userCreationResult.classList.remove('hidden');
+                }
             }
         }
 
