@@ -94,7 +94,7 @@
         .fa-telegram:before, .fab.fa-telegram:before { content: "\f2c6" !important; }
         .fa-exclamation-circle:before, .fas.fa-exclamation-circle:before { content: "\f06a" !important; }
         .fa-exclamation-triangle:before, .fas.fa-exclamation-triangle:before { content: "\f071" !important; }
-        .fa-ticket-alt:before, .fas.fa-ticket-alt:before { content: "\f3ff" !important; }
+        .fa-headset:before, .fas.fa-headset:before { content: "\f590" !important; }
         .fa-paper-plane:before, .fas.fa-paper-plane:before { content: "\f1d8" !important; }
         .fa-clock:before, .fas.fa-clock:before { content: "\f017" !important; }
         .fa-envelope:before, .fas.fa-envelope:before { content: "\f0e0" !important; }
@@ -1219,120 +1219,6 @@
             white-space: nowrap;
             font-family: 'Vazir', 'Vazir-Local', 'Tahoma', 'Arial', sans-serif !important;
         }
-
-        /* Ticket Styles */
-        .ticket-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 16px;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .ticket-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 4px;
-            height: 100%;
-            background: linear-gradient(135deg, var(--info-color), var(--primary-color));
-        }
-
-        .ticket-card:hover {
-            box-shadow: var(--shadow-md);
-            transform: translateY(-2px);
-        }
-
-        .ticket-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 12px;
-            flex-wrap: wrap;
-            gap: 12px;
-        }
-
-        .ticket-title {
-            font-size: 16px;
-            font-weight: 600;
-            color: var(--text-primary);
-            margin: 0;
-            font-family: 'Vazir', 'Vazir-Local', 'Tahoma', 'Arial', sans-serif !important;
-        }
-
-        .ticket-meta {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-size: 12px;
-            color: var(--text-secondary);
-        }
-
-        .ticket-content {
-            color: var(--text-secondary);
-            line-height: 1.6;
-            margin-bottom: 16px;
-            font-family: 'Vazir', 'Vazir-Local', 'Tahoma', 'Arial', sans-serif !important;
-        }
-
-        .ticket-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 12px;
-        }
-
-        .ticket-actions {
-            display: flex;
-            gap: 8px;
-        }
-
-        .ticket-form {
-            background: var(--bg-secondary);
-            padding: 20px;
-            border-radius: 12px;
-            margin-bottom: 24px;
-        }
-
-        .ticket-form-title {
-            color: var(--text-primary);
-            font-size: 18px;
-            font-weight: 600;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-family: 'Vazir', 'Vazir-Local', 'Tahoma', 'Arial', sans-serif !important;
-        }
-
-        .message-input {
-            width: 100%;
-            min-height: 120px;
-            padding: 12px;
-            border: 2px solid var(--border-color);
-            border-radius: 8px;
-            font-size: 14px;
-            background: var(--card-bg);
-            color: var(--text-primary);
-            transition: all 0.3s ease;
-            resize: vertical;
-            font-family: 'Vazir', 'Vazir-Local', 'Tahoma', 'Arial', sans-serif !important;
-        }
-
-        .message-input:focus {
-            outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 4px rgba(44, 62, 80, 0.1);
-        }
-
-        .message-input::placeholder {
-            color: var(--text-muted);
-        }
         
         /* Mobile Header */
         .mobile-header {
@@ -1795,51 +1681,6 @@
                 box-sizing: border-box;
             }
 
-            .message-input {
-                font-size: 14px;
-                padding: 10px 12px;
-                min-height: 100px;
-            }
-
-            .ticket-card {
-                padding: 16px;
-                margin-bottom: 12px;
-            }
-
-            .ticket-form {
-                padding: 16px;
-                margin-bottom: 16px;
-            }
-
-            .ticket-header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 8px;
-            }
-
-            .ticket-title {
-                font-size: 14px;
-            }
-
-            .ticket-meta {
-                font-size: 11px;
-            }
-
-            .ticket-content {
-                font-size: 13px;
-            }
-
-            .ticket-footer {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 8px;
-            }
-
-            .ticket-actions {
-                width: 100%;
-                justify-content: space-between;
-            }
-
             div[style*="display: flex"] {
                 flex-wrap: wrap;
                 gap: 6px;
@@ -1952,22 +1793,6 @@
                 font-size: 11px;
                 margin: 0 4px;
             }
-
-            .ticket-card {
-                padding: 12px;
-            }
-
-            .ticket-form {
-                padding: 12px;
-            }
-
-            .ticket-title {
-                font-size: 13px;
-            }
-
-            .ticket-form-title {
-                font-size: 16px;
-            }
         }
 
         /* Icon Backup System - If Font Awesome fails, show Unicode */
@@ -1990,10 +1815,7 @@
             .fa-moon:before { content: "🌙"; }
             .fa-server:before { content: "🖥️"; }
             .fa-bars:before { content: "☰"; }
-            .fa-ticket-alt:before { content: "🎫"; }
-            .fa-paper-plane:before { content: "✈️"; }
-            .fa-clock:before { content: "🕐"; }
-            .fa-envelope:before { content: "✉️"; }
+            .fa-headset:before { content: "🎧"; }
         }
 
         /* Force Icon Display */
@@ -2091,8 +1913,8 @@
                 <button class="nav-item" onclick="showSection('traffic'); toggleMobileMenu()">
                     <span>ترافیک</span><i class="fas fa-chart-area"></i>
                 </button>
-                <button class="nav-item" onclick="showSection('tickets'); toggleMobileMenu()">
-                    <span>تیکت‌ها</span><i class="fas fa-ticket-alt"></i>
+                <button class="nav-item" onclick="showSection('support'); toggleMobileMenu()">
+                    <span>پشتیبانی</span><i class="fas fa-headset"></i>
                 </button>
                 <button class="nav-item" onclick="showSection('payment'); toggleMobileMenu()">
                     <span>پرداخت</span><i class="fas fa-credit-card"></i>
@@ -2133,8 +1955,8 @@
                 <button class="nav-item" data-section="traffic" onclick="showSection('traffic')">
                     <span>ترافیک</span><i class="fas fa-chart-area"></i>
                 </button>
-                <button class="nav-item" data-section="tickets" onclick="showSection('tickets')">
-                    <span>تیکت‌ها</span><i class="fas fa-ticket-alt"></i>
+                <button class="nav-item" data-section="support" onclick="showSection('support')">
+                    <span>پشتیبانی</span><i class="fas fa-headset"></i>
                 </button>
                 <button class="nav-item" data-section="payment" onclick="showSection('payment')">
                     <span>پرداخت</span><i class="fas fa-credit-card"></i>
@@ -2260,23 +2082,13 @@
                             <label class="form-label">تاریخ انقضا</label>
                             <input type="date" id="newExpireDate" class="form-input" required>
                         </div>
-                        
-                        <div class="form-group">
-                            <label class="form-label">پروتکل</label>
-                            <select id="newProtocol" class="form-input" required>
-                                <option value="vless">VLESS</option>
-                                <option value="vmess">VMess</option>
-                                <option value="trojan">Trojan</option>
-                                <option value="shadowsocks">Shadowsocks</option>
-                            </select>
-                        </div>
                     </div>
                     
                     <div id="addUserError" class="error-message hidden"></div>
                     <div id="addUserSuccess" class="success-message hidden"></div>
                     
                     <button type="submit" class="form-button" style="width: 100%; padding: 16px; font-size: 16px;">
-                        <span id="addUserBtnText">افزودن کاربر</span>
+                        <span id="addUserBtnText">افزودن کاربر (VLESS)</span>
                         <div id="addUserSpinner" class="loading-spinner hidden"></div>
                     </button>
                 </form>
@@ -2312,14 +2124,14 @@
                 </div>
             </div>
 
-            <!-- Tickets Section -->
-            <div id="ticketsSection" class="content-section">
+            <!-- Support Section -->
+            <div id="supportSection" class="content-section">
                 <div class="section-header">
                     <h3 class="section-title">
-                        <i class="fas fa-ticket-alt"></i>
-                        مدیریت تیکت‌ها
+                        <i class="fas fa-headset"></i>
+                        پشتیبانی
                     </h3>
-                    <button class="refresh-btn" onclick="refreshTicketsSection()">
+                    <button class="refresh-btn" onclick="refreshSupportSection()">
                         <i class="fas fa-sync-alt"></i>
                         بروزرسانی
                     </button>
@@ -2338,44 +2150,17 @@
                     </a>
                 </div>
 
-                <!-- New Ticket Form -->
-                <div class="ticket-form">
-                    <h4 class="ticket-form-title">
-                        <i class="fas fa-paper-plane"></i>
-                        ارسال تیکت جدید
-                    </h4>
-                    
-                    <form id="newTicketForm">
-                        <div class="form-grid">
-                            <div class="form-group">
-                                <label class="form-label">موضوع تیکت</label>
-                                <input type="text" id="ticketSubject" class="form-input" placeholder="موضوع تیکت را وارد کنید" required maxlength="100">
-                            </div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label class="form-label">پیام</label>
-                            <textarea id="ticketMessage" class="message-input" placeholder="پیام خود را اینجا بنویسید..." required maxlength="2000"></textarea>
-                        </div>
-                        
-                        <div id="ticketError" class="error-message hidden"></div>
-                        <div id="ticketSuccess" class="success-message hidden"></div>
-                        
-                        <button type="submit" class="form-button" style="width: 100%; padding: 14px;">
-                            <span id="ticketBtnText">
-                                <i class="fas fa-paper-plane"></i> ارسال تیکت
-                            </span>
-                            <div id="ticketSpinner" class="loading-spinner hidden"></div>
-                        </button>
-                    </form>
-                </div>
-                
-                <!-- Tickets List -->
-                <div id="ticketsContent">
-                    <div class="section-loading">
-                        <div class="loading-spinner"></div>
-                        <span>در حال بارگذاری تیکت‌ها...</span>
-                    </div>
+                <!-- Support Guide -->
+                <div class="chart-container">
+                    <h4 class="chart-title">راهنمای دریافت پشتیبانی</h4>
+                    <ul style="color: var(--text-secondary); line-height: 2; margin: 0; padding-right: 20px;">
+                        <li>🔧 پشتیبانی ۲۴ ساعته در خدمت شماست</li>
+                        <li>⚡ پاسخگویی سریع به مشکلات فنی</li>
+                        <li>👤 راهنمایی کامل در مدیریت کاربران</li>
+                        <li>💡 مشاوره در بهینه‌سازی سرویس</li>
+                        <li>🛠️ حل مشکلات اتصال و کانفیگ</li>
+                        <li>📊 راهنمایی در تحلیل ترافیک</li>
+                    </ul>
                 </div>
             </div>
 
@@ -2590,22 +2375,6 @@
         </div>
     </div>
 
-    <!-- Ticket Details Modal -->
-    <div id="ticketModal" class="modal hidden">
-        <div class="modal-content" style="max-width: 700px;">
-            <div class="modal-header">
-                <h3 class="modal-title">
-                    <i class="fas fa-ticket-alt"></i>
-                    جزئیات تیکت
-                </h3>
-                <button class="modal-close" onclick="closeTicketModal()">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div id="ticketModalContent"></div>
-        </div>
-    </div>
-
     <!-- Loading Overlay -->
     <div id="loadingOverlay" class="loading-overlay hidden">
         <div class="loading-content">
@@ -2658,7 +2427,7 @@
                     else if (className.includes('fa-sync')) fallback = '🔄';
                     else if (className.includes('fa-download')) fallback = '⬇️';
                     else if (className.includes('fa-telegram')) fallback = '📱';
-                    else if (className.includes('fa-ticket')) fallback = '🎫';
+                    else if (className.includes('fa-headset')) fallback = '🎧';
                     else if (className.includes('fa-paper-plane')) fallback = '✈️';
                     else if (className.includes('fa-clock')) fallback = '🕐';
                     else if (className.includes('fa-envelope')) fallback = '✉️';
@@ -2696,7 +2465,7 @@
                 'fa-play': '▶️',
                 'fa-pause': '⏸️',
                 'fa-copy': '📋',
-                'fa-ticket-alt': '🎫',
+                'fa-headset': '🎧',
                 'fa-paper-plane': '✈️',
                 'fa-clock': '🕐',
                 'fa-envelope': '✉️',
@@ -3017,19 +2786,19 @@
         let serverUrl = '';
         let currentUsername = '';
         let users = [];
-        let tickets = [];
         let updateInterval;
         let currentPage = 1;
         let usersPerPage = 20;
         let filteredUsers = [];
         let loginAttempts = 0;
         let sessionFingerprint = '';
+        let adminInbounds = []; // Store Admin user inbounds
         let sectionsLoaded = {
             dashboard: false,
             users: false,
             traffic: false,
             analytics: false,
-            tickets: false
+            support: false
         };
 
         // Chart instances
@@ -3122,20 +2891,8 @@
             });
         }
 
-        function refreshTicketsSection() {
-            if (!Security.requestLimiter.isAllowed('refresh_tickets')) {
-                showNotification('لطفاً کمی صبر کنید', 'error');
-                return;
-            }
-            
-            showLoading('در حال بروزرسانی تیکت‌ها...');
-            loadTickets().then(() => {
-                hideLoading();
-                showNotification('تیکت‌ها بروزرسانی شد! 🔄', 'success');
-            }).catch(() => {
-                hideLoading();
-                showNotification('خطا در بروزرسانی تیکت‌ها', 'error');
-            });
+        function refreshSupportSection() {
+            showNotification('بخش پشتیبانی بروزرسانی شد! 🔄', 'success');
         }
 
         function refreshPaymentSection() {
@@ -3231,12 +2988,10 @@
             const loginForm = document.getElementById('loginForm');
             const addUserForm = document.getElementById('addUserForm');
             const editUserForm = document.getElementById('editUserForm');
-            const newTicketForm = document.getElementById('newTicketForm');
             
             if (loginForm) loginForm.addEventListener('submit', handleLogin);
             if (addUserForm) addUserForm.addEventListener('submit', handleAddUser);
             if (editUserForm) editUserForm.addEventListener('submit', handleEditUser);
-            if (newTicketForm) newTicketForm.addEventListener('submit', handleNewTicket);
             
             // Enhanced input validation listeners
             const usernameInput = document.getElementById('username');
@@ -3355,6 +3110,10 @@
                             showPanel();
                             loadDashboardData();
                             startAutoUpdate();
+                            
+                            // Load Admin user inbounds
+                            await loadAdminInbounds();
+                            
                             showNotification('ورود موفقیت‌آمیز بود! 🎉', 'success');
                         } else {
                             showMessage('loginError', 'خطا در ذخیره‌سازی جلسه');
@@ -3380,6 +3139,18 @@
             hideLoading();
         }
 
+        // Load Admin user inbounds to use for new users
+        async function loadAdminInbounds() {
+            try {
+                const adminUser = await apiCall('/user/Admin');
+                if (adminUser && adminUser.inbounds && Array.isArray(adminUser.inbounds)) {
+                    adminInbounds = adminUser.inbounds;
+                }
+            } catch (error) {
+                console.error('Failed to load Admin inbounds');
+            }
+        }
+
         function logout() {
             // Clear all session data
             sessionStorage.removeItem(CONFIG.tokenKey);
@@ -3393,7 +3164,8 @@
             
             authToken = '';
             currentUsername = '';
-            sectionsLoaded = { dashboard: false, users: false, traffic: false, analytics: false, tickets: false };
+            adminInbounds = [];
+            sectionsLoaded = { dashboard: false, users: false, traffic: false, analytics: false, support: false };
             
             // Clear any sensitive form data
             const forms = document.querySelectorAll('form');
@@ -3443,7 +3215,7 @@
 
         function showSection(sectionName) {
             // Validate section name
-            const allowedSections = ['dashboard', 'users', 'addUser', 'traffic', 'tickets', 'payment', 'analytics', 'settings'];
+            const allowedSections = ['dashboard', 'users', 'addUser', 'traffic', 'support', 'payment', 'analytics', 'settings'];
             if (!allowedSections.includes(sectionName)) {
                 console.warn('Invalid section name:', sectionName);
                 return;
@@ -3494,10 +3266,9 @@
                         sectionsLoaded.traffic = true;
                     }
                     break;
-                case 'tickets':
-                    if (!sectionsLoaded.tickets) {
-                        loadTickets().catch(() => console.error('Failed to load tickets'));
-                        sectionsLoaded.tickets = true;
+                case 'support':
+                    if (!sectionsLoaded.support) {
+                        sectionsLoaded.support = true;
                     }
                     break;
                 default:
@@ -4519,260 +4290,6 @@
             }
         }
 
-        // Enhanced Tickets Functions (تیکت‌ها)
-        async function loadTickets() {
-            const ticketsContent = document.getElementById('ticketsContent');
-            if (!ticketsContent) return Promise.reject();
-            
-            try {
-                // Mock tickets data - در محیط واقعی از API دریافت شود
-                tickets = [
-                    {
-                        id: 1,
-                        subject: 'مشکل در اتصال VPN',
-                        message: 'سلام، من نمی‌توانم به سرور متصل شوم. لطفاً راهنمایی کنید.',
-                        status: 'pending',
-                        created_at: new Date(Date.now() - 3600000).toISOString(),
-                        responses: []
-                    },
-                    {
-                        id: 2,
-                        subject: 'درخواست افزایش ترافیک',
-                        message: 'سلام، لطفاً ترافیک کاربران من را افزایش دهید.',
-                        status: 'answered',
-                        created_at: new Date(Date.now() - 86400000).toISOString(),
-                        responses: [
-                            {
-                                message: 'سلام، ترافیک شما افزایش یافت.',
-                                created_at: new Date(Date.now() - 3600000).toISOString(),
-                                is_admin: true
-                            }
-                        ]
-                    }
-                ];
-                
-                renderTicketsSection();
-                return Promise.resolve();
-            } catch (error) {
-                console.error('Tickets loading failed');
-                const errorMsg = Security.safeCreateElement('p', 'خطا در بارگذاری تیکت‌ها');
-                errorMsg.style.cssText = 'text-align: center; color: var(--danger-color); padding: 40px;';
-                ticketsContent.innerHTML = '';
-                ticketsContent.appendChild(errorMsg);
-                return Promise.reject();
-            }
-        }
-
-        function renderTicketsSection() {
-            const ticketsContent = document.getElementById('ticketsContent');
-            if (!ticketsContent) return;
-            
-            if (!Array.isArray(tickets) || tickets.length === 0) {
-                ticketsContent.innerHTML = `
-                    <div style="text-align: center; color: var(--text-muted); padding: 60px; font-style: italic;">
-                        <i class="fas fa-ticket-alt" style="font-size: 48px; margin-bottom: 16px; opacity: 0.5;"></i>
-                        <p>هیچ تیکتی یافت نشد</p>
-                    </div>
-                `;
-                return;
-            }
-            
-            ticketsContent.innerHTML = '';
-            
-            tickets.forEach(ticket => {
-                const ticketCard = document.createElement('div');
-                ticketCard.className = 'ticket-card';
-                
-                const ticketHeader = document.createElement('div');
-                ticketHeader.className = 'ticket-header';
-                
-                const ticketTitle = Security.safeCreateElement('h4', Security.sanitizeHtml(ticket.subject), 'ticket-title');
-                
-                const ticketMeta = document.createElement('div');
-                ticketMeta.className = 'ticket-meta';
-                
-                const createdDate = new Date(ticket.created_at).toLocaleDateString('fa-IR', {
-                    year: 'numeric',
-                    month: 'short',
-                    day: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit'
-                });
-                
-                ticketMeta.innerHTML = `
-                    <span><i class="fas fa-clock"></i> ${createdDate}</span>
-                    <span><i class="fas fa-ticket-alt"></i> #${ticket.id}</span>
-                `;
-                
-                ticketHeader.appendChild(ticketTitle);
-                ticketHeader.appendChild(ticketMeta);
-                
-                const ticketContent = Security.safeCreateElement('div', Security.sanitizeHtml(ticket.message), 'ticket-content');
-                
-                const ticketFooter = document.createElement('div');
-                ticketFooter.className = 'ticket-footer';
-                
-                const statusClass = ticket.status === 'pending' ? 'status-pending' :
-                                  ticket.status === 'answered' ? 'status-answered' : 'status-closed';
-                const statusText = ticket.status === 'pending' ? 'در انتظار پاسخ' :
-                                 ticket.status === 'answered' ? 'پاسخ داده شده' : 'بسته شده';
-                const statusBadge = Security.safeCreateElement('span', statusText, `status-badge ${statusClass}`);
-                
-                const ticketActions = document.createElement('div');
-                ticketActions.className = 'ticket-actions';
-                
-                const viewBtn = Security.safeCreateElement('button', '', 'form-button info');
-                viewBtn.innerHTML = '<i class="fas fa-eye"></i> مشاهده';
-                viewBtn.onclick = () => showTicketDetails(ticket);
-                
-                ticketActions.appendChild(viewBtn);
-                
-                ticketFooter.appendChild(statusBadge);
-                ticketFooter.appendChild(ticketActions);
-                
-                ticketCard.appendChild(ticketHeader);
-                ticketCard.appendChild(ticketContent);
-                ticketCard.appendChild(ticketFooter);
-                
-                ticketsContent.appendChild(ticketCard);
-            });
-        }
-
-        async function handleNewTicket(e) {
-            e.preventDefault();
-            
-            if (!Security.requestLimiter.isAllowed('new_ticket')) {
-                showMessage('ticketError', 'لطفاً کمی صبر کنید');
-                return;
-            }
-            
-            const subjectInput = document.getElementById('ticketSubject');
-            const messageInput = document.getElementById('ticketMessage');
-            
-            if (!subjectInput || !messageInput) {
-                showMessage('ticketError', 'خطا در فرم تیکت');
-                return;
-            }
-            
-            const subject = subjectInput.value.trim();
-            const message = messageInput.value.trim();
-            
-            if (!Security.validateInput(subject, 'text', { minLength: 5, maxLength: 100 })) {
-                showMessage('ticketError', 'موضوع تیکت باید بین 5 تا 100 کاراکتر باشد');
-                return;
-            }
-            
-            if (!Security.validateInput(message, 'text', { minLength: 10, maxLength: 2000 })) {
-                showMessage('ticketError', 'پیام تیکت باید بین 10 تا 2000 کاراکتر باشد');
-                return;
-            }
-            
-            setLoadingState('newTicketForm', 'ticketBtnText', 'ticketSpinner', true);
-            hideMessage('ticketError');
-            hideMessage('ticketSuccess');
-            showLoading('در حال ارسال تیکت...');
-            
-            try {
-                // Mock API call - در محیط واقعی به API ارسال شود
-                await new Promise(resolve => setTimeout(resolve, 2000));
-                
-                const newTicket = {
-                    id: Date.now(),
-                    subject: subject,
-                    message: message,
-                    status: 'pending',
-                    created_at: new Date().toISOString(),
-                    responses: []
-                };
-                
-                tickets.unshift(newTicket);
-                
-                subjectInput.value = '';
-                messageInput.value = '';
-                
-                showMessage('ticketSuccess', 'تیکت شما با موفقیت ارسال شد');
-                renderTicketsSection();
-                showNotification('تیکت جدید ارسال شد! 🎫', 'success');
-            } catch (error) {
-                showMessage('ticketError', 'خطا در ارسال تیکت');
-            }
-            
-            setLoadingState('newTicketForm', 'ticketBtnText', 'ticketSpinner', false);
-            hideLoading();
-        }
-
-        function showTicketDetails(ticket) {
-            const ticketModalContent = document.getElementById('ticketModalContent');
-            if (!ticketModalContent) return;
-            
-            const createdDate = new Date(ticket.created_at).toLocaleDateString('fa-IR', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit'
-            });
-            
-            const statusClass = ticket.status === 'pending' ? 'status-pending' :
-                              ticket.status === 'answered' ? 'status-answered' : 'status-closed';
-            const statusText = ticket.status === 'pending' ? 'در انتظار پاسخ' :
-                             ticket.status === 'answered' ? 'پاسخ داده شده' : 'بسته شده';
-            
-            let responsesHtml = '';
-            if (ticket.responses && ticket.responses.length > 0) {
-                responsesHtml = '<div style="margin-top: 24px;"><h5 style="color: var(--text-primary); margin-bottom: 16px;">پاسخ‌ها:</h5>';
-                ticket.responses.forEach(response => {
-                    const responseDate = new Date(response.created_at).toLocaleDateString('fa-IR', {
-                        year: 'numeric',
-                        month: 'short',
-                        day: 'numeric',
-                        hour: '2-digit',
-                        minute: '2-digit'
-                    });
-                    const responseClass = response.is_admin ? 'admin-response' : 'user-response';
-                    const responseLabel = response.is_admin ? 'پشتیبانی' : 'شما';
-                    
-                    responsesHtml += `
-                        <div style="background: var(--bg-secondary); padding: 16px; border-radius: 12px; margin-bottom: 12px; border-right: 4px solid ${response.is_admin ? 'var(--info-color)' : 'var(--primary-color)'};">
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                                <strong style="color: var(--text-primary);">${responseLabel}</strong>
-                                <small style="color: var(--text-muted);">${responseDate}</small>
-                            </div>
-                            <p style="color: var(--text-secondary); margin: 0; line-height: 1.6;">${Security.sanitizeHtml(response.message)}</p>
-                        </div>
-                    `;
-                });
-                responsesHtml += '</div>';
-            }
-            
-            ticketModalContent.innerHTML = `
-                <div style="margin-bottom: 24px;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 12px;">
-                        <div>
-                            <h4 style="color: var(--text-primary); margin: 0; font-size: 18px;">${Security.sanitizeHtml(ticket.subject)}</h4>
-                            <small style="color: var(--text-muted);">تیکت #${ticket.id} • ${createdDate}</small>
-                        </div>
-                        <span class="status-badge ${statusClass}">${statusText}</span>
-                    </div>
-                    
-                    <div style="background: var(--bg-secondary); padding: 20px; border-radius: 12px; border: 1px solid var(--border-light);">
-                        <h5 style="color: var(--text-primary); margin-bottom: 12px;">پیام اصلی:</h5>
-                        <p style="color: var(--text-secondary); margin: 0; line-height: 1.6;">${Security.sanitizeHtml(ticket.message)}</p>
-                    </div>
-                    
-                    ${responsesHtml}
-                </div>
-            `;
-            
-            const ticketModal = document.getElementById('ticketModal');
-            if (ticketModal) ticketModal.classList.remove('hidden');
-        }
-
-        function closeTicketModal() {
-            const ticketModal = document.getElementById('ticketModal');
-            if (ticketModal) ticketModal.classList.add('hidden');
-        }
-
         // Enhanced Edit User Functions (ویرایش کاربر)
         function editUser(username) {
             if (!Security.validateInput(username, 'username')) {
@@ -4907,9 +4424,8 @@
             const usernameInput = document.getElementById('newUsername');
             const dataLimitInput = document.getElementById('newDataLimit');
             const expireDateInput = document.getElementById('newExpireDate');
-            const protocolInput = document.getElementById('newProtocol');
             
-            if (!usernameInput || !dataLimitInput || !expireDateInput || !protocolInput) {
+            if (!usernameInput || !dataLimitInput || !expireDateInput) {
                 showMessage('addUserError', 'خطا در فرم افزودن کاربر');
                 return;
             }
@@ -4917,7 +4433,6 @@
             const username = usernameInput.value.trim();
             const dataLimitGB = parseFloat(dataLimitInput.value);
             const expireDateStr = expireDateInput.value;
-            const protocol = protocolInput.value;
             
             // Enhanced validation
             if (!Security.validateInput(username, 'username')) {
@@ -4932,12 +4447,6 @@
             
             if (!Security.validateInput(expireDateStr, 'date')) {
                 showMessage('addUserError', 'تاریخ انقضا نامعتبر است');
-                return;
-            }
-            
-            const allowedProtocols = ['vless', 'vmess', 'trojan', 'shadowsocks'];
-            if (!allowedProtocols.includes(protocol)) {
-                showMessage('addUserError', 'پروتکل انتخاب شده نامعتبر است');
                 return;
             }
             
@@ -4960,20 +4469,22 @@
             
             showLoading('در حال افزودن کاربر...');
             
+            // Create user data with VLESS protocol and Admin inbounds
             const userData = {
                 username,
                 data_limit: dataLimit,
                 expire,
                 proxies: {
-                    [protocol]: {}
-                }
+                    vless: {}
+                },
+                inbounds: adminInbounds.length > 0 ? adminInbounds : undefined
             };
             
             try {
                 const result = await apiCall('/user', 'POST', userData);
                 
                 if (result) {
-                    showMessage('addUserSuccess', `کاربر ${Security.sanitizeHtml(username)} با موفقیت اضافه شد`);
+                    showMessage('addUserSuccess', `کاربر ${Security.sanitizeHtml(username)} با موفقیت اضافه شد (پروتکل VLESS)`);
                     
                     const addUserForm = document.getElementById('addUserForm');
                     if (addUserForm) addUserForm.reset();
@@ -4986,7 +4497,7 @@
                     await showNewUserConfigs(username);
                     await loadUsers(); // Refresh users list
                     
-                    showNotification(`کاربر ${Security.sanitizeHtml(username)} اضافه شد`, 'success');
+                    showNotification(`کاربر ${Security.sanitizeHtml(username)} با پروتکل VLESS اضافه شد`, 'success');
                 } else {
                     showMessage('addUserError', 'خطا در افزودن کاربر');
                 }
