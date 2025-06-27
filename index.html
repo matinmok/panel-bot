@@ -99,6 +99,9 @@
         .fa-clock:before, .fas.fa-clock:before { content: "\f017" !important; }
         .fa-envelope:before, .fas.fa-envelope:before { content: "\f0e0" !important; }
         .fa-envelope-open:before, .fas.fa-envelope-open:before { content: "\f2b6" !important; }
+        .fa-crown:before, .fas.fa-crown:before { content: "\f521" !important; }
+        .fa-user-cog:before, .fas.fa-user-cog:before { content: "\f4fe" !important; }
+        .fa-network-wired:before, .fas.fa-network-wired:before { content: "\f6ff" !important; }
         
         /* Enhanced Vazir Font Loading */
         @import url('https://v1.fontapi.ir/css/Vazir');
@@ -380,7 +383,7 @@
             font-size: 14px;
         }
         
-        .form-input {
+        .form-input, .form-select {
             width: 100%;
             padding: 14px 16px;
             border: 2px solid var(--border-color);
@@ -393,7 +396,7 @@
             font-family: 'Vazir', 'Vazir-Local', 'Tahoma', 'Arial', sans-serif !important;
         }
         
-        .form-input:focus {
+        .form-input:focus, .form-select:focus {
             border-color: var(--primary-color);
             box-shadow: 0 0 0 4px rgba(44, 62, 80, 0.1);
             transform: translateY(-1px);
@@ -1263,6 +1266,89 @@
         .inbound-tag.none {
             background: var(--danger-color);
         }
+
+        .inbound-tag.selected {
+            background: var(--success-color);
+            box-shadow: 0 0 0 2px rgba(46, 125, 50, 0.3);
+        }
+
+        /* Admin User Selection */
+        .admin-selection {
+            background: var(--bg-secondary);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 16px 0;
+            border: 1px solid var(--border-light);
+        }
+
+        .admin-selection h5 {
+            color: var(--text-primary);
+            margin-bottom: 16px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .admin-user-card {
+            background: var(--card-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 16px;
+            margin: 8px 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .admin-user-card:hover {
+            border-color: var(--primary-color);
+            box-shadow: var(--shadow-md);
+        }
+
+        .admin-user-card.selected {
+            border-color: var(--success-color);
+            background: rgba(46, 125, 50, 0.05);
+            box-shadow: 0 0 0 4px rgba(46, 125, 50, 0.1);
+        }
+
+        .admin-user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .admin-user-avatar {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .admin-user-details h6 {
+            margin: 0 0 4px 0;
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .admin-user-details p {
+            margin: 0;
+            color: var(--text-secondary);
+            font-size: 12px;
+        }
+
+        .admin-user-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
         
         /* Mobile Header */
         .mobile-header {
@@ -1539,7 +1625,7 @@
                 font-size: 13px;
             }
 
-            .form-input {
+            .form-input, .form-select {
                 padding: 12px 14px;
                 font-size: 16px;
             }
@@ -1761,7 +1847,7 @@
                 margin: 0 8px;
             }
 
-            .inbound-status {
+            .inbound-status, .admin-selection {
                 padding: 12px;
                 margin: 12px 0;
             }
@@ -1773,6 +1859,17 @@
             .inbound-tag {
                 padding: 3px 8px;
                 font-size: 11px;
+            }
+
+            .admin-user-card {
+                padding: 12px;
+                margin: 6px 0;
+            }
+
+            .admin-user-avatar {
+                width: 32px;
+                height: 32px;
+                font-size: 12px;
             }
         }
 
@@ -1882,6 +1979,9 @@
             .fa-server:before { content: "🖥️"; }
             .fa-bars:before { content: "☰"; }
             .fa-headset:before { content: "🎧"; }
+            .fa-crown:before { content: "👑"; }
+            .fa-user-cog:before { content: "⚙️"; }
+            .fa-network-wired:before { content: "🌐"; }
         }
 
         /* Force Icon Display */
@@ -2087,7 +2187,7 @@
                 
                 <!-- Inbound Status Display -->
                 <div id="inboundStatus" class="inbound-status">
-                    <h5><i class="fas fa-server"></i> وضعیت اینباندها</h5>
+                    <h5><i class="fas fa-server"></i> وضعیت اینباندها (کاربر انتخابی: <span id="selectedAdminDisplay">Admin</span>)</h5>
                     <div id="inboundList" class="inbound-list">
                         <div class="inbound-tag loading">
                             <i class="fas fa-sync-alt"></i> در حال بارگذاری...
@@ -2142,9 +2242,20 @@
                     </button>
                 </div>
                 
+                <!-- Admin User Selection -->
+                <div id="adminSelectionSection" class="admin-selection">
+                    <h5><i class="fas fa-user-cog"></i> انتخاب کاربر Admin برای دریافت اینباندها</h5>
+                    <div id="adminUsersList">
+                        <div class="section-loading">
+                            <div class="loading-spinner"></div>
+                            <span>در حال بارگذاری کاربران Admin...</span>
+                        </div>
+                    </div>
+                </div>
+                
                 <!-- Inbound Status for New Users -->
                 <div id="addUserInboundStatus" class="inbound-status">
-                    <h5><i class="fas fa-server"></i> اینباندهای فعال برای کاربر جدید</h5>
+                    <h5><i class="fas fa-server"></i> اینباندهای فعال برای کاربر جدید (از: <span id="selectedAdminForUser">Admin</span>)</h5>
                     <div id="addUserInboundList" class="inbound-list">
                         <div class="inbound-tag loading">
                             <i class="fas fa-sync-alt"></i> در حال بارگذاری...
@@ -2355,7 +2466,7 @@
                     </button>
                 </div>
                 
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 24px;">
                     <div class="chart-container">
                         <h4 class="chart-title">اطلاعات حساب</h4>
                         <div class="form-group">
@@ -2386,6 +2497,36 @@
                         </div>
                         <button onclick="saveSettings()" class="form-button" style="width: 100%; padding: 12px;">
                             <i class="fas fa-save"></i> ذخیره تنظیمات
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Inbound Configuration Settings -->
+                <div class="chart-container">
+                    <h4 class="chart-title"><i class="fas fa-network-wired"></i> تنظیمات اینباند و VLESS</h4>
+                    
+                    <div class="form-group">
+                        <label class="form-label">کاربر Admin انتخابی برای اینباندها</label>
+                        <select id="adminUserSelect" class="form-select" onchange="changeSelectedAdmin()">
+                            <option value="Admin">Admin (پیش‌فرض)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">وضعیت اینباندهای انتخابی</label>
+                        <div id="settingsInboundList" class="inbound-list">
+                            <div class="inbound-tag loading">
+                                <i class="fas fa-sync-alt"></i> در حال بارگذاری...
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: 12px; margin-top: 16px;">
+                        <button onclick="loadAdminUsers()" class="form-button info" style="flex: 1;">
+                            <i class="fas fa-user-cog"></i> بارگذاری کاربران Admin
+                        </button>
+                        <button onclick="loadAdminInbounds()" class="form-button warning" style="flex: 1;">
+                            <i class="fas fa-sync-alt"></i> بروزرسانی اینباندها
                         </button>
                     </div>
                 </div>
@@ -2517,6 +2658,8 @@
                     else if (className.includes('fa-paper-plane')) fallback = '✈️';
                     else if (className.includes('fa-clock')) fallback = '🕐';
                     else if (className.includes('fa-envelope')) fallback = '✉️';
+                    else if (className.includes('fa-crown')) fallback = '👑';
+                    else if (className.includes('fa-network')) fallback = '🌐';
                     
                     icon.innerHTML = `<span class="icon-fallback">${fallback}</span>`;
                 }
@@ -2555,7 +2698,10 @@
                 'fa-paper-plane': '✈️',
                 'fa-clock': '🕐',
                 'fa-envelope': '✉️',
-                'fa-envelope-open': '📭'
+                'fa-envelope-open': '📭',
+                'fa-crown': '👑',
+                'fa-user-cog': '⚙️',
+                'fa-network-wired': '🌐'
             };
 
             Object.keys(iconMap).forEach(className => {
@@ -2700,7 +2846,7 @@
             },
             
             safeCreateElement: (tag, content, className) => {
-                const allowedTags = ['div', 'span', 'p', 'button', 'input', 'label', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'ul', 'li', 'table', 'tr', 'td', 'th', 'thead', 'tbody'];
+                const allowedTags = ['div', 'span', 'p', 'button', 'input', 'label', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'ul', 'li', 'table', 'tr', 'td', 'th', 'thead', 'tbody', 'select', 'option'];
                 if (!allowedTags.includes(tag.toLowerCase())) {
                     console.warn(`Attempted to create unsafe element: ${tag}`);
                     tag = 'div';
@@ -2880,6 +3026,8 @@
         let sessionFingerprint = '';
         let adminInbounds = []; // Store Admin user inbounds
         let availableInbounds = []; // Store all available inbounds
+        let selectedAdminUser = 'Admin'; // Selected admin user for inbounds
+        let adminUsers = []; // List of admin users
         let sectionsLoaded = {
             dashboard: false,
             users: false,
@@ -2959,7 +3107,8 @@
                 expireDateInput.value = expireDate.toISOString().split('T')[0];
             }
             
-            // Reload inbounds
+            // Reload admin users and inbounds
+            loadAdminUsers();
             loadAdminInbounds();
             
             showNotification('فرم افزودن کاربر بازنشانی شد! 🔄', 'success');
@@ -3012,6 +3161,11 @@
             if (usernameInput) usernameInput.value = currentUsername;
             if (serverUrlInput) serverUrlInput.value = getServerUrl();
             
+            // Update admin user select
+            updateAdminUserSelect();
+            updateInboundDisplay('loading');
+            loadAdminInbounds();
+            
             showNotification('تنظیمات بروزرسانی شد! 🔄', 'success');
         }
 
@@ -3049,6 +3203,7 @@
                             showPanel();
                             loadDashboardData();
                             startAutoUpdate();
+                            loadAdminUsers();
                             loadAdminInbounds();
                         } else {
                             logout();
@@ -3202,7 +3357,8 @@
                             loadDashboardData();
                             startAutoUpdate();
                             
-                            // Load inbounds for new users
+                            // Load admin users and inbounds for new users
+                            await loadAdminUsers();
                             await loadAdminInbounds();
                             
                             showNotification('ورود موفقیت‌آمیز بود! 🎉', 'success');
@@ -3230,27 +3386,184 @@
             hideLoading();
         }
 
+        // Enhanced Admin User Management
+        async function loadAdminUsers() {
+            try {
+                console.log('🔄 شروع بارگذاری کاربران Admin...');
+                
+                const usersData = await apiCall('/users');
+                if (usersData && usersData.users && Array.isArray(usersData.users)) {
+                    // Filter admin users (users with inbounds or specific patterns)
+                    adminUsers = usersData.users.filter(user => {
+                        return user.username && (
+                            user.username.toLowerCase().includes('admin') ||
+                            user.username.toLowerCase().includes('root') ||
+                            user.username.toLowerCase().includes('super') ||
+                            (user.inbounds && user.inbounds.length > 0)
+                        );
+                    });
+                    
+                    // Always include 'Admin' if not already present
+                    if (!adminUsers.find(u => u.username === 'Admin')) {
+                        adminUsers.unshift({ username: 'Admin', inbounds: [] });
+                    }
+                    
+                    console.log('✅ کاربران Admin بارگذاری شد:', adminUsers);
+                    updateAdminUsersList();
+                    updateAdminUserSelect();
+                    showNotification(`${adminUsers.length} کاربر Admin یافت شد`, 'success');
+                    
+                } else {
+                    console.log('⚠️ هیچ کاربری یافت نشد، استفاده از پیش‌فرض');
+                    adminUsers = [{ username: 'Admin', inbounds: [] }];
+                    updateAdminUsersList();
+                    updateAdminUserSelect();
+                }
+                
+            } catch (error) {
+                console.error('❌ خطا در بارگذاری کاربران Admin:', error);
+                adminUsers = [{ username: 'Admin', inbounds: [] }];
+                updateAdminUsersList();
+                updateAdminUserSelect();
+                showNotification('خطا در بارگذاری کاربران Admin', 'error');
+            }
+        }
+
+        function updateAdminUsersList() {
+            const container = document.getElementById('adminUsersList');
+            if (!container) return;
+            
+            container.innerHTML = '';
+            
+            if (adminUsers.length === 0) {
+                const noUsersMsg = Security.safeCreateElement('p', 'هیچ کاربر Admin یافت نشد');
+                noUsersMsg.style.cssText = 'text-align: center; color: var(--text-muted); padding: 20px;';
+                container.appendChild(noUsersMsg);
+                return;
+            }
+            
+            adminUsers.forEach(user => {
+                const userCard = document.createElement('div');
+                userCard.className = `admin-user-card ${user.username === selectedAdminUser ? 'selected' : ''}`;
+                userCard.onclick = () => selectAdminUser(user.username);
+                
+                const userInfo = document.createElement('div');
+                userInfo.className = 'admin-user-info';
+                
+                const avatar = document.createElement('div');
+                avatar.className = 'admin-user-avatar';
+                const initial = user.username.charAt(0).toUpperCase();
+                avatar.textContent = initial;
+                
+                const details = document.createElement('div');
+                details.className = 'admin-user-details';
+                
+                const username = Security.safeCreateElement('h6', user.username);
+                const inboundCount = Security.safeCreateElement('p', `${(user.inbounds || []).length} اینباند`);
+                
+                details.appendChild(username);
+                details.appendChild(inboundCount);
+                userInfo.appendChild(avatar);
+                userInfo.appendChild(details);
+                
+                const statusDiv = document.createElement('div');
+                statusDiv.className = 'admin-user-status';
+                
+                if (user.username === selectedAdminUser) {
+                    const selectedBadge = Security.safeCreateElement('span', 'انتخاب شده', 'status-badge status-active');
+                    const selectedIcon = document.createElement('i');
+                    selectedIcon.className = 'fas fa-check-circle';
+                    statusDiv.appendChild(selectedIcon);
+                    statusDiv.appendChild(selectedBadge);
+                } else {
+                    const selectIcon = document.createElement('i');
+                    selectIcon.className = 'fas fa-crown';
+                    selectIcon.style.color = 'var(--text-muted)';
+                    statusDiv.appendChild(selectIcon);
+                }
+                
+                userCard.appendChild(userInfo);
+                userCard.appendChild(statusDiv);
+                container.appendChild(userCard);
+            });
+        }
+
+        function updateAdminUserSelect() {
+            const select = document.getElementById('adminUserSelect');
+            if (!select) return;
+            
+            select.innerHTML = '';
+            
+            adminUsers.forEach(user => {
+                const option = Security.safeCreateElement('option', user.username);
+                option.value = user.username;
+                if (user.username === selectedAdminUser) {
+                    option.selected = true;
+                }
+                select.appendChild(option);
+            });
+        }
+
+        function selectAdminUser(username) {
+            if (!Security.validateInput(username, 'username')) return;
+            
+            selectedAdminUser = username;
+            
+            // Update displays
+            updateAdminUsersList();
+            updateSelectedAdminDisplays();
+            
+            // Reload inbounds for the selected admin
+            loadAdminInbounds();
+            
+            showNotification(`کاربر Admin انتخاب شد: ${Security.sanitizeHtml(username)}`, 'success');
+        }
+
+        function changeSelectedAdmin() {
+            const select = document.getElementById('adminUserSelect');
+            if (!select) return;
+            
+            const selectedValue = select.value;
+            if (selectedValue && selectedValue !== selectedAdminUser) {
+                selectAdminUser(selectedValue);
+            }
+        }
+
+        function updateSelectedAdminDisplays() {
+            const displays = [
+                'selectedAdminDisplay',
+                'selectedAdminForUser'
+            ];
+            
+            displays.forEach(id => {
+                const element = document.getElementById(id);
+                if (element) {
+                    Security.safeSetContent(element, selectedAdminUser);
+                }
+            });
+        }
+
         // Enhanced Inbound Management
         async function loadAdminInbounds() {
             try {
-                console.log('🔄 شروع بارگذاری اینباندها...');
+                console.log('🔄 شروع بارگذاری اینباندها از کاربر:', selectedAdminUser);
                 updateInboundDisplay('loading');
                 
-                // First try to get Admin user inbounds
-                const adminUser = await apiCall('/user/Admin');
+                // Try to get selected admin user inbounds
+                const adminUser = await apiCall(`/user/${encodeURIComponent(selectedAdminUser)}`);
                 console.log('📊 داده‌های کاربر Admin:', adminUser);
                 
                 if (adminUser && adminUser.inbounds && Array.isArray(adminUser.inbounds) && adminUser.inbounds.length > 0) {
                     adminInbounds = adminUser.inbounds;
-                    console.log('✅ اینباندهای Admin بارگذاری شد:', adminInbounds);
-                    showNotification(`${adminInbounds.length} اینباند از Admin بارگذاری شد`, 'success');
+                    console.log('✅ اینباندهای کاربر Admin بارگذاری شد:', adminInbounds);
+                    showNotification(`${adminInbounds.length} اینباند از ${selectedAdminUser} بارگذاری شد`, 'success');
                     updateInboundDisplay('admin', adminInbounds);
                     return;
                 }
                 
-                console.log('⚠️ اینباندی در کاربر Admin یافت نشد، تلاش برای دریافت اینباندهای سیستم...');
+                console.log('⚠️ اینباندی در کاربر انتخابی یافت نشد، تلاش برای دریافت اینباندهای سیستم...');
                 
-                // If Admin user has no inbounds, try to get system inbounds
+                // If selected admin user has no inbounds, try to get system inbounds
                 const systemInbounds = await apiCall('/inbounds');
                 console.log('🔧 اینباندهای سیستم:', systemInbounds);
                 
@@ -3314,6 +3627,12 @@
             if (addUserInboundList) {
                 updateInboundList(addUserInboundList, status, inbounds);
             }
+
+            // Update settings inbound display
+            const settingsInboundList = document.getElementById('settingsInboundList');
+            if (settingsInboundList) {
+                updateInboundList(settingsInboundList, status, inbounds);
+            }
         }
 
         function updateInboundList(container, status, inbounds = []) {
@@ -3332,7 +3651,7 @@
                 case 'admin':
                     inbounds.forEach(inbound => {
                         const tag = document.createElement('div');
-                        tag.className = 'inbound-tag';
+                        tag.className = 'inbound-tag selected';
                         tag.innerHTML = `<i class="fas fa-server"></i> ${Security.sanitizeHtml(inbound.tag)} (${Security.sanitizeHtml(inbound.protocol || 'vless')})`;
                         container.appendChild(tag);
                     });
@@ -3397,6 +3716,8 @@
             currentUsername = '';
             adminInbounds = [];
             availableInbounds = [];
+            selectedAdminUser = 'Admin';
+            adminUsers = [];
             sectionsLoaded = { dashboard: false, users: false, traffic: false, analytics: false, support: false };
             
             // Clear any sensitive form data
@@ -3443,6 +3764,9 @@
             if (navWelcomeMobile) Security.safeSetContent(navWelcomeMobile, welcomeText);
             if (settingsUsername) settingsUsername.value = currentUsername;
             if (currentServerUrl) currentServerUrl.value = getServerUrl();
+
+            // Update selected admin displays
+            updateSelectedAdminDisplays();
         }
 
         function showSection(sectionName) {
@@ -3501,6 +3825,19 @@
                 case 'support':
                     if (!sectionsLoaded.support) {
                         sectionsLoaded.support = true;
+                    }
+                    break;
+                case 'addUser':
+                    // Load admin users when accessing add user section
+                    if (adminUsers.length === 0) {
+                        loadAdminUsers();
+                    }
+                    break;
+                case 'settings':
+                    // Update settings displays
+                    updateSelectedAdminDisplays();
+                    if (adminUsers.length === 0) {
+                        loadAdminUsers();
                     }
                     break;
                 default:
@@ -4690,7 +5027,7 @@
             
             // Check if inbounds are available
             if (!adminInbounds || adminInbounds.length === 0) {
-                showMessage('addUserError', 'هیچ اینباندی یافت نشد - لطفاً با پشتیبانی تماس بگیرید');
+                showMessage('addUserError', `هیچ اینباندی از کاربر ${selectedAdminUser} یافت نشد - لطفاً کاربر Admin دیگری انتخاب کنید`);
                 console.log('🚨 اینباند موجود نیست، تلاش برای بارگذاری مجدد...');
                 await loadAdminInbounds();
                 
@@ -4713,8 +5050,8 @@
             
             showLoading('در حال افزودن کاربر...');
             
-            // Create comprehensive user data with all inbounds
-            console.log('🔧 ایجاد کاربر با اینباندهای:', adminInbounds);
+            // Create comprehensive user data with selected admin inbounds
+            console.log('🔧 ایجاد کاربر با اینباندهای کاربر', selectedAdminUser, ':', adminInbounds);
             
             const userData = {
                 username,
@@ -4736,7 +5073,7 @@
                 console.log('📨 پاسخ سرور:', result);
                 
                 if (result) {
-                    showMessage('addUserSuccess', `کاربر ${Security.sanitizeHtml(username)} با موفقیت اضافه شد (${adminInbounds.length} اینباند)`);
+                    showMessage('addUserSuccess', `کاربر ${Security.sanitizeHtml(username)} با موفقیت اضافه شد (${adminInbounds.length} اینباند از ${selectedAdminUser})`);
                     
                     const addUserForm = document.getElementById('addUserForm');
                     if (addUserForm) addUserForm.reset();
@@ -4753,7 +5090,7 @@
                     
                     await loadUsers(); // Refresh users list
                     
-                    showNotification(`✅ کاربر ${Security.sanitizeHtml(username)} با ${adminInbounds.length} اینباند اضافه شد`, 'success');
+                    showNotification(`✅ کاربر ${Security.sanitizeHtml(username)} با ${adminInbounds.length} اینباند از ${selectedAdminUser} اضافه شد`, 'success');
                 } else {
                     showMessage('addUserError', 'خطا در افزودن کاربر - لطفاً دوباره تلاش کنید');
                 }
@@ -4784,14 +5121,14 @@
                 
                 configsContainer.innerHTML = '';
                 
-                // Show inbound information
+                // Show information about selected admin and inbounds
                 if (adminInbounds && adminInbounds.length > 0) {
                     const inboundInfo = document.createElement('div');
                     inboundInfo.className = 'inbound-status';
                     inboundInfo.style.marginBottom = '16px';
                     
                     const inboundTitle = document.createElement('h5');
-                    inboundTitle.innerHTML = '<i class="fas fa-server"></i> اینباندهای استفاده شده';
+                    inboundTitle.innerHTML = `<i class="fas fa-server"></i> اینباندهای استفاده شده از کاربر: ${Security.sanitizeHtml(selectedAdminUser)}`;
                     inboundTitle.style.marginBottom = '12px';
                     
                     const inboundList = document.createElement('div');
@@ -4799,7 +5136,7 @@
                     
                     adminInbounds.forEach(inbound => {
                         const tag = document.createElement('div');
-                        tag.className = 'inbound-tag';
+                        tag.className = 'inbound-tag selected';
                         tag.innerHTML = `<i class="fas fa-check"></i> ${Security.sanitizeHtml(inbound.tag)} (${Security.sanitizeHtml(inbound.protocol || 'vless')})`;
                         inboundList.appendChild(tag);
                     });
@@ -5064,6 +5401,7 @@
             try {
                 sessionStorage.setItem('toofan_default_data_limit', defaultDataLimit);
                 sessionStorage.setItem('toofan_default_duration', defaultDuration);
+                sessionStorage.setItem('toofan_selected_admin', selectedAdminUser);
                 showNotification('تنظیمات با موفقیت ذخیره شد ✅', 'success');
             } catch (error) {
                 showNotification('خطا در ذخیره تنظیمات', 'error');
