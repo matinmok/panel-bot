@@ -1,0 +1,80 @@
+<!-- START: Admin Panel Communication Script -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        /**
+         * !! IMPORTANT !!
+         * CHANGE THE VALUE BELOW to a unique name for this representative.
+         * This name will be shown in the admin panel's login logs.
+         */
+        const repIdentifier = "نام نماینده یا شناسه منحصر به فرد";
+
+        const CONFIG_KEYS = {
+            announcement: 'toofan_global_announcement',
+            repLoginLogs: 'toofan_rep_login_logs'
+        };
+
+        // --- 1. Display Global Announcement ---
+        function displayAnnouncement() {
+            const message = localStorage.getItem(CONFIG_KEYS.announcement);
+            if (message) {
+                const announcementBar = document.createElement('div');
+                announcementBar.id = 'global-admin-announcement';
+                announcementBar.innerHTML = `
+                    <p style="margin: 0; padding: 0; font-weight: bold;">
+                        <i class="fas fa-bullhorn" style="margin-left: 8px;"></i> اطلاعیه مدیر:
+                    </p>
+                    <p style="margin: 0; padding: 0;">${message}</p>
+                `;
+                
+                // Styles for the bar
+                Object.assign(announcementBar.style, {
+                    backgroundColor: '#1e3a8a',
+                    color: '#ffffff',
+                    padding: '12px 20px',
+                    textAlign: 'center',
+                    fontSize: '14px',
+                    lineHeight: '1.6',
+                    position: 'relative',
+                    zIndex: '9999',
+                    fontFamily: 'Vazir, Tahoma, sans-serif'
+                });
+
+                document.body.prepend(announcementBar);
+            }
+        }
+
+        // --- 2. Log Representative Login ---
+        function logRepLogin() {
+            // We only log once per session to avoid spamming logs on page refresh
+            if (sessionStorage.getItem('rep_login_logged')) {
+                return;
+            }
+
+            try {
+                const logs = JSON.parse(localStorage.getItem(CONFIG_KEYS.repLoginLogs)) || [];
+                const newLog = {
+                    repName: repIdentifier,
+                    timestamp: new Date().toISOString()
+                };
+                logs.push(newLog);
+
+                // Keep logs from getting too large, store latest 100
+                if (logs.length > 100) {
+                    logs.shift();
+                }
+
+                localStorage.setItem(CONFIG_KEYS.repLoginLogs, JSON.stringify(logs));
+                sessionStorage.setItem('rep_login_logged', 'true');
+                console.log('Login logged for:', repIdentifier);
+
+            } catch (error) {
+                console.error("Could not write rep login log:", error);
+            }
+        }
+
+        // Run the functions
+        displayAnnouncement();
+        logRepLogin();
+    });
+</script>
+<!-- END: Admin Panel Communication Script -->
