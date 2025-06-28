@@ -3838,163 +3838,178 @@
         }
 
         // Enhanced Add User Functions (افزودن کاربر) - اصلاح شده برای درست عمل کردن اینباندها
-        async function handleAddUser(e) {
-            e.preventDefault();
-            
-            if (!Security.requestLimiter.isAllowed('add_user')) {
-                showMessage('addUserError', 'لطفاً کمی صبر کنید');
-                return;
-            }
-            
-            const usernameInput = document.getElementById('newUsername');
-            const dataLimitInput = document.getElementById('newDataLimit');
-            const expireDateInput = document.getElementById('newExpireDate');
-            
-            if (!usernameInput || !dataLimitInput || !expireDateInput) {
-                showMessage('addUserError', 'خطا در فرم افزودن کاربر');
-                return;
-            }
-            
-            const username = usernameInput.value.trim();
-            const dataLimitGB = parseFloat(dataLimitInput.value);
-            const expireDateStr = expireDateInput.value;
-            
-            // Enhanced validation
-            if (!Security.validateInput(username, 'username')) {
-                showMessage('addUserError', 'نام کاربری نامعتبر است (فقط حروف انگلیسی، اعداد و _ مجاز است)');
-                return;
-            }
-            
-            if (!Security.validateInput(dataLimitGB.toString(), 'number', { min: 1, max: 1000 })) {
-                showMessage('addUserError', 'حجم ترافیک باید بین 1 تا 1000 گیگابایت باشد');
-                return;
-            }
-            
-            if (!Security.validateInput(expireDateStr, 'date')) {
-                showMessage('addUserError', 'تاریخ انقضا نامعتبر است');
-                return;
-            }
-            
-            // Check if username already exists
-            if (users.some(user => user.username === username)) {
-                showMessage('addUserError', 'نام کاربری قبلاً وجود دارد');
-                return;
-            }
-            
-            const dataLimit = dataLimitGB * 1024 * 1024 * 1024;
-            const expireDate = new Date(expireDateStr);
-            const expire = Math.floor(expireDate.getTime() / 1000);
-            
-            setLoadingState('addUserForm', 'addUserBtnText', 'addUserSpinner', true);
-            hideMessage('addUserError');
-            hideMessage('addUserSuccess');
-            
-            const userCreationResult = document.getElementById('userCreationResult');
-            if (userCreationResult) userCreationResult.classList.add('hidden');
-            
-            showLoading('در حال ایجاد کاربر...');
-            
-            try {
-                // مرحله ۱: ابتدا کاربر پایه را ایجاد می‌کنیم
-                console.log('🔄 ایجاد کاربر پایه:', username);
-                const basicUserData = {
-                    username,
-                    data_limit: dataLimit,
-                    expire
-                };
-                
-                console.log('📤 ارسال داده‌های پایه کاربر:', basicUserData);
-                const createResult = await apiCall('/user', 'POST', basicUserData);
-                console.log('📨 پاسخ ایجاد کاربر:', createResult);
-                
-                if (!createResult) {
-                    throw new Error('خطا در ایجاد کاربر پایه');
-                }
-                
-                // مرحله ۲: کمی صبر می‌کنیم تا کاربر کاملاً ایجاد شود
-                await new Promise(resolve => setTimeout(resolve, 1500));
-                
-                // مرحله ۳: حالا تنظیمات Template را اعمال می‌کنیم (اگر موجود باشد)
-                let configsApplied = 0;
-                if (templateConfigs && templateConfigs.length > 0) {
-                    console.log('🔧 اعمال تنظیمات Template از کاربر', selectedTemplateUser, ':', templateConfigs);
-                    showLoading('در حال اعمال تنظیمات Template...');
-                    
-                    // داده‌های Template User را برای کپی دریافت می‌کنیم
-                    const templateUserData = await apiCall(`/user/${encodeURIComponent(selectedTemplateUser)}`);
-                    if (templateUserData) {
-                        console.log('📋 اطلاعات Template User:', templateUserData);
-                        
-                        // داده‌های بروزرسانی را با تنظیمات Template آماده می‌کنیم
-                        const updateData = {};
-                        
-                        // کپی اینباندها از Template
-                        if (templateUserData.inbounds && Array.isArray(templateUserData.inbounds) && templateUserData.inbounds.length > 0) {
-                            updateData.inbounds = templateUserData.inbounds.map(inbound => ({
-                                tag: inbound.tag,
-                                protocol: inbound.protocol || 'vless'
-                            }));
-                            console.log('📥 اینباندهای کپی شده:', updateData.inbounds);
-                            configsApplied += templateUserData.inbounds.length;
-                        }
-                        
-                        // کپی پروکسی‌ها از Template
-                        if (templateUserData.proxies && typeof templateUserData.proxies === 'object' && Object.keys(templateUserData.proxies).length > 0) {
-                            updateData.proxies = { ...templateUserData.proxies };
-                            console.log('🔧 پروکسی‌های کپی شده:', updateData.proxies);
-                            configsApplied += Object.keys(templateUserData.proxies).length;
-                        }
-                        
-                        // اعمال تنظیمات در صورت وجود
-                        if (Object.keys(updateData).length > 0) {
-                            console.log('🚀 اعمال تنظیمات Template:', updateData);
-                            const updateResult = await apiCall(`/user/${encodeURIComponent(username)}`, 'PUT', updateData);
-                            console.log('📨 پاسخ بروزرسانی:', updateResult);
-                            
-                            if (updateResult) {
-                                console.log('✅ تنظیمات Template با موفقیت اعمال شد');
-                                // کمی صبر می‌کنیم تا تنظیمات اعمال شود
-                                await new Promise(resolve => setTimeout(resolve, 2000));
-                            } else {
-                                console.warn('⚠️ مشکل در اعمال تنظیمات Template');
-                            }
-                        } else {
-                            console.log('📋 هیچ تنظیمات Template یافت نشد برای کپی');
-                        }
-                    }
-                }
-                
-                // مرحله ۴: تأیید نهایی داده‌های کاربر
-                showLoading('در حال تأیید نهایی...');
-                await new Promise(resolve => setTimeout(resolve, 2000));
-                
-                showMessage('addUserSuccess', `کاربر ${Security.sanitizeHtml(username)} با موفقیت ایجاد شد ${configsApplied > 0 ? `(${configsApplied} تنظیمات از ${selectedTemplateUser} اعمال شد)` : ''}`);
-                
-                const addUserForm = document.getElementById('addUserForm');
-                if (addUserForm) addUserForm.reset();
-                
-                // تنظیم مجدد تاریخ انقضا
-                const newExpireDate = new Date();
-                newExpireDate.setDate(newExpireDate.getDate() + 30);
-                expireDateInput.value = newExpireDate.toISOString().split('T')[0];
-                
-                // نمایش کانفیگ‌ها
-                setTimeout(async () => {
-                    await showNewUserConfigs(username);
-                }, 1000);
-                
-                await loadUsers(); // بروزرسانی لیست کاربران
-                
-                showNotification(`✅ کاربر ${Security.sanitizeHtml(username)} ایجاد شد ${configsApplied > 0 ? `با ${configsApplied} تنظیمات` : ''}`, 'success');
-                
-            } catch (error) {
-                console.error('❌ خطا در ایجاد کاربر:', error);
-                showMessage('addUserError', 'خطا در ایجاد کاربر - لطفاً دوباره تلاش کنید');
-            }
-            
-            setLoadingState('addUserForm', 'addUserBtnText', 'addUserSpinner', false);
-            hideLoading();
+       async function handleAddUser(e) {
+    e.preventDefault();
+    
+    // اعتبارسنجی درخواست‌ها
+    if (!Security.requestLimiter.isAllowed('add_user')) {
+        showMessage('addUserError', 'لطفاً کمی صبر کنید');
+        return;
+    }
+    
+    // دریافت مقادیر فرم
+    const usernameInput = document.getElementById('newUsername');
+    const dataLimitInput = document.getElementById('newDataLimit');
+    const expireDateInput = document.getElementById('newExpireDate');
+    
+    if (!usernameInput || !dataLimitInput || !expireDateInput) {
+        showMessage('addUserError', 'خطا در فرم افزودن کاربر');
+        return;
+    }
+    
+    const username = usernameInput.value.trim();
+    const dataLimitGB = parseFloat(dataLimitInput.value);
+    const expireDateStr = expireDateInput.value;
+    
+    // اعتبارسنجی ورودی‌ها
+    if (!Security.validateInput(username, 'username')) {
+        showMessage('addUserError', 'نام کاربری نامعتبر است (فقط حروف انگلیسی، اعداد و _ مجاز است)');
+        return;
+    }
+    
+    if (!Security.validateInput(dataLimitGB.toString(), 'number', { min: 1, max: 1000 })) {
+        showMessage('addUserError', 'حجم ترافیک باید بین 1 تا 1000 گیگابایت باشد');
+        return;
+    }
+    
+    if (!Security.validateInput(expireDateStr, 'date')) {
+        showMessage('addUserError', 'تاریخ انقضا نامعتبر است');
+        return;
+    }
+    
+    // بررسی تکراری نبودن نام کاربری
+    if (users.some(user => user.username === username)) {
+        showMessage('addUserError', 'نام کاربری قبلاً وجود دارد');
+        return;
+    }
+    
+    // محاسبه مقادیر نهایی
+    const dataLimit = dataLimitGB * 1024 * 1024 * 1024;
+    const expireDate = new Date(expireDateStr);
+    const expire = Math.floor(expireDate.getTime() / 1000);
+    
+    // تنظیم حالت بارگذاری
+    setLoadingState('addUserForm', 'addUserBtnText', 'addUserSpinner', true);
+    hideMessage('addUserError');
+    hideMessage('addUserSuccess');
+    const userCreationResult = document.getElementById('userCreationResult');
+    if (userCreationResult) userCreationResult.classList.add('hidden');
+    
+    showLoading('در حال ایجاد کاربر...');
+    
+    try {
+        // مرحله 1: ایجاد کاربر پایه
+        console.log('🔄 ایجاد کاربر پایه:', username);
+        const basicUserData = {
+            username,
+            data_limit: dataLimit,
+            expire
+        };
+        
+        console.log('📤 ارسال داده‌های پایه کاربر:', basicUserData);
+        const createResult = await apiCall('/user', 'POST', basicUserData);
+        console.log('📨 پاسخ ایجاد کاربر:', createResult);
+        
+        if (!createResult) {
+            throw new Error('خطا در ایجاد کاربر پایه');
         }
+        
+        // مرحله 2: انتظار برای ایجاد کامل کاربر
+        console.log('⏳ انتظار برای ایجاد کامل کاربر...');
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        
+        // مرحله 3: دریافت تنظیمات از کاربر Template
+        console.log('🔄 دریافت تنظیمات از کاربر Template:', selectedTemplateUser);
+        const templateUser = await apiCall(`/user/${encodeURIComponent(selectedTemplateUser)}`);
+        console.log('📋 اطلاعات Template User:', templateUser);
+        
+        if (!templateUser) {
+            throw new Error('خطا در دریافت تنظیمات Template');
+        }
+        
+        // مرحله 4: آماده‌سازی داده‌های بروزرسانی
+        const updateData = {};
+        let configsApplied = 0;
+        
+        // کپی اینباندها
+        if (templateUser.inbounds && templateUser.inbounds.length > 0) {
+            updateData.inbounds = templateUser.inbounds.map(inbound => ({
+                tag: inbound.tag,
+                protocol: inbound.protocol || 'vless'
+            }));
+            configsApplied += templateUser.inbounds.length;
+            console.log('📥 اینباندهای کپی شده:', updateData.inbounds);
+        }
+        
+        // کپی پروکسی‌ها
+        if (templateUser.proxies && Object.keys(templateUser.proxies).length > 0) {
+            updateData.proxies = { ...templateUser.proxies };
+            configsApplied += Object.keys(templateUser.proxies).length;
+            console.log('🔧 پروکسی‌های کپی شده:', updateData.proxies);
+        }
+        
+        // مرحله 5: اعمال تنظیمات به کاربر جدید
+        if (Object.keys(updateData).length > 0) {
+            console.log('🚀 اعمال تنظیمات به کاربر جدید:', updateData);
+            showLoading('در حال اعمال تنظیمات Template...');
+            
+            const updateResult = await apiCall(`/user/${encodeURIComponent(username)}`, 'PUT', updateData);
+            console.log('📨 پاسخ بروزرسانی:', updateResult);
+            
+            if (!updateResult) {
+                console.warn('⚠️ مشکل در اعمال تنظیمات Template');
+            }
+            
+            // انتظار برای اعمال تنظیمات
+            await new Promise(resolve => setTimeout(resolve, 3000));
+        } else {
+            console.log('📋 هیچ تنظیمات Template یافت نشد برای کپی');
+        }
+        
+        // مرحله 6: دریافت اطلاعات نهایی کاربر
+        console.log('🔍 دریافت اطلاعات نهایی کاربر');
+        const finalUserData = await apiCall(`/user/${encodeURIComponent(username)}`);
+        
+        // بررسی وجود لینک‌های کانفیگ
+        if (finalUserData && finalUserData.links && finalUserData.links.length > 0) {
+            showMessage('addUserSuccess', `کاربر ${Security.sanitizeHtml(username)} با موفقیت ایجاد شد ${configsApplied > 0 ? `(${configsApplied} تنظیمات از ${selectedTemplateUser} اعمال شد)` : ''}`);
+            
+            // بازنشانی فرم
+            const addUserForm = document.getElementById('addUserForm');
+            if (addUserForm) addUserForm.reset();
+            
+            // تنظیم مجدد تاریخ انقضا
+            const newExpireDate = new Date();
+            newExpireDate.setDate(newExpireDate.getDate() + 30);
+            if (expireDateInput) {
+                expireDateInput.value = newExpireDate.toISOString().split('T')[0];
+            }
+            
+            // نمایش کانفیگ‌ها
+            await showNewUserConfigs(username);
+            
+            // بروزرسانی لیست کاربران
+            await loadUsers();
+            
+            showNotification(`✅ کاربر ${Security.sanitizeHtml(username)} ایجاد شد ${configsApplied > 0 ? `با ${configsApplied} تنظیمات` : ''}`, 'success');
+        } else {
+            throw new Error('کانفیگ‌ها ایجاد نشدند');
+        }
+    } catch (error) {
+        console.error('❌ خطا در ایجاد کاربر:', error);
+        showMessage('addUserError', 'خطا در ایجاد کاربر - لطفاً دوباره تلاش کنید');
+        
+        // در صورت خطا، کاربر ایجاد شده را حذف می‌کنیم
+        try {
+            await apiCall(`/user/${encodeURIComponent(username)}`, 'DELETE');
+        } catch (deleteError) {
+            console.error('حذف کاربر ناموفق بود:', deleteError);
+        }
+    } finally {
+        setLoadingState('addUserForm', 'addUserBtnText', 'addUserSpinner', false);
+        hideLoading();
+    }
+}
 
         async function showNewUserConfigs(username) {
             if (!Security.validateInput(username, 'username')) return;
