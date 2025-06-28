@@ -99,11 +99,6 @@
         .fa-clock:before, .fas.fa-clock:before { content: "\f017" !important; }
         .fa-envelope:before, .fas.fa-envelope:before { content: "\f0e0" !important; }
         .fa-envelope-open:before, .fas.fa-envelope-open:before { content: "\f2b6" !important; }
-        .fa-crown:before, .fas.fa-crown:before { content: "\f521" !important; }
-        .fa-user-cog:before, .fas.fa-user-cog:before { content: "\f4fe" !important; }
-        .fa-network-wired:before, .fas.fa-network-wired:before { content: "\f6ff" !important; }
-        .fa-clone:before, .fas.fa-clone:before { content: "\f24d" !important; }
-        .fa-magic:before, .fas.fa-magic:before { content: "\f0d0" !important; }
         
         /* Enhanced Vazir Font Loading */
         @import url('https://v1.fontapi.ir/css/Vazir');
@@ -385,7 +380,7 @@
             font-size: 14px;
         }
         
-        .form-input, .form-select {
+        .form-input {
             width: 100%;
             padding: 14px 16px;
             border: 2px solid var(--border-color);
@@ -398,7 +393,7 @@
             font-family: 'Vazir', 'Vazir-Local', 'Tahoma', 'Arial', sans-serif !important;
         }
         
-        .form-input:focus, .form-select:focus {
+        .form-input:focus {
             border-color: var(--primary-color);
             box-shadow: 0 0 0 4px rgba(44, 62, 80, 0.1);
             transform: translateY(-1px);
@@ -1225,8 +1220,8 @@
             font-family: 'Vazir', 'Vazir-Local', 'Tahoma', 'Arial', sans-serif !important;
         }
 
-        /* Template User Display */
-        .template-status {
+        /* Inbound Status Display */
+        .inbound-status {
             background: var(--bg-secondary);
             padding: 16px;
             border-radius: 12px;
@@ -1234,7 +1229,7 @@
             border: 1px solid var(--border-light);
         }
 
-        .template-status h5 {
+        .inbound-status h5 {
             color: var(--text-primary);
             margin-bottom: 12px;
             font-weight: 600;
@@ -1243,13 +1238,13 @@
             gap: 8px;
         }
 
-        .template-list {
+        .inbound-list {
             display: flex;
             flex-wrap: wrap;
             gap: 8px;
         }
 
-        .template-tag {
+        .inbound-tag {
             background: var(--primary-color);
             color: white;
             padding: 4px 12px;
@@ -1261,129 +1256,12 @@
             gap: 4px;
         }
 
-        .template-tag.loading {
+        .inbound-tag.loading {
             background: var(--warning-color);
         }
 
-        .template-tag.none {
+        .inbound-tag.none {
             background: var(--danger-color);
-        }
-
-        .template-tag.selected {
-            background: var(--success-color);
-            box-shadow: 0 0 0 2px rgba(46, 125, 50, 0.3);
-        }
-
-        /* Template User Selection */
-        .template-selection {
-            background: var(--bg-secondary);
-            padding: 20px;
-            border-radius: 12px;
-            margin: 16px 0;
-            border: 1px solid var(--border-light);
-        }
-
-        .template-selection h5 {
-            color: var(--text-primary);
-            margin-bottom: 16px;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .template-user-card {
-            background: var(--card-bg);
-            border: 2px solid var(--border-color);
-            border-radius: 12px;
-            padding: 16px;
-            margin: 8px 0;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .template-user-card:hover {
-            border-color: var(--primary-color);
-            box-shadow: var(--shadow-md);
-        }
-
-        .template-user-card.selected {
-            border-color: var(--success-color);
-            background: rgba(46, 125, 50, 0.05);
-            box-shadow: 0 0 0 4px rgba(46, 125, 50, 0.1);
-        }
-
-        .template-user-info {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .template-user-avatar {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-        }
-
-        .template-user-details h6 {
-            margin: 0 0 4px 0;
-            color: var(--text-primary);
-            font-weight: 600;
-        }
-
-        .template-user-details p {
-            margin: 0;
-            color: var(--text-secondary);
-            font-size: 12px;
-        }
-
-        .template-user-status {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .template-info-panel {
-            background: rgba(204, 155, 80, 0.1);
-            border: 1px solid rgba(204, 155, 80, 0.2);
-            border-radius: 12px;
-            padding: 16px;
-            margin: 16px 0;
-        }
-
-        .template-info-panel h6 {
-            color: var(--accent-color);
-            margin-bottom: 12px;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .template-configs {
-            display: grid;
-            gap: 8px;
-        }
-
-        .template-config-item {
-            background: var(--card-bg);
-            padding: 8px 12px;
-            border-radius: 8px;
-            border: 1px solid var(--border-light);
-            font-size: 12px;
-            color: var(--text-secondary);
-            display: flex;
-            align-items: center;
-            gap: 8px;
         }
         
         /* Mobile Header */
@@ -1661,7 +1539,7 @@
                 font-size: 13px;
             }
 
-            .form-input, .form-select {
+            .form-input {
                 padding: 12px 14px;
                 font-size: 16px;
             }
@@ -1883,29 +1761,18 @@
                 margin: 0 8px;
             }
 
-            .template-status, .template-selection {
+            .inbound-status {
                 padding: 12px;
                 margin: 12px 0;
             }
 
-            .template-list {
+            .inbound-list {
                 gap: 6px;
             }
 
-            .template-tag {
+            .inbound-tag {
                 padding: 3px 8px;
                 font-size: 11px;
-            }
-
-            .template-user-card {
-                padding: 12px;
-                margin: 6px 0;
-            }
-
-            .template-user-avatar {
-                width: 32px;
-                height: 32px;
-                font-size: 12px;
             }
         }
 
@@ -2015,11 +1882,6 @@
             .fa-server:before { content: "🖥️"; }
             .fa-bars:before { content: "☰"; }
             .fa-headset:before { content: "🎧"; }
-            .fa-crown:before { content: "👑"; }
-            .fa-user-cog:before { content: "⚙️"; }
-            .fa-network-wired:before { content: "🌐"; }
-            .fa-clone:before { content: "📋"; }
-            .fa-magic:before { content: "✨"; }
         }
 
         /* Force Icon Display */
@@ -2223,11 +2085,11 @@
                     </div>
                 </div>
                 
-                <!-- Template Status Display -->
-                <div id="templateStatus" class="template-status">
-                    <h5><i class="fas fa-clone"></i> کاربر Template انتخابی: <span id="selectedTemplateDisplay">Admin</span></h5>
-                    <div id="templateList" class="template-list">
-                        <div class="template-tag loading">
+                <!-- Inbound Status Display -->
+                <div id="inboundStatus" class="inbound-status">
+                    <h5><i class="fas fa-server"></i> وضعیت اینباندها</h5>
+                    <div id="inboundList" class="inbound-list">
+                        <div class="inbound-tag loading">
                             <i class="fas fa-sync-alt"></i> در حال بارگذاری...
                         </div>
                     </div>
@@ -2280,38 +2142,13 @@
                     </button>
                 </div>
                 
-                <!-- Template User Selection -->
-                <div id="templateSelectionSection" class="template-selection">
-                    <h5><i class="fas fa-clone"></i> انتخاب کاربر Template (الگو) برای کپی تنظیمات</h5>
-                    <div style="background: rgba(25, 118, 210, 0.1); padding: 12px; border-radius: 8px; margin-bottom: 16px; border: 1px solid rgba(25, 118, 210, 0.2);">
-                        <p style="color: var(--info-color); margin: 0; font-size: 13px; line-height: 1.5;">
-                            <i class="fas fa-info-circle"></i>
-                            کاربر انتخابی به عنوان الگو استفاده شده و تمام تنظیمات، پروتکل‌ها، اینباندها و کانفیگ‌های آن برای کاربران جدید کپی می‌شود
-                        </p>
-                    </div>
-                    <div id="templateUsersList">
-                        <div class="section-loading">
-                            <div class="loading-spinner"></div>
-                            <span>در حال بارگذاری کاربران Template...</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Template Status for New Users -->
-                <div id="addUserTemplateStatus" class="template-status">
-                    <h5><i class="fas fa-magic"></i> تنظیمات الگو برای کاربر جدید (از: <span id="selectedTemplateForUser">Admin</span>)</h5>
-                    <div id="addUserTemplateList" class="template-list">
-                        <div class="template-tag loading">
+                <!-- Inbound Status for New Users -->
+                <div id="addUserInboundStatus" class="inbound-status">
+                    <h5><i class="fas fa-server"></i> اینباندهای فعال برای کاربر جدید</h5>
+                    <div id="addUserInboundList" class="inbound-list">
+                        <div class="inbound-tag loading">
                             <i class="fas fa-sync-alt"></i> در حال بارگذاری...
                         </div>
-                    </div>
-                </div>
-                
-                <!-- Template Configuration Info -->
-                <div id="templateConfigInfo" class="template-info-panel hidden">
-                    <h6><i class="fas fa-cog"></i> تنظیمات Template انتخابی</h6>
-                    <div id="templateConfigs" class="template-configs">
-                        <!-- Template configs will be shown here -->
                     </div>
                 </div>
                 
@@ -2337,9 +2174,7 @@
                     <div id="addUserSuccess" class="success-message hidden"></div>
                     
                     <button type="submit" class="form-button" style="width: 100%; padding: 16px; font-size: 16px;">
-                        <span id="addUserBtnText">
-                            <i class="fas fa-clone"></i> افزودن کاربر (بر اساس Template)
-                        </span>
+                        <span id="addUserBtnText">افزودن کاربر (VLESS)</span>
                         <div id="addUserSpinner" class="loading-spinner hidden"></div>
                     </button>
                 </form>
@@ -2520,7 +2355,7 @@
                     </button>
                 </div>
                 
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 24px;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
                     <div class="chart-container">
                         <h4 class="chart-title">اطلاعات حساب</h4>
                         <div class="form-group">
@@ -2551,36 +2386,6 @@
                         </div>
                         <button onclick="saveSettings()" class="form-button" style="width: 100%; padding: 12px;">
                             <i class="fas fa-save"></i> ذخیره تنظیمات
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Template Configuration Settings -->
-                <div class="chart-container">
-                    <h4 class="chart-title"><i class="fas fa-clone"></i> تنظیمات Template و کانفیگ</h4>
-                    
-                    <div class="form-group">
-                        <label class="form-label">کاربر Template انتخابی برای کپی تنظیمات</label>
-                        <select id="templateUserSelect" class="form-select" onchange="changeSelectedTemplate()">
-                            <option value="Admin">Admin (پیش‌فرض)</option>
-                        </select>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="form-label">وضعیت تنظیمات انتخابی</label>
-                        <div id="settingsTemplateList" class="template-list">
-                            <div class="template-tag loading">
-                                <i class="fas fa-sync-alt"></i> در حال بارگذاری...
-                            </div>
-                        </div>
-                    </div>
-
-                    <div style="display: flex; gap: 12px; margin-top: 16px;">
-                        <button onclick="loadTemplateUsers()" class="form-button info" style="flex: 1;">
-                            <i class="fas fa-user-cog"></i> بارگذاری کاربران Template
-                        </button>
-                        <button onclick="loadTemplateConfigs()" class="form-button warning" style="flex: 1;">
-                            <i class="fas fa-sync-alt"></i> بروزرسانی تنظیمات
                         </button>
                     </div>
                 </div>
@@ -2712,10 +2517,6 @@
                     else if (className.includes('fa-paper-plane')) fallback = '✈️';
                     else if (className.includes('fa-clock')) fallback = '🕐';
                     else if (className.includes('fa-envelope')) fallback = '✉️';
-                    else if (className.includes('fa-crown')) fallback = '👑';
-                    else if (className.includes('fa-network')) fallback = '🌐';
-                    else if (className.includes('fa-clone')) fallback = '📋';
-                    else if (className.includes('fa-magic')) fallback = '✨';
                     
                     icon.innerHTML = `<span class="icon-fallback">${fallback}</span>`;
                 }
@@ -2754,12 +2555,7 @@
                 'fa-paper-plane': '✈️',
                 'fa-clock': '🕐',
                 'fa-envelope': '✉️',
-                'fa-envelope-open': '📭',
-                'fa-crown': '👑',
-                'fa-user-cog': '⚙️',
-                'fa-network-wired': '🌐',
-                'fa-clone': '📋',
-                'fa-magic': '✨'
+                'fa-envelope-open': '📭'
             };
 
             Object.keys(iconMap).forEach(className => {
@@ -2904,7 +2700,7 @@
             },
             
             safeCreateElement: (tag, content, className) => {
-                const allowedTags = ['div', 'span', 'p', 'button', 'input', 'label', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'ul', 'li', 'table', 'tr', 'td', 'th', 'thead', 'tbody', 'select', 'option'];
+                const allowedTags = ['div', 'span', 'p', 'button', 'input', 'label', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'ul', 'li', 'table', 'tr', 'td', 'th', 'thead', 'tbody'];
                 if (!allowedTags.includes(tag.toLowerCase())) {
                     console.warn(`Attempted to create unsafe element: ${tag}`);
                     tag = 'div';
@@ -3082,10 +2878,8 @@
         let filteredUsers = [];
         let loginAttempts = 0;
         let sessionFingerprint = '';
-        let templateConfigs = []; // Store template user configurations
-        let availableTemplates = []; // Store all available template configurations
-        let selectedTemplateUser = 'Admin'; // Selected template user for new users
-        let templateUsers = []; // List of template users
+        let adminInbounds = []; // Store Admin user inbounds
+        let availableInbounds = []; // Store all available inbounds
         let sectionsLoaded = {
             dashboard: false,
             users: false,
@@ -3165,9 +2959,8 @@
                 expireDateInput.value = expireDate.toISOString().split('T')[0];
             }
             
-            // Reload template users and configs
-            loadTemplateUsers();
-            loadTemplateConfigs();
+            // Reload inbounds
+            loadAdminInbounds();
             
             showNotification('فرم افزودن کاربر بازنشانی شد! 🔄', 'success');
         }
@@ -3219,11 +3012,6 @@
             if (usernameInput) usernameInput.value = currentUsername;
             if (serverUrlInput) serverUrlInput.value = getServerUrl();
             
-            // Update template user select
-            updateTemplateUserSelect();
-            updateTemplateDisplay('loading');
-            loadTemplateConfigs();
-            
             showNotification('تنظیمات بروزرسانی شد! 🔄', 'success');
         }
 
@@ -3261,8 +3049,7 @@
                             showPanel();
                             loadDashboardData();
                             startAutoUpdate();
-                            loadTemplateUsers();
-                            loadTemplateConfigs();
+                            loadAdminInbounds();
                         } else {
                             logout();
                         }
@@ -3415,9 +3202,8 @@
                             loadDashboardData();
                             startAutoUpdate();
                             
-                            // Load template users and configs for new users
-                            await loadTemplateUsers();
-                            await loadTemplateConfigs();
+                            // Load inbounds for new users
+                            await loadAdminInbounds();
                             
                             showNotification('ورود موفقیت‌آمیز بود! 🎉', 'success');
                         } else {
@@ -3444,285 +3230,101 @@
             hideLoading();
         }
 
-        // Enhanced Template User Management
-        async function loadTemplateUsers() {
+        // Fixed Inbound Management - حل مشکل کانفیگ خالی
+        async function loadAdminInbounds() {
             try {
-                console.log('🔄 شروع بارگذاری کاربران Template...');
+                console.log('🔄 شروع بارگذاری اینباندها...');
+                updateInboundDisplay('loading');
                 
-                const usersData = await apiCall('/users');
-                if (usersData && usersData.users && Array.isArray(usersData.users)) {
-                    // Filter users with configurations (prioritize users with inbounds and links)
-                    templateUsers = usersData.users.filter(user => {
-                        return user.username && (
-                            // Users with inbounds
-                            (user.inbounds && user.inbounds.length > 0) ||
-                            // Users with existing configs
-                            (user.links && user.links.length > 0) ||
-                            // Users with proxies
-                            (user.proxies && Object.keys(user.proxies).length > 0) ||
-                            // Traditional admin patterns
-                            user.username.toLowerCase().includes('admin') ||
-                            user.username.toLowerCase().includes('root') ||
-                            user.username.toLowerCase().includes('template') ||
-                            user.username.toLowerCase().includes('sample')
-                        );
-                    }).sort((a, b) => {
-                        // Sort by priority: users with more inbounds first
-                        const aScore = (a.inbounds?.length || 0) * 10 + (a.links?.length || 0);
-                        const bScore = (b.inbounds?.length || 0) * 10 + (b.links?.length || 0);
-                        return bScore - aScore;
-                    });
+                // Try to get system inbounds first
+                const systemInbounds = await apiCall('/inbounds');
+                console.log('🔧 اینباندهای سیستم:', systemInbounds);
+                
+                if (systemInbounds && Array.isArray(systemInbounds) && systemInbounds.length > 0) {
+                    // Filter active inbounds
+                    availableInbounds = systemInbounds.filter(inbound => 
+                        inbound && 
+                        inbound.enable !== false && 
+                        inbound.tag && 
+                        inbound.tag.trim() !== ''
+                    );
                     
-                    // Always include 'Admin' if not already present
-                    if (!templateUsers.find(u => u.username === 'Admin')) {
-                        templateUsers.unshift({ username: 'Admin', inbounds: [], links: [] });
-                    }
-                    
-                    console.log('✅ کاربران Template بارگذاری شد:', templateUsers);
-                    updateTemplateUsersList();
-                    updateTemplateUserSelect();
-                    showNotification(`${templateUsers.length} کاربر Template یافت شد`, 'success');
-                    
-                } else {
-                    console.log('⚠️ هیچ کاربری یافت نشد، استفاده از پیش‌فرض');
-                    templateUsers = [{ username: 'Admin', inbounds: [], links: [] }];
-                    updateTemplateUsersList();
-                    updateTemplateUserSelect();
-                }
-                
-            } catch (error) {
-                console.error('❌ خطا در بارگذاری کاربران Template:', error);
-                templateUsers = [{ username: 'Admin', inbounds: [], links: [] }];
-                updateTemplateUsersList();
-                updateTemplateUserSelect();
-                showNotification('خطا در بارگذاری کاربران Template', 'error');
-            }
-        }
-
-        function updateTemplateUsersList() {
-            const container = document.getElementById('templateUsersList');
-            if (!container) return;
-            
-            container.innerHTML = '';
-            
-            if (templateUsers.length === 0) {
-                const noUsersMsg = Security.safeCreateElement('p', 'هیچ کاربر Template یافت نشد');
-                noUsersMsg.style.cssText = 'text-align: center; color: var(--text-muted); padding: 20px;';
-                container.appendChild(noUsersMsg);
-                return;
-            }
-            
-            templateUsers.forEach(user => {
-                const userCard = document.createElement('div');
-                userCard.className = `template-user-card ${user.username === selectedTemplateUser ? 'selected' : ''}`;
-                userCard.onclick = () => selectTemplateUser(user.username);
-                
-                const userInfo = document.createElement('div');
-                userInfo.className = 'template-user-info';
-                
-                const avatar = document.createElement('div');
-                avatar.className = 'template-user-avatar';
-                const initial = user.username.charAt(0).toUpperCase();
-                avatar.textContent = initial;
-                
-                const details = document.createElement('div');
-                details.className = 'template-user-details';
-                
-                const username = Security.safeCreateElement('h6', user.username);
-                const configCount = (user.inbounds?.length || 0) + (user.links?.length || 0);
-                const configInfo = Security.safeCreateElement('p', `${configCount} تنظیمات موجود`);
-                
-                details.appendChild(username);
-                details.appendChild(configInfo);
-                userInfo.appendChild(avatar);
-                userInfo.appendChild(details);
-                
-                const statusDiv = document.createElement('div');
-                statusDiv.className = 'template-user-status';
-                
-                if (user.username === selectedTemplateUser) {
-                    const selectedBadge = Security.safeCreateElement('span', 'انتخاب شده', 'status-badge status-active');
-                    const selectedIcon = document.createElement('i');
-                    selectedIcon.className = 'fas fa-check-circle';
-                    statusDiv.appendChild(selectedIcon);
-                    statusDiv.appendChild(selectedBadge);
-                } else {
-                    const selectIcon = document.createElement('i');
-                    selectIcon.className = 'fas fa-clone';
-                    selectIcon.style.color = 'var(--text-muted)';
-                    statusDiv.appendChild(selectIcon);
-                }
-                
-                userCard.appendChild(userInfo);
-                userCard.appendChild(statusDiv);
-                container.appendChild(userCard);
-            });
-        }
-
-        function updateTemplateUserSelect() {
-            const select = document.getElementById('templateUserSelect');
-            if (!select) return;
-            
-            select.innerHTML = '';
-            
-            templateUsers.forEach(user => {
-                const option = Security.safeCreateElement('option', user.username);
-                option.value = user.username;
-                if (user.username === selectedTemplateUser) {
-                    option.selected = true;
-                }
-                select.appendChild(option);
-            });
-        }
-
-        function selectTemplateUser(username) {
-            if (!Security.validateInput(username, 'username')) return;
-            
-            selectedTemplateUser = username;
-            
-            // Update displays
-            updateTemplateUsersList();
-            updateSelectedTemplateDisplays();
-            
-            // Reload configs for the selected template
-            loadTemplateConfigs();
-            
-            showNotification(`کاربر Template انتخاب شد: ${Security.sanitizeHtml(username)}`, 'success');
-        }
-
-        function changeSelectedTemplate() {
-            const select = document.getElementById('templateUserSelect');
-            if (!select) return;
-            
-            const selectedValue = select.value;
-            if (selectedValue && selectedValue !== selectedTemplateUser) {
-                selectTemplateUser(selectedValue);
-            }
-        }
-
-        function updateSelectedTemplateDisplays() {
-            const displays = [
-                'selectedTemplateDisplay',
-                'selectedTemplateForUser'
-            ];
-            
-            displays.forEach(id => {
-                const element = document.getElementById(id);
-                if (element) {
-                    Security.safeSetContent(element, selectedTemplateUser);
-                }
-            });
-        }
-
-        // Enhanced Template Configuration Management
-        async function loadTemplateConfigs() {
-            try {
-                console.log('🔄 شروع بارگذاری تنظیمات Template از کاربر:', selectedTemplateUser);
-                updateTemplateDisplay('loading');
-                
-                // Try to get selected template user configs
-                const templateUser = await apiCall(`/user/${encodeURIComponent(selectedTemplateUser)}`);
-                console.log('📊 داده‌های کاربر Template:', templateUser);
-                
-                if (templateUser) {
-                    templateConfigs = [];
-                    
-                    // Collect inbounds
-                    if (templateUser.inbounds && Array.isArray(templateUser.inbounds) && templateUser.inbounds.length > 0) {
-                        templateUser.inbounds.forEach(inbound => {
-                            templateConfigs.push({
-                                type: 'inbound',
-                                tag: inbound.tag,
-                                protocol: inbound.protocol || 'vless'
-                            });
-                        });
-                        console.log('✅ اینباندهای Template بارگذاری شد:', templateUser.inbounds);
-                    }
-                    
-                    // Collect proxies
-                    if (templateUser.proxies && typeof templateUser.proxies === 'object') {
-                        Object.keys(templateUser.proxies).forEach(protocol => {
-                            templateConfigs.push({
-                                type: 'proxy',
-                                protocol: protocol,
-                                details: templateUser.proxies[protocol]
-                            });
-                        });
-                        console.log('🔧 پروکسی‌های Template بارگذاری شد:', templateUser.proxies);
-                    }
-                    
-                    // Collect links
-                    if (templateUser.links && Array.isArray(templateUser.links) && templateUser.links.length > 0) {
-                        templateUser.links.forEach((link, index) => {
-                            const protocol = link.split('://')[0].toLowerCase();
-                            templateConfigs.push({
-                                type: 'link',
-                                protocol: protocol,
-                                link: link,
-                                index: index + 1
-                            });
-                        });
-                        console.log('🔗 لینک‌های Template بارگذاری شد:', templateUser.links);
-                    }
-                    
-                    if (templateConfigs.length > 0) {
-                        console.log('🚀 تنظیمات Template موفقیت‌آمیز بارگذاری شد:', templateConfigs);
-                        showNotification(`${templateConfigs.length} تنظیمات از ${selectedTemplateUser} بارگذاری شد`, 'success');
-                        updateTemplateDisplay('template', templateConfigs);
-                        showTemplateConfigInfo(templateUser);
+                    if (availableInbounds.length > 0) {
+                        // Convert to proper format with IDs
+                        adminInbounds = availableInbounds.map(inbound => ({
+                            tag: inbound.tag,
+                            protocol: inbound.protocol || 'vless',
+                            id: inbound.id || null
+                        }));
+                        
+                        console.log('✅ اینباندهای سیستم بارگذاری شد:', adminInbounds);
+                        showNotification(`${adminInbounds.length} اینباند فعال یافت شد`, 'success');
+                        updateInboundDisplay('system', adminInbounds);
                         return;
                     }
                 }
                 
-                console.log('❌ هیچ تنظیماتی از کاربر Template یافت نشد');
+                console.log('⚠️ تلاش برای دریافت اینباندهای کاربر Admin...');
                 
-                // Last resort: use default configs
-                templateConfigs = [
-                    { type: 'inbound', tag: "REALITY", protocol: "vless" },
-                    { type: 'inbound', tag: "Websocket", protocol: "vless" },
-                    { type: 'inbound', tag: "gRPC", protocol: "vless" }
+                // Try to get Admin user inbounds as fallback
+                const adminUser = await apiCall('/user/Admin');
+                console.log('📊 داده‌های کاربر Admin:', adminUser);
+                
+                if (adminUser && adminUser.inbounds && Array.isArray(adminUser.inbounds) && adminUser.inbounds.length > 0) {
+                    adminInbounds = adminUser.inbounds.map(inbound => ({
+                        tag: inbound.tag || inbound,
+                        protocol: inbound.protocol || 'vless',
+                        id: inbound.id || null
+                    }));
+                    console.log('✅ اینباندهای Admin بارگذاری شد:', adminInbounds);
+                    showNotification(`${adminInbounds.length} اینباند از Admin یافت شد`, 'info');
+                    updateInboundDisplay('admin', adminInbounds);
+                    return;
+                }
+                
+                console.log('❌ هیچ اینباندی یافت نشد، استفاده از اینباندهای پیش‌فرض...');
+                
+                // Last resort: use default inbounds
+                adminInbounds = [
+                    { tag: "REALITY", protocol: "vless", id: 1 },
+                    { tag: "Websocket", protocol: "vless", id: 2 },
+                    { tag: "gRPC", protocol: "vless", id: 3 }
                 ];
                 
-                console.log('🔄 تنظیمات پیش‌فرض تعیین شد:', templateConfigs);
-                showNotification('تنظیمات پیش‌فرض استفاده شد', 'warning');
-                updateTemplateDisplay('default', templateConfigs);
+                console.log('🔄 اینباندهای پیش‌فرض تنظیم شد:', adminInbounds);
+                showNotification('اینباندهای پیش‌فرض استفاده شد - ممکن است کانفیگ خالی باشد', 'warning');
+                updateInboundDisplay('default', adminInbounds);
                 
             } catch (error) {
-                console.error('❌ خطا در بارگذاری تنظیمات Template:', error);
+                console.error('❌ خطا در بارگذاری اینباندها:', error);
                 
                 // Emergency fallback
-                templateConfigs = [
-                    { type: 'inbound', tag: "REALITY", protocol: "vless" },
-                    { type: 'inbound', tag: "Websocket", protocol: "vless" },
-                    { type: 'inbound', tag: "gRPC", protocol: "vless" }
+                adminInbounds = [
+                    { tag: "REALITY", protocol: "vless", id: 1 },
+                    { tag: "Websocket", protocol: "vless", id: 2 },
+                    { tag: "gRPC", protocol: "vless", id: 3 }
                 ];
                 
-                showNotification('خطا در بارگذاری تنظیمات - پیش‌فرض استفاده شد', 'error');
-                updateTemplateDisplay('error', templateConfigs);
+                showNotification('خطا در بارگذاری اینباندها - اینباند پیش‌فرض استفاده شد', 'error');
+                updateInboundDisplay('error', adminInbounds);
             }
         }
 
-        function updateTemplateDisplay(status, configs = []) {
-            // Update dashboard template display
-            const templateList = document.getElementById('templateList');
-            if (templateList) {
-                updateTemplateList(templateList, status, configs);
+        function updateInboundDisplay(status, inbounds = []) {
+            // Update dashboard inbound display
+            const inboundList = document.getElementById('inboundList');
+            if (inboundList) {
+                updateInboundList(inboundList, status, inbounds);
             }
             
-            // Update add user section template display
-            const addUserTemplateList = document.getElementById('addUserTemplateList');
-            if (addUserTemplateList) {
-                updateTemplateList(addUserTemplateList, status, configs);
-            }
-
-            // Update settings template display
-            const settingsTemplateList = document.getElementById('settingsTemplateList');
-            if (settingsTemplateList) {
-                updateTemplateList(settingsTemplateList, status, configs);
+            // Update add user section inbound display
+            const addUserInboundList = document.getElementById('addUserInboundList');
+            if (addUserInboundList) {
+                updateInboundList(addUserInboundList, status, inbounds);
             }
         }
 
-        function updateTemplateList(container, status, configs = []) {
+        function updateInboundList(container, status, inbounds = []) {
             if (!container) return;
             
             container.innerHTML = '';
@@ -3730,49 +3332,51 @@
             switch (status) {
                 case 'loading':
                     const loadingTag = document.createElement('div');
-                    loadingTag.className = 'template-tag loading';
+                    loadingTag.className = 'inbound-tag loading';
                     loadingTag.innerHTML = '<i class="fas fa-sync-alt"></i> در حال بارگذاری...';
                     container.appendChild(loadingTag);
                     break;
                     
-                case 'template':
-                    configs.forEach(config => {
+                case 'admin':
+                    inbounds.forEach(inbound => {
                         const tag = document.createElement('div');
-                        tag.className = 'template-tag selected';
-                        let content = '';
-                        if (config.type === 'inbound') {
-                            content = `<i class="fas fa-server"></i> ${Security.sanitizeHtml(config.tag)} (${Security.sanitizeHtml(config.protocol)})`;
-                        } else if (config.type === 'proxy') {
-                            content = `<i class="fas fa-network-wired"></i> ${Security.sanitizeHtml(config.protocol)}`;
-                        } else if (config.type === 'link') {
-                            content = `<i class="fas fa-link"></i> ${Security.sanitizeHtml(config.protocol)} #${config.index}`;
-                        }
-                        tag.innerHTML = content;
+                        tag.className = 'inbound-tag';
+                        tag.innerHTML = `<i class="fas fa-server"></i> ${Security.sanitizeHtml(inbound.tag)} (${Security.sanitizeHtml(inbound.protocol || 'vless')})`;
+                        container.appendChild(tag);
+                    });
+                    break;
+                    
+                case 'system':
+                    inbounds.forEach(inbound => {
+                        const tag = document.createElement('div');
+                        tag.className = 'inbound-tag';
+                        tag.style.background = 'var(--info-color)';
+                        tag.innerHTML = `<i class="fas fa-cog"></i> ${Security.sanitizeHtml(inbound.tag)} (${Security.sanitizeHtml(inbound.protocol || 'vless')})`;
                         container.appendChild(tag);
                     });
                     break;
                     
                 case 'default':
-                    configs.forEach(config => {
+                    inbounds.forEach(inbound => {
                         const tag = document.createElement('div');
-                        tag.className = 'template-tag';
+                        tag.className = 'inbound-tag';
                         tag.style.background = 'var(--warning-color)';
-                        tag.innerHTML = `<i class="fas fa-exclamation-triangle"></i> ${Security.sanitizeHtml(config.tag)} (پیش‌فرض)`;
+                        tag.innerHTML = `<i class="fas fa-exclamation-triangle"></i> ${Security.sanitizeHtml(inbound.tag)} (${Security.sanitizeHtml(inbound.protocol || 'vless')})`;
                         container.appendChild(tag);
                     });
                     break;
                     
                 case 'error':
                     const errorTag = document.createElement('div');
-                    errorTag.className = 'template-tag none';
+                    errorTag.className = 'inbound-tag none';
                     errorTag.innerHTML = '<i class="fas fa-times"></i> خطا در بارگذاری';
                     container.appendChild(errorTag);
                     
-                    if (configs.length > 0) {
-                        configs.forEach(config => {
+                    if (inbounds.length > 0) {
+                        inbounds.forEach(inbound => {
                             const tag = document.createElement('div');
-                            tag.className = 'template-tag none';
-                            tag.innerHTML = `<i class="fas fa-exclamation-triangle"></i> ${Security.sanitizeHtml(config.tag)} (اضطراری)`;
+                            tag.className = 'inbound-tag none';
+                            tag.innerHTML = `<i class="fas fa-exclamation-triangle"></i> ${Security.sanitizeHtml(inbound.tag)} (اضطراری)`;
                             container.appendChild(tag);
                         });
                     }
@@ -3780,359 +3384,9 @@
                     
                 default:
                     const defaultTag = document.createElement('div');
-                    defaultTag.className = 'template-tag none';
+                    defaultTag.className = 'inbound-tag none';
                     defaultTag.innerHTML = '<i class="fas fa-question"></i> وضعیت نامشخص';
                     container.appendChild(defaultTag);
-            }
-        }
-
-        function showTemplateConfigInfo(templateUser) {
-            const configInfoPanel = document.getElementById('templateConfigInfo');
-            const configsContainer = document.getElementById('templateConfigs');
-            
-            if (!configInfoPanel || !configsContainer) return;
-            
-            configsContainer.innerHTML = '';
-            
-            // Show subscription URL
-            if (templateUser.subscription_url) {
-                const subItem = document.createElement('div');
-                subItem.className = 'template-config-item';
-                subItem.innerHTML = `<i class="fas fa-link"></i> Subscription URL موجود`;
-                configsContainer.appendChild(subItem);
-            }
-            
-            // Show inbounds
-            if (templateUser.inbounds && templateUser.inbounds.length > 0) {
-                templateUser.inbounds.forEach(inbound => {
-                    const inboundItem = document.createElement('div');
-                    inboundItem.className = 'template-config-item';
-                    inboundItem.innerHTML = `<i class="fas fa-server"></i> اینباند: ${Security.sanitizeHtml(inbound.tag)} (${Security.sanitizeHtml(inbound.protocol || 'vless')})`;
-                    configsContainer.appendChild(inboundItem);
-                });
-            }
-            
-            // Show proxies
-            if (templateUser.proxies && Object.keys(templateUser.proxies).length > 0) {
-                Object.keys(templateUser.proxies).forEach(protocol => {
-                    const proxyItem = document.createElement('div');
-                    proxyItem.className = 'template-config-item';
-                    proxyItem.innerHTML = `<i class="fas fa-network-wired"></i> پروکسی: ${Security.sanitizeHtml(protocol)}`;
-                    configsContainer.appendChild(proxyItem);
-                });
-            }
-            
-            // Show links count
-            if (templateUser.links && templateUser.links.length > 0) {
-                const linksItem = document.createElement('div');
-                linksItem.className = 'template-config-item';
-                linksItem.innerHTML = `<i class="fas fa-link"></i> تعداد کانفیگ: ${templateUser.links.length}`;
-                configsContainer.appendChild(linksItem);
-            }
-            
-            if (configsContainer.children.length > 0) {
-                configInfoPanel.classList.remove('hidden');
-            } else {
-                configInfoPanel.classList.add('hidden');
-            }
-        }
-
-        // Enhanced Add User Functions (افزودن کاربر) - اصلاح شده برای درست عمل کردن اینباندها
-       async function handleAddUser(e) {
-    e.preventDefault();
-    
-    // اعتبارسنجی درخواست‌ها
-    if (!Security.requestLimiter.isAllowed('add_user')) {
-        showMessage('addUserError', 'لطفاً کمی صبر کنید');
-        return;
-    }
-    
-    // دریافت مقادیر فرم
-    const usernameInput = document.getElementById('newUsername');
-    const dataLimitInput = document.getElementById('newDataLimit');
-    const expireDateInput = document.getElementById('newExpireDate');
-    
-    if (!usernameInput || !dataLimitInput || !expireDateInput) {
-        showMessage('addUserError', 'خطا در فرم افزودن کاربر');
-        return;
-    }
-    
-    const username = usernameInput.value.trim();
-    const dataLimitGB = parseFloat(dataLimitInput.value);
-    const expireDateStr = expireDateInput.value;
-    
-    // اعتبارسنجی ورودی‌ها
-    if (!Security.validateInput(username, 'username')) {
-        showMessage('addUserError', 'نام کاربری نامعتبر است (فقط حروف انگلیسی، اعداد و _ مجاز است)');
-        return;
-    }
-    
-    if (!Security.validateInput(dataLimitGB.toString(), 'number', { min: 1, max: 1000 })) {
-        showMessage('addUserError', 'حجم ترافیک باید بین 1 تا 1000 گیگابایت باشد');
-        return;
-    }
-    
-    if (!Security.validateInput(expireDateStr, 'date')) {
-        showMessage('addUserError', 'تاریخ انقضا نامعتبر است');
-        return;
-    }
-    
-    // بررسی تکراری نبودن نام کاربری
-    if (users.some(user => user.username === username)) {
-        showMessage('addUserError', 'نام کاربری قبلاً وجود دارد');
-        return;
-    }
-    
-    // محاسبه مقادیر نهایی
-    const dataLimit = dataLimitGB * 1024 * 1024 * 1024;
-    const expireDate = new Date(expireDateStr);
-    const expire = Math.floor(expireDate.getTime() / 1000);
-    
-    // تنظیم حالت بارگذاری
-    setLoadingState('addUserForm', 'addUserBtnText', 'addUserSpinner', true);
-    hideMessage('addUserError');
-    hideMessage('addUserSuccess');
-    const userCreationResult = document.getElementById('userCreationResult');
-    if (userCreationResult) userCreationResult.classList.add('hidden');
-    
-    showLoading('در حال ایجاد کاربر...');
-    
-    try {
-        // مرحله 1: ایجاد کاربر پایه
-        console.log('🔄 ایجاد کاربر پایه:', username);
-        const basicUserData = {
-            username,
-            data_limit: dataLimit,
-            expire
-        };
-        
-        console.log('📤 ارسال داده‌های پایه کاربر:', basicUserData);
-        const createResult = await apiCall('/user', 'POST', basicUserData);
-        console.log('📨 پاسخ ایجاد کاربر:', createResult);
-        
-        if (!createResult) {
-            throw new Error('خطا در ایجاد کاربر پایه');
-        }
-        
-        // مرحله 2: انتظار برای ایجاد کامل کاربر
-        console.log('⏳ انتظار برای ایجاد کامل کاربر...');
-        await new Promise(resolve => setTimeout(resolve, 2000));
-        
-        // مرحله 3: دریافت تنظیمات از کاربر Template
-        console.log('🔄 دریافت تنظیمات از کاربر Template:', selectedTemplateUser);
-        const templateUser = await apiCall(`/user/${encodeURIComponent(selectedTemplateUser)}`);
-        console.log('📋 اطلاعات Template User:', templateUser);
-        
-        if (!templateUser) {
-            throw new Error('خطا در دریافت تنظیمات Template');
-        }
-        
-        // مرحله 4: آماده‌سازی داده‌های بروزرسانی
-        const updateData = {};
-        let configsApplied = 0;
-        
-        // کپی اینباندها
-        if (templateUser.inbounds && templateUser.inbounds.length > 0) {
-            updateData.inbounds = templateUser.inbounds.map(inbound => ({
-                tag: inbound.tag,
-                protocol: inbound.protocol || 'vless'
-            }));
-            configsApplied += templateUser.inbounds.length;
-            console.log('📥 اینباندهای کپی شده:', updateData.inbounds);
-        }
-        
-        // کپی پروکسی‌ها
-        if (templateUser.proxies && Object.keys(templateUser.proxies).length > 0) {
-            updateData.proxies = { ...templateUser.proxies };
-            configsApplied += Object.keys(templateUser.proxies).length;
-            console.log('🔧 پروکسی‌های کپی شده:', updateData.proxies);
-        }
-        
-        // مرحله 5: اعمال تنظیمات به کاربر جدید
-        if (Object.keys(updateData).length > 0) {
-            console.log('🚀 اعمال تنظیمات به کاربر جدید:', updateData);
-            showLoading('در حال اعمال تنظیمات Template...');
-            
-            const updateResult = await apiCall(`/user/${encodeURIComponent(username)}`, 'PUT', updateData);
-            console.log('📨 پاسخ بروزرسانی:', updateResult);
-            
-            if (!updateResult) {
-                console.warn('⚠️ مشکل در اعمال تنظیمات Template');
-            }
-            
-            // انتظار برای اعمال تنظیمات
-            await new Promise(resolve => setTimeout(resolve, 3000));
-        } else {
-            console.log('📋 هیچ تنظیمات Template یافت نشد برای کپی');
-        }
-        
-        // مرحله 6: دریافت اطلاعات نهایی کاربر
-        console.log('🔍 دریافت اطلاعات نهایی کاربر');
-        const finalUserData = await apiCall(`/user/${encodeURIComponent(username)}`);
-        
-        // بررسی وجود لینک‌های کانفیگ
-        if (finalUserData && finalUserData.links && finalUserData.links.length > 0) {
-            showMessage('addUserSuccess', `کاربر ${Security.sanitizeHtml(username)} با موفقیت ایجاد شد ${configsApplied > 0 ? `(${configsApplied} تنظیمات از ${selectedTemplateUser} اعمال شد)` : ''}`);
-            
-            // بازنشانی فرم
-            const addUserForm = document.getElementById('addUserForm');
-            if (addUserForm) addUserForm.reset();
-            
-            // تنظیم مجدد تاریخ انقضا
-            const newExpireDate = new Date();
-            newExpireDate.setDate(newExpireDate.getDate() + 30);
-            if (expireDateInput) {
-                expireDateInput.value = newExpireDate.toISOString().split('T')[0];
-            }
-            
-            // نمایش کانفیگ‌ها
-            await showNewUserConfigs(username);
-            
-            // بروزرسانی لیست کاربران
-            await loadUsers();
-            
-            showNotification(`✅ کاربر ${Security.sanitizeHtml(username)} ایجاد شد ${configsApplied > 0 ? `با ${configsApplied} تنظیمات` : ''}`, 'success');
-        } else {
-            throw new Error('کانفیگ‌ها ایجاد نشدند');
-        }
-    } catch (error) {
-        console.error('❌ خطا در ایجاد کاربر:', error);
-        showMessage('addUserError', 'خطا در ایجاد کاربر - لطفاً دوباره تلاش کنید');
-        
-        // در صورت خطا، کاربر ایجاد شده را حذف می‌کنیم
-        try {
-            await apiCall(`/user/${encodeURIComponent(username)}`, 'DELETE');
-        } catch (deleteError) {
-            console.error('حذف کاربر ناموفق بود:', deleteError);
-        }
-    } finally {
-        setLoadingState('addUserForm', 'addUserBtnText', 'addUserSpinner', false);
-        hideLoading();
-    }
-}
-
-        async function showNewUserConfigs(username) {
-            if (!Security.validateInput(username, 'username')) return;
-            
-            try {
-                console.log('🔍 دریافت کانفیگ کاربر:', username);
-                const userData = await apiCall(`/user/${encodeURIComponent(username)}`);
-                console.log('📋 اطلاعات کاربر دریافت شده:', userData);
-                
-                if (!userData) {
-                    console.warn('⚠️ اطلاعات کاربر دریافت نشد');
-                    return;
-                }
-                
-                const configsContainer = document.getElementById('newUserConfigs');
-                if (!configsContainer) return;
-                
-                configsContainer.innerHTML = '';
-                
-                // Show information about selected template and configs
-                if (templateConfigs && templateConfigs.length > 0) {
-                    const templateInfo = document.createElement('div');
-                    templateInfo.className = 'template-status';
-                    templateInfo.style.marginBottom = '16px';
-                    
-                    const templateTitle = document.createElement('h5');
-                    templateTitle.innerHTML = `<i class="fas fa-clone"></i> تنظیمات استفاده شده از Template: ${Security.sanitizeHtml(selectedTemplateUser)}`;
-                    templateTitle.style.marginBottom = '12px';
-                    
-                    const templateList = document.createElement('div');
-                    templateList.className = 'template-list';
-                    
-                    templateConfigs.forEach(config => {
-                        const tag = document.createElement('div');
-                        tag.className = 'template-tag selected';
-                        if (config.type === 'inbound') {
-                            tag.innerHTML = `<i class="fas fa-server"></i> ${Security.sanitizeHtml(config.tag)} (${Security.sanitizeHtml(config.protocol)})`;
-                        } else if (config.type === 'proxy') {
-                            tag.innerHTML = `<i class="fas fa-network-wired"></i> ${Security.sanitizeHtml(config.protocol)}`;
-                        } else if (config.type === 'link') {
-                            tag.innerHTML = `<i class="fas fa-link"></i> ${Security.sanitizeHtml(config.protocol)} #${config.index}`;
-                        }
-                        templateList.appendChild(tag);
-                    });
-                    
-                    templateInfo.appendChild(templateTitle);
-                    templateInfo.appendChild(templateList);
-                    configsContainer.appendChild(templateInfo);
-                }
-                
-                // Show subscription URL
-                if (userData.subscription_url) {
-                    const subDiv = document.createElement('div');
-                    subDiv.className = 'config-display';
-                    
-                    const subInfo = document.createElement('div');
-                    subInfo.className = 'config-info';
-                    subInfo.innerHTML = `
-                        <strong><i class="fas fa-link"></i> لینک ساب (Subscription):</strong>
-                        <button onclick="copyText('${Security.sanitizeHtml(userData.subscription_url)}')" class="form-button success">
-                            <i class="fas fa-copy"></i> کپی
-                        </button>
-                    `;
-                    
-                    const subText = Security.safeCreateElement('div', userData.subscription_url, 'config-text');
-                    
-                    subDiv.appendChild(subInfo);
-                    subDiv.appendChild(subText);
-                    configsContainer.appendChild(subDiv);
-                }
-                
-                // Show individual configurations
-                if (userData.links && Array.isArray(userData.links) && userData.links.length > 0) {
-                    userData.links.forEach((config, index) => {
-                        const protocol = Security.sanitizeHtml(config.split('://')[0].toUpperCase());
-                        
-                        const configDiv = document.createElement('div');
-                        configDiv.className = 'config-display';
-                        
-                        const configInfo = document.createElement('div');
-                        configInfo.className = 'config-info';
-                        configInfo.innerHTML = `
-                            <strong><i class="fas fa-cog"></i> کانفیگ ${protocol} #${index + 1}:</strong>
-                            <button onclick="copyText('${Security.sanitizeHtml(config)}')" class="form-button success">
-                                <i class="fas fa-copy"></i> کپی
-                            </button>
-                        `;
-                        
-                        const configText = Security.safeCreateElement('div', config, 'config-text');
-                        
-                        configDiv.appendChild(configInfo);
-                        configDiv.appendChild(configText);
-                        configsContainer.appendChild(configDiv);
-                    });
-                    
-                    console.log(`✅ ${userData.links.length} کانفیگ نمایش داده شد`);
-                } else {
-                    console.warn('⚠️ هیچ کانفیگی یافت نشد');
-                    const noConfigMsg = Security.safeCreateElement('p', 'در حال ایجاد کانفیگ‌ها... لطفاً چند لحظه صبر کنید');
-                    noConfigMsg.style.cssText = 'text-align: center; color: var(--text-muted); padding: 20px; font-style: italic;';
-                    configsContainer.appendChild(noConfigMsg);
-                    
-                    // Try to reload configs after a delay
-                    setTimeout(() => {
-                        showNewUserConfigs(username);
-                    }, 5000);
-                }
-                
-                const userCreationResult = document.getElementById('userCreationResult');
-                if (userCreationResult) userCreationResult.classList.remove('hidden');
-                
-            } catch (error) {
-                console.error('❌ خطا در نمایش کانفیگ‌ها:', error);
-                
-                const configsContainer = document.getElementById('newUserConfigs');
-                if (configsContainer) {
-                    const errorMsg = Security.safeCreateElement('p', 'خطا در دریافت کانفیگ‌ها - لطفاً از بخش "کاربران" مشاهده کنید');
-                    errorMsg.style.cssText = 'text-align: center; color: var(--danger-color); padding: 20px;';
-                    configsContainer.appendChild(errorMsg);
-                    
-                    const userCreationResult = document.getElementById('userCreationResult');
-                    if (userCreationResult) userCreationResult.classList.remove('hidden');
-                }
             }
         }
 
@@ -4149,10 +3403,8 @@
             
             authToken = '';
             currentUsername = '';
-            templateConfigs = [];
-            availableTemplates = [];
-            selectedTemplateUser = 'Admin';
-            templateUsers = [];
+            adminInbounds = [];
+            availableInbounds = [];
             sectionsLoaded = { dashboard: false, users: false, traffic: false, analytics: false, support: false };
             
             // Clear any sensitive form data
@@ -4199,9 +3451,6 @@
             if (navWelcomeMobile) Security.safeSetContent(navWelcomeMobile, welcomeText);
             if (settingsUsername) settingsUsername.value = currentUsername;
             if (currentServerUrl) currentServerUrl.value = getServerUrl();
-
-            // Update selected template displays
-            updateSelectedTemplateDisplays();
         }
 
         function showSection(sectionName) {
@@ -4260,19 +3509,6 @@
                 case 'support':
                     if (!sectionsLoaded.support) {
                         sectionsLoaded.support = true;
-                    }
-                    break;
-                case 'addUser':
-                    // Load template users when accessing add user section
-                    if (templateUsers.length === 0) {
-                        loadTemplateUsers();
-                    }
-                    break;
-                case 'settings':
-                    // Update settings displays
-                    updateSelectedTemplateDisplays();
-                    if (templateUsers.length === 0) {
-                        loadTemplateUsers();
                     }
                     break;
                 default:
@@ -5416,6 +4652,270 @@
             hideMessage('editUserSuccess');
         }
 
+        // Enhanced Add User Functions (افزودن کاربر) - Fixed for Real Inbounds
+        async function handleAddUser(e) {
+            e.preventDefault();
+            
+            if (!Security.requestLimiter.isAllowed('add_user')) {
+                showMessage('addUserError', 'لطفاً کمی صبر کنید');
+                return;
+            }
+            
+            const usernameInput = document.getElementById('newUsername');
+            const dataLimitInput = document.getElementById('newDataLimit');
+            const expireDateInput = document.getElementById('newExpireDate');
+            
+            if (!usernameInput || !dataLimitInput || !expireDateInput) {
+                showMessage('addUserError', 'خطا در فرم افزودن کاربر');
+                return;
+            }
+            
+            const username = usernameInput.value.trim();
+            const dataLimitGB = parseFloat(dataLimitInput.value);
+            const expireDateStr = expireDateInput.value;
+            
+            // Enhanced validation
+            if (!Security.validateInput(username, 'username')) {
+                showMessage('addUserError', 'نام کاربری نامعتبر است (فقط حروف انگلیسی، اعداد و _ مجاز است)');
+                return;
+            }
+            
+            if (!Security.validateInput(dataLimitGB.toString(), 'number', { min: 1, max: 1000 })) {
+                showMessage('addUserError', 'حجم ترافیک باید بین 1 تا 1000 گیگابایت باشد');
+                return;
+            }
+            
+            if (!Security.validateInput(expireDateStr, 'date')) {
+                showMessage('addUserError', 'تاریخ انقضا نامعتبر است');
+                return;
+            }
+            
+            // Check if username already exists
+            if (users.some(user => user.username === username)) {
+                showMessage('addUserError', 'نام کاربری قبلاً وجود دارد');
+                return;
+            }
+            
+            // Check if inbounds are available
+            if (!adminInbounds || adminInbounds.length === 0) {
+                showMessage('addUserError', 'هیچ اینباندی یافت نشد - لطفاً با پشتیبانی تماس بگیرید');
+                console.log('🚨 اینباند موجود نیست، تلاش برای بارگذاری مجدد...');
+                await loadAdminInbounds();
+                
+                if (!adminInbounds || adminInbounds.length === 0) {
+                    showMessage('addUserError', 'امکان ایجاد کاربر بدون اینباند وجود ندارد');
+                    return;
+                }
+            }
+            
+            const dataLimit = dataLimitGB * 1024 * 1024 * 1024;
+            const expireDate = new Date(expireDateStr);
+            const expire = Math.floor(expireDate.getTime() / 1000);
+            
+            setLoadingState('addUserForm', 'addUserBtnText', 'addUserSpinner', true);
+            hideMessage('addUserError');
+            hideMessage('addUserSuccess');
+            
+            const userCreationResult = document.getElementById('userCreationResult');
+            if (userCreationResult) userCreationResult.classList.add('hidden');
+            
+            showLoading('در حال افزودن کاربر...');
+            
+            // Fixed user data format - send inbound IDs properly
+            console.log('🔧 ایجاد کاربر با اینباندهای:', adminInbounds);
+            
+            // Create user data based on actual API format
+            const userData = {
+                username,
+                data_limit: dataLimit,
+                expire,
+                proxies: {
+                    vless: {}
+                },
+                // Send inbound IDs in the correct format
+                inbounds: adminInbounds.map(inbound => inbound.id || inbound.tag)
+            };
+            
+            console.log('📤 ارسال داده‌های کاربر:', userData);
+            
+            try {
+                const result = await apiCall('/user', 'POST', userData);
+                console.log('📨 پاسخ سرور:', result);
+                
+                if (result) {
+                    showMessage('addUserSuccess', `کاربر ${Security.sanitizeHtml(username)} با موفقیت اضافه شد (${adminInbounds.length} اینباند)`);
+                    
+                    const addUserForm = document.getElementById('addUserForm');
+                    if (addUserForm) addUserForm.reset();
+                    
+                    // Reset expire date
+                    const newExpireDate = new Date();
+                    newExpireDate.setDate(newExpireDate.getDate() + 30);
+                    expireDateInput.value = newExpireDate.toISOString().split('T')[0];
+                    
+                    // Show configurations with delay to ensure user is created
+                    setTimeout(async () => {
+                        await showNewUserConfigs(username);
+                    }, 1500);
+                    
+                    await loadUsers(); // Refresh users list
+                    
+                    showNotification(`✅ کاربر ${Security.sanitizeHtml(username)} با ${adminInbounds.length} اینباند اضافه شد`, 'success');
+                } else {
+                    showMessage('addUserError', 'خطا در افزودن کاربر - لطفاً دوباره تلاش کنید');
+                }
+            } catch (error) {
+                console.error('❌ خطا در افزودن کاربر:', error);
+                showMessage('addUserError', 'خطا در ارتباط با سرور - لطفاً دوباره تلاش کنید');
+            }
+            
+            setLoadingState('addUserForm', 'addUserBtnText', 'addUserSpinner', false);
+            hideLoading();
+        }
+
+        async function showNewUserConfigs(username) {
+            if (!Security.validateInput(username, 'username')) return;
+            
+            try {
+                console.log('🔍 دریافت کانفیگ کاربر:', username);
+                // Wait a bit more for user to be fully created
+                await new Promise(resolve => setTimeout(resolve, 2000));
+                
+                const userData = await apiCall(`/user/${encodeURIComponent(username)}`);
+                console.log('📋 اطلاعات کاربر دریافت شده:', userData);
+                
+                if (!userData) {
+                    console.warn('⚠️ اطلاعات کاربر دریافت نشد');
+                    return;
+                }
+                
+                const configsContainer = document.getElementById('newUserConfigs');
+                if (!configsContainer) return;
+                
+                configsContainer.innerHTML = '';
+                
+                // Show inbound information
+                if (adminInbounds && adminInbounds.length > 0) {
+                    const inboundInfo = document.createElement('div');
+                    inboundInfo.className = 'inbound-status';
+                    inboundInfo.style.marginBottom = '16px';
+                    
+                    const inboundTitle = document.createElement('h5');
+                    inboundTitle.innerHTML = '<i class="fas fa-server"></i> اینباندهای استفاده شده';
+                    inboundTitle.style.marginBottom = '12px';
+                    
+                    const inboundList = document.createElement('div');
+                    inboundList.className = 'inbound-list';
+                    
+                    adminInbounds.forEach(inbound => {
+                        const tag = document.createElement('div');
+                        tag.className = 'inbound-tag';
+                        tag.innerHTML = `<i class="fas fa-check"></i> ${Security.sanitizeHtml(inbound.tag)} (${Security.sanitizeHtml(inbound.protocol || 'vless')})`;
+                        inboundList.appendChild(tag);
+                    });
+                    
+                    inboundInfo.appendChild(inboundTitle);
+                    inboundInfo.appendChild(inboundList);
+                    configsContainer.appendChild(inboundInfo);
+                }
+                
+                // Show subscription URL
+                if (userData.subscription_url) {
+                    const subDiv = document.createElement('div');
+                    subDiv.className = 'config-display';
+                    
+                    const subInfo = document.createElement('div');
+                    subInfo.className = 'config-info';
+                    subInfo.innerHTML = `
+                        <strong><i class="fas fa-link"></i> لینک ساب (Subscription):</strong>
+                        <button onclick="copyText('${Security.sanitizeHtml(userData.subscription_url)}')" class="form-button success">
+                            <i class="fas fa-copy"></i> کپی
+                        </button>
+                    `;
+                    
+                    const subText = Security.safeCreateElement('div', userData.subscription_url, 'config-text');
+                    
+                    subDiv.appendChild(subInfo);
+                    subDiv.appendChild(subText);
+                    configsContainer.appendChild(subDiv);
+                }
+                
+                // Show individual configurations
+                if (userData.links && Array.isArray(userData.links) && userData.links.length > 0) {
+                    userData.links.forEach((config, index) => {
+                        const protocol = Security.sanitizeHtml(config.split('://')[0].toUpperCase());
+                        
+                        const configDiv = document.createElement('div');
+                        configDiv.className = 'config-display';
+                        
+                        const configInfo = document.createElement('div');
+                        configInfo.className = 'config-info';
+                        configInfo.innerHTML = `
+                            <strong><i class="fas fa-cog"></i> کانفیگ ${protocol} #${index + 1}:</strong>
+                            <button onclick="copyText('${Security.sanitizeHtml(config)}')" class="form-button success">
+                                <i class="fas fa-copy"></i> کپی
+                            </button>
+                        `;
+                        
+                        const configText = Security.safeCreateElement('div', config, 'config-text');
+                        
+                        configDiv.appendChild(configInfo);
+                        configDiv.appendChild(configText);
+                        configsContainer.appendChild(configDiv);
+                    });
+                    
+                    console.log(`✅ ${userData.links.length} کانفیگ نمایش داده شد`);
+                } else {
+                    console.warn('⚠️ هیچ کانفیگی یافت نشد، چند بار دیگر تلاش می‌کنیم...');
+                    
+                    // Show loading message
+                    const loadingMsg = Security.safeCreateElement('p', 'در حال ایجاد کانفیگ‌ها... لطفاً چند لحظه صبر کنید');
+                    loadingMsg.style.cssText = 'text-align: center; color: var(--text-muted); padding: 20px; font-style: italic;';
+                    configsContainer.appendChild(loadingMsg);
+                    
+                    // Try a few more times with longer delays
+                    let attempts = 0;
+                    const maxAttempts = 3;
+                    const retryInterval = setInterval(async () => {
+                        attempts++;
+                        try {
+                            const retryUserData = await apiCall(`/user/${encodeURIComponent(username)}`);
+                            if (retryUserData && retryUserData.links && retryUserData.links.length > 0) {
+                                clearInterval(retryInterval);
+                                showNewUserConfigs(username); // Recursive call with successful data
+                            } else if (attempts >= maxAttempts) {
+                                clearInterval(retryInterval);
+                                loadingMsg.textContent = 'کانفیگ‌ها هنوز آماده نیستند - از بخش "کاربران" مشاهده کنید';
+                                loadingMsg.style.color = 'var(--warning-color)';
+                            }
+                        } catch (error) {
+                            if (attempts >= maxAttempts) {
+                                clearInterval(retryInterval);
+                                loadingMsg.textContent = 'خطا در دریافت کانفیگ‌ها - از بخش "کاربران" مشاهده کنید';
+                                loadingMsg.style.color = 'var(--danger-color)';
+                            }
+                        }
+                    }, 3000);
+                }
+                
+                const userCreationResult = document.getElementById('userCreationResult');
+                if (userCreationResult) userCreationResult.classList.remove('hidden');
+                
+            } catch (error) {
+                console.error('❌ خطا در نمایش کانفیگ‌ها:', error);
+                
+                const configsContainer = document.getElementById('newUserConfigs');
+                if (configsContainer) {
+                    const errorMsg = Security.safeCreateElement('p', 'خطا در دریافت کانفیگ‌ها - لطفاً از بخش "کاربران" مشاهده کنید');
+                    errorMsg.style.cssText = 'text-align: center; color: var(--danger-color); padding: 20px;';
+                    configsContainer.appendChild(errorMsg);
+                    
+                    const userCreationResult = document.getElementById('userCreationResult');
+                    if (userCreationResult) userCreationResult.classList.remove('hidden');
+                }
+            }
+        }
+
         // Enhanced Config Functions (کانفیگ)
         async function showUserConfigs(username) {
             if (!Security.validateInput(username, 'username')) {
@@ -5595,7 +5095,6 @@
             try {
                 sessionStorage.setItem('toofan_default_data_limit', defaultDataLimit);
                 sessionStorage.setItem('toofan_default_duration', defaultDuration);
-                sessionStorage.setItem('toofan_selected_template', selectedTemplateUser);
                 showNotification('تنظیمات با موفقیت ذخیره شد ✅', 'success');
             } catch (error) {
                 showNotification('خطا در ذخیره تنظیمات', 'error');
