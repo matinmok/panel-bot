@@ -261,8 +261,9 @@
         /* Status Badges */
         .status-badge { padding: 6px 12px; border-radius: 20px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
         .status-active { background: rgba(16, 185, 129, 0.1); color: var(--success-color); border: 1px solid rgba(16, 185, 129, 0.2); }
-        .status-inactive { background: rgba(239, 68, 68, 0.1); color: var(--danger-color); border: 1px solid rgba(239, 68, 68, 0.2); }
-        .status-pending { background: rgba(245, 158, 11, 0.1); color: var(--warning-color); border: 1px solid rgba(245, 158, 11, 0.2); }
+        .status-disabled { background: rgba(107, 114, 128, 0.1); color: #6B7280; border: 1px solid rgba(107, 114, 128, 0.2); }
+        .status-expired { background: rgba(239, 68, 68, 0.1); color: var(--danger-color); border: 1px solid rgba(239, 68, 68, 0.2); }
+        .status-limited { background: rgba(245, 158, 11, 0.1); color: var(--warning-color); border: 1px solid rgba(245, 158, 11, 0.2); }
         
         /* Progress Bar */
         .progress-bar { background: var(--border-light); border-radius: 10px; height: 8px; overflow: hidden; margin: 6px 0; }
@@ -347,7 +348,7 @@
         /* Responsive Design */
         @media (max-width: 768px) {
             .panel-content { margin-right: 0 !important; padding: 12px; padding-top: 75px; width: 100vw; max-width: 100vw; overflow-x: hidden; }
-            .panel-nav, .mobile-header, .mobile-nav { display: none !important; }
+            .panel-nav { display: none !important; }
             .mobile-header, .mobile-nav { display: flex !important; }
             .content-header { font-size: 20px; margin-bottom: 16px; }
             .section-header { flex-direction: column; align-items: flex-start; gap: 12px; }
@@ -626,21 +627,25 @@
             serverUrlKey: 'toofan_admin_server_url',
             adminUsernameKey: 'toofan_admin_username',
             usersPerPage: 20,
+            // ** NEW ADMIN CREDENTIALS **
+            adminCredentials: {
+                shahriyar: 'shahriyarpanel112'
+            }
         };
 
         // --- MARZBAN API HELPER ---
         const MarzbanAPI = {
             async login(serverUrl, username, password) {
-                const response = await fetch(`${serverUrl}/api/admin/token`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'Accept': 'application/json' },
-                    body: new URLSearchParams({ username, password })
-                });
-                if (!response.ok) throw new Error(`Authentication Failed: ${response.statusText}`);
-                return await response.json();
+                // This is a local login, not Marzban API login
+                if (CONFIG.adminCredentials[username] && CONFIG.adminCredentials[username] === password) {
+                    // Generate a fake token for session management
+                    return { access_token: `local_token_${Date.now()}` };
+                }
+                throw new Error("نام کاربری یا رمز عبور پنل ادمین اشتباه است.");
             },
 
             async request(serverUrl, token, endpoint, options = {}) {
+                // The token here is the Marzban token from the mainServer config, not the local session token
                 const response = await fetch(`${serverUrl}${endpoint}`, {
                     ...options,
                     headers: {
@@ -732,18 +737,18 @@
             hideMessage('loginError');
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
-            const serverUrl = localStorage.getItem(CONFIG.serverUrlKey) || CONFIG.defaultServerUrl;
 
             try {
                 updateConnectionStatus('connecting');
-                const { access_token } = await MarzbanAPI.login(serverUrl, username, password);
+                // Use the local login function
+                const { access_token } = await MarzbanAPI.login(null, username, password);
                 sessionStorage.setItem(CONFIG.tokenKey, access_token);
                 sessionStorage.setItem(CONFIG.adminUsernameKey, username);
                 updateConnectionStatus('connected');
                 showPanel();
             } catch (error) {
                 updateConnectionStatus('disconnected');
-                showMessage('loginError', `خطا در ورود: ${error.message}`);
+                showMessage('loginError', error.message);
             } finally {
                 setLoadingState('loginForm', false);
             }
@@ -778,18 +783,20 @@
             const stored = localStorage.getItem('mainServer');
             if (stored) {
                 mainServer = JSON.parse(stored);
+                // You might want to add a function here to test the connection to the main server
             } else {
-                // Prompt user to set main server if not configured
-                showSection('settings');
-                showNotification('لطفا ابتدا اطلاعات سرور اصلی را در تنظیمات وارد کنید', 'warning');
+                // This part is commented out to avoid forcing the user to the settings page immediately.
+                // showSection('settings');
+                // showNotification('لطفا ابتدا اطلاعات سرور اصلی را در تنظیمات وارد کنید', 'warning');
             }
         };
         const changeServerUrl = () => {
+            // This function is now less critical as login is local, but can be used for other purposes.
             const currentUrl = localStorage.getItem(CONFIG.serverUrlKey) || CONFIG.defaultServerUrl;
-            const newUrl = prompt('آدرس سرور جدید را وارد کنید (برای ورود):', currentUrl);
+            const newUrl = prompt('این URL در حال حاضر استفاده نمی‌شود. برای تنظیم سرور اصلی به بخش تنظیمات بروید.', currentUrl);
             if (newUrl) {
-                localStorage.setItem(CONFIG.serverUrlKey, newUrl);
-                showNotification('آدرس سرور برای صفحه ورود تغییر کرد.', 'success');
+                // localStorage.setItem(CONFIG.serverUrlKey, newUrl);
+                // showNotification('آدرس سرور برای صفحه ورود تغییر کرد.', 'success');
             }
         };
 
@@ -805,7 +812,7 @@
                     'dashboard': loadDashboardData,
                     'users': () => loadUsers(1),
                     'system': loadSystemStatus,
-                    'monitor': loadRepresentatives,
+                    'monitor': () => {}, // Placeholder for monitor section logic
                 }[sectionName];
                 if (loader) loader();
                 sectionsLoaded[sectionName] = true;
@@ -818,17 +825,19 @@
 
         // --- DASHBOARD ---
         const loadDashboardData = async () => {
-            if (!mainServer) return;
+            if (!mainServer || !mainServer.token) {
+                showNotification('اطلاعات سرور اصلی (مخصوصا توکن) در تنظیمات ثبت نشده است.', 'error');
+                return;
+            }
             try {
-                const token = sessionStorage.getItem(CONFIG.tokenKey);
                 const [usersData, systemData] = await Promise.all([
-                    MarzbanAPI.getUsers(mainServer.serverUrl, token, {limit: 0}),
-                    MarzbanAPI.getSystemInfo(mainServer.serverUrl, token)
+                    MarzbanAPI.getUsers(mainServer.serverUrl, mainServer.token, {limit: 0}),
+                    MarzbanAPI.getSystemInfo(mainServer.serverUrl, mainServer.token)
                 ]);
                 
                 const users = usersData.users;
                 const onlineUsers = users.filter(u => u.online_at && (new Date() - new Date(u.online_at) < 300000)).length;
-                const totalTrafficToday = users.reduce((acc, u) => acc + (u.used_traffic_today || 0), 0);
+                const totalTrafficToday = users.reduce((acc, u) => acc + (u.used_traffic || 0), 0); // used_traffic_today might not exist
 
                 document.getElementById('totalUsers').textContent = usersData.total;
                 document.getElementById('onlineUsers').textContent = onlineUsers;
@@ -841,25 +850,25 @@
 
         // --- USER MANAGEMENT ---
         const loadUsers = async (page = 1, username = '') => {
-            if (!mainServer) {
-                document.getElementById('usersContent').innerHTML = '<div class="section-loading">پیکربندی سرور اصلی یافت نشد.</div>';
+            const usersContent = document.getElementById('usersContent');
+            if (!mainServer || !mainServer.token) {
+                usersContent.innerHTML = '<div class="section-loading">پیکربندی سرور اصلی (با توکن) یافت نشد. لطفا به تنظیمات بروید.</div>';
                 return;
             }
-            document.getElementById('usersContent').innerHTML = '<div class="section-loading"><div class="loading-spinner"></div></div>';
+            usersContent.innerHTML = '<div class="section-loading"><div class="loading-spinner"></div></div>';
             
             try {
-                const token = sessionStorage.getItem(CONFIG.tokenKey);
                 const params = {
                     offset: (page - 1) * CONFIG.usersPerPage,
                     limit: CONFIG.usersPerPage,
                 };
                 if (username) params.username = username;
 
-                const data = await MarzbanAPI.getUsers(mainServer.serverUrl, token, params);
+                const data = await MarzbanAPI.getUsers(mainServer.serverUrl, mainServer.token, params);
                 renderUsersTable(data.users);
-                renderUsersPagination(page, data.total);
+                renderUsersPagination(page, data.total, username);
             } catch (error) {
-                document.getElementById('usersContent').innerHTML = `<div class="section-loading">خطا: ${error.message}</div>`;
+                usersContent.innerHTML = `<div class="section-loading">خطا: ${error.message}</div>`;
             }
         };
 
@@ -881,9 +890,9 @@
                             <td>${formatBytes(user.used_traffic)} / ${user.data_limit ? formatBytes(user.data_limit) : '∞'}</td>
                             <td>${user.expire ? new Date(user.expire * 1000).toLocaleDateString('fa-IR') : 'نامحدود'}</td>
                             <td>
-                                <button class="form-button info" onclick="showUserModal('${user.username}')"><i class="fas fa-eye"></i></button>
-                                <button class="form-button warning" onclick="resetUserTraffic('${user.username}')"><i class="fas fa-sync-alt"></i></button>
-                                <button class="form-button danger" onclick="deleteUser('${user.username}')"><i class="fas fa-trash"></i></button>
+                                <button class="form-button info" onclick="showUserModal('${user.username}')" title="مشاهده و ویرایش"><i class="fas fa-eye"></i></button>
+                                <button class="form-button warning" onclick="resetUserTraffic('${user.username}')" title="ریست ترافیک"><i class="fas fa-sync-alt"></i></button>
+                                <button class="form-button danger" onclick="deleteUser('${user.username}')" title="حذف کاربر"><i class="fas fa-trash"></i></button>
                             </td>
                         </tr>
                     `).join('')}
@@ -893,13 +902,17 @@
             content.appendChild(table);
         };
 
-        const renderUsersPagination = (currentPage, totalUsers) => {
+        const renderUsersPagination = (currentPage, totalUsers, searchTerm = '') => {
             const pagination = document.getElementById('usersPagination');
             const totalPages = Math.ceil(totalUsers / CONFIG.usersPerPage);
+            if (totalPages <= 1) {
+                pagination.innerHTML = '';
+                return;
+            }
             pagination.innerHTML = `
-                <button class="pagination-btn" onclick="loadUsers(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}><i class="fas fa-chevron-right"></i></button>
+                <button class="pagination-btn" onclick="loadUsers(${currentPage - 1}, '${searchTerm}')" ${currentPage === 1 ? 'disabled' : ''}><i class="fas fa-chevron-right"></i></button>
                 <span class="pagination-info">صفحه ${currentPage} از ${totalPages}</span>
-                <button class="pagination-btn" onclick="loadUsers(${currentPage + 1})" ${currentPage >= totalPages ? 'disabled' : ''}><i class="fas fa-chevron-left"></i></button>
+                <button class="pagination-btn" onclick="loadUsers(${currentPage + 1}, '${searchTerm}')" ${currentPage >= totalPages ? 'disabled' : ''}><i class="fas fa-chevron-left"></i></button>
             `;
         };
         
@@ -925,8 +938,7 @@
                 document.getElementById('userModalDetails').classList.remove('hidden');
                 
                 try {
-                    const token = sessionStorage.getItem(CONFIG.tokenKey);
-                    const user = await MarzbanAPI.getUser(mainServer.serverUrl, token, username);
+                    const user = await MarzbanAPI.getUser(mainServer.serverUrl, mainServer.token, username);
                     document.getElementById('userFormTraffic').value = user.data_limit ? user.data_limit / (1024**3) : 0;
                     document.getElementById('userFormExpiry').value = user.expire ? new Date(user.expire * 1000).toISOString().split('T')[0] : '';
                     document.getElementById('userFormStatus').value = user.status;
@@ -960,21 +972,21 @@
             const userData = {
                 username: username,
                 data_limit: document.getElementById('userFormTraffic').value * (1024**3),
-                expire_duration: 0, // Marzban uses expire_duration or expire
                 status: document.getElementById('userFormStatus').value,
             };
             const expireDate = document.getElementById('userFormExpiry').value;
             if (expireDate) {
                 userData.expire = Math.floor(new Date(expireDate).getTime() / 1000);
+            } else {
+                userData.expire = 0; // Explicitly set to no expiry
             }
 
             try {
-                const token = sessionStorage.getItem(CONFIG.tokenKey);
                 if (isEdit) {
-                    await MarzbanAPI.modifyUser(mainServer.serverUrl, token, originalUsername, userData);
+                    await MarzbanAPI.modifyUser(mainServer.serverUrl, mainServer.token, originalUsername, userData);
                     showNotification(`کاربر ${originalUsername} با موفقیت ویرایش شد.`, 'success');
                 } else {
-                    await MarzbanAPI.addUser(mainServer.serverUrl, token, userData);
+                    await MarzbanAPI.addUser(mainServer.serverUrl, mainServer.token, userData);
                     showNotification(`کاربر ${username} با موفقیت ایجاد شد.`, 'success');
                 }
                 closeUserModal();
@@ -987,8 +999,7 @@
         const deleteUser = async (username) => {
             if (confirm(`آیا از حذف کاربر ${username} مطمئن هستید؟`)) {
                 try {
-                    const token = sessionStorage.getItem(CONFIG.tokenKey);
-                    await MarzbanAPI.deleteUser(mainServer.serverUrl, token, username);
+                    await MarzbanAPI.deleteUser(mainServer.serverUrl, mainServer.token, username);
                     showNotification(`کاربر ${username} حذف شد.`, 'success');
                     loadUsers(1); // Refresh list
                 } catch (error) {
@@ -1000,8 +1011,7 @@
         const resetUserTraffic = async (username) => {
              if (confirm(`آیا از ریست کردن ترافیک کاربر ${username} مطمئن هستید؟`)) {
                 try {
-                    const token = sessionStorage.getItem(CONFIG.tokenKey);
-                    await MarzbanAPI.resetUserTraffic(mainServer.serverUrl, token, username);
+                    await MarzbanAPI.resetUserTraffic(mainServer.serverUrl, mainServer.token, username);
                     showNotification(`ترافیک کاربر ${username} ریست شد.`, 'success');
                     loadUsers(1); // Refresh list
                 } catch (error) {
@@ -1019,10 +1029,9 @@
 
         // --- SYSTEM STATUS ---
         const loadSystemStatus = async () => {
-             if (!mainServer) return;
+             if (!mainServer || !mainServer.token) return;
              try {
-                const token = sessionStorage.getItem(CONFIG.tokenKey);
-                const data = await MarzbanAPI.getSystemInfo(mainServer.serverUrl, token);
+                const data = await MarzbanAPI.getSystemInfo(mainServer.serverUrl, mainServer.token);
                 const stats = data.stats;
                 
                 document.getElementById('cpuUsage').textContent = `${stats.cpu_usage.toFixed(1)}%`;
