@@ -1,26 +1,46 @@
 <?php
-// Start the session
-session_start();
-
-// Set the content type to JSON
 header('Content-Type: application/json');
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: POST, GET, OPTIONS');
+header('Access-Control-Allow-Headers: Content-Type, Accept');
 
-// Function to log user access
-function logUserAccess($username) {
-    $logFile = 'user_access_log.txt'; // File to store logs
-    $timestamp = date("Y-m-d H:i:s"); // Get current timestamp
-    $logEntry = "$timestamp - User: $username\n"; // Create log entry
-
-    // Append the log entry to the file
-    file_put_contents($logFile, $logEntry, FILE_APPEND);
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit();
 }
 
-// Check if the user is logged in
-if (isset($_SESSION['username'])) {
-    $username = $_SESSION['username']; // Get the logged-in username
-    logUserAccess($username); // Log the access
-    echo json_encode(['status' => 'success', 'message' => 'User access logged successfully.']);
+$requestMethod = $_SERVER['REQUEST_METHOD'];
+$data = json_decode(file_get_contents('php://input'), true);
+
+if ($requestMethod === 'POST' && isset($data['repName'])) {
+    $repName = $data['repName'];
+    $timestamp = time();
+    $logEntry = ['repName' => $repName, 'timestamp' => $timestamp];
+
+    $existingLogs = json_decode($_COOKIE['repLoginLogs'] ?? '[]', true);
+    $existingLogs[] = $logEntry;
+
+    if (count($existingLogs) > 100) {
+        $existingLogs = array_slice($existingLogs, -100);
+    }
+
+    setcookie('repLoginLogs', json_encode($existingLogs), [
+        'expires' => time() + 86400 * 30,
+        'path' => '/',
+        'samesite' => 'Strict',
+        'secure' => true
+    ]);
+
+    echo json_encode(['success' => true, 'message' => 'لاگ ورود با موفقیت ثبت شد']);
+    http_response_code(201);
+    exit();
+} elseif ($requestMethod === 'GET') {
+    $existingLogs = json_decode($_COOKIE['repLoginLogs'] ?? '[]', true);
+    echo json_encode($existingLogs);
+    http_response_code(200);
+    exit();
 } else {
-    echo json_encode(['status' => 'error', 'message' => 'User not logged in.']);
+    http_response_code(400);
+    echo json_encode(['error' => 'درخواست نامعتبر']);
+    exit();
 }
-?>
