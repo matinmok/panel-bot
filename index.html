@@ -102,6 +102,8 @@
         .fa-crown:before, .fas.fa-crown:before { content: "\f521" !important; }
         .fa-user-cog:before, .fas.fa-user-cog:before { content: "\f4fe" !important; }
         .fa-network-wired:before, .fas.fa-network-wired:before { content: "\f6ff" !important; }
+        .fa-clone:before, .fas.fa-clone:before { content: "\f24d" !important; }
+        .fa-magic:before, .fas.fa-magic:before { content: "\f0d0" !important; }
         
         /* Enhanced Vazir Font Loading */
         @import url('https://v1.fontapi.ir/css/Vazir');
@@ -1223,8 +1225,8 @@
             font-family: 'Vazir', 'Vazir-Local', 'Tahoma', 'Arial', sans-serif !important;
         }
 
-        /* Inbound Status Display */
-        .inbound-status {
+        /* Template User Display */
+        .template-status {
             background: var(--bg-secondary);
             padding: 16px;
             border-radius: 12px;
@@ -1232,7 +1234,7 @@
             border: 1px solid var(--border-light);
         }
 
-        .inbound-status h5 {
+        .template-status h5 {
             color: var(--text-primary);
             margin-bottom: 12px;
             font-weight: 600;
@@ -1241,13 +1243,13 @@
             gap: 8px;
         }
 
-        .inbound-list {
+        .template-list {
             display: flex;
             flex-wrap: wrap;
             gap: 8px;
         }
 
-        .inbound-tag {
+        .template-tag {
             background: var(--primary-color);
             color: white;
             padding: 4px 12px;
@@ -1259,21 +1261,21 @@
             gap: 4px;
         }
 
-        .inbound-tag.loading {
+        .template-tag.loading {
             background: var(--warning-color);
         }
 
-        .inbound-tag.none {
+        .template-tag.none {
             background: var(--danger-color);
         }
 
-        .inbound-tag.selected {
+        .template-tag.selected {
             background: var(--success-color);
             box-shadow: 0 0 0 2px rgba(46, 125, 50, 0.3);
         }
 
-        /* Admin User Selection */
-        .admin-selection {
+        /* Template User Selection */
+        .template-selection {
             background: var(--bg-secondary);
             padding: 20px;
             border-radius: 12px;
@@ -1281,7 +1283,7 @@
             border: 1px solid var(--border-light);
         }
 
-        .admin-selection h5 {
+        .template-selection h5 {
             color: var(--text-primary);
             margin-bottom: 16px;
             font-weight: 600;
@@ -1290,7 +1292,7 @@
             gap: 8px;
         }
 
-        .admin-user-card {
+        .template-user-card {
             background: var(--card-bg);
             border: 2px solid var(--border-color);
             border-radius: 12px;
@@ -1303,24 +1305,24 @@
             justify-content: space-between;
         }
 
-        .admin-user-card:hover {
+        .template-user-card:hover {
             border-color: var(--primary-color);
             box-shadow: var(--shadow-md);
         }
 
-        .admin-user-card.selected {
+        .template-user-card.selected {
             border-color: var(--success-color);
             background: rgba(46, 125, 50, 0.05);
             box-shadow: 0 0 0 4px rgba(46, 125, 50, 0.1);
         }
 
-        .admin-user-info {
+        .template-user-info {
             display: flex;
             align-items: center;
             gap: 12px;
         }
 
-        .admin-user-avatar {
+        .template-user-avatar {
             width: 40px;
             height: 40px;
             background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
@@ -1332,19 +1334,53 @@
             font-weight: bold;
         }
 
-        .admin-user-details h6 {
+        .template-user-details h6 {
             margin: 0 0 4px 0;
             color: var(--text-primary);
             font-weight: 600;
         }
 
-        .admin-user-details p {
+        .template-user-details p {
             margin: 0;
             color: var(--text-secondary);
             font-size: 12px;
         }
 
-        .admin-user-status {
+        .template-user-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .template-info-panel {
+            background: rgba(204, 155, 80, 0.1);
+            border: 1px solid rgba(204, 155, 80, 0.2);
+            border-radius: 12px;
+            padding: 16px;
+            margin: 16px 0;
+        }
+
+        .template-info-panel h6 {
+            color: var(--accent-color);
+            margin-bottom: 12px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .template-configs {
+            display: grid;
+            gap: 8px;
+        }
+
+        .template-config-item {
+            background: var(--card-bg);
+            padding: 8px 12px;
+            border-radius: 8px;
+            border: 1px solid var(--border-light);
+            font-size: 12px;
+            color: var(--text-secondary);
             display: flex;
             align-items: center;
             gap: 8px;
@@ -1847,26 +1883,26 @@
                 margin: 0 8px;
             }
 
-            .inbound-status, .admin-selection {
+            .template-status, .template-selection {
                 padding: 12px;
                 margin: 12px 0;
             }
 
-            .inbound-list {
+            .template-list {
                 gap: 6px;
             }
 
-            .inbound-tag {
+            .template-tag {
                 padding: 3px 8px;
                 font-size: 11px;
             }
 
-            .admin-user-card {
+            .template-user-card {
                 padding: 12px;
                 margin: 6px 0;
             }
 
-            .admin-user-avatar {
+            .template-user-avatar {
                 width: 32px;
                 height: 32px;
                 font-size: 12px;
@@ -1982,6 +2018,8 @@
             .fa-crown:before { content: "👑"; }
             .fa-user-cog:before { content: "⚙️"; }
             .fa-network-wired:before { content: "🌐"; }
+            .fa-clone:before { content: "📋"; }
+            .fa-magic:before { content: "✨"; }
         }
 
         /* Force Icon Display */
@@ -2185,11 +2223,11 @@
                     </div>
                 </div>
                 
-                <!-- Inbound Status Display -->
-                <div id="inboundStatus" class="inbound-status">
-                    <h5><i class="fas fa-server"></i> وضعیت اینباندها (کاربر انتخابی: <span id="selectedAdminDisplay">Admin</span>)</h5>
-                    <div id="inboundList" class="inbound-list">
-                        <div class="inbound-tag loading">
+                <!-- Template Status Display -->
+                <div id="templateStatus" class="template-status">
+                    <h5><i class="fas fa-clone"></i> کاربر Template انتخابی: <span id="selectedTemplateDisplay">Admin</span></h5>
+                    <div id="templateList" class="template-list">
+                        <div class="template-tag loading">
                             <i class="fas fa-sync-alt"></i> در حال بارگذاری...
                         </div>
                     </div>
@@ -2242,24 +2280,38 @@
                     </button>
                 </div>
                 
-                <!-- Admin User Selection -->
-                <div id="adminSelectionSection" class="admin-selection">
-                    <h5><i class="fas fa-user-cog"></i> انتخاب کاربر Admin برای دریافت اینباندها</h5>
-                    <div id="adminUsersList">
+                <!-- Template User Selection -->
+                <div id="templateSelectionSection" class="template-selection">
+                    <h5><i class="fas fa-clone"></i> انتخاب کاربر Template (الگو) برای کپی تنظیمات</h5>
+                    <div style="background: rgba(25, 118, 210, 0.1); padding: 12px; border-radius: 8px; margin-bottom: 16px; border: 1px solid rgba(25, 118, 210, 0.2);">
+                        <p style="color: var(--info-color); margin: 0; font-size: 13px; line-height: 1.5;">
+                            <i class="fas fa-info-circle"></i>
+                            کاربر انتخابی به عنوان الگو استفاده شده و تمام تنظیمات، پروتکل‌ها، اینباندها و کانفیگ‌های آن برای کاربران جدید کپی می‌شود
+                        </p>
+                    </div>
+                    <div id="templateUsersList">
                         <div class="section-loading">
                             <div class="loading-spinner"></div>
-                            <span>در حال بارگذاری کاربران Admin...</span>
+                            <span>در حال بارگذاری کاربران Template...</span>
                         </div>
                     </div>
                 </div>
                 
-                <!-- Inbound Status for New Users -->
-                <div id="addUserInboundStatus" class="inbound-status">
-                    <h5><i class="fas fa-server"></i> اینباندهای فعال برای کاربر جدید (از: <span id="selectedAdminForUser">Admin</span>)</h5>
-                    <div id="addUserInboundList" class="inbound-list">
-                        <div class="inbound-tag loading">
+                <!-- Template Status for New Users -->
+                <div id="addUserTemplateStatus" class="template-status">
+                    <h5><i class="fas fa-magic"></i> تنظیمات الگو برای کاربر جدید (از: <span id="selectedTemplateForUser">Admin</span>)</h5>
+                    <div id="addUserTemplateList" class="template-list">
+                        <div class="template-tag loading">
                             <i class="fas fa-sync-alt"></i> در حال بارگذاری...
                         </div>
+                    </div>
+                </div>
+                
+                <!-- Template Configuration Info -->
+                <div id="templateConfigInfo" class="template-info-panel hidden">
+                    <h6><i class="fas fa-cog"></i> تنظیمات Template انتخابی</h6>
+                    <div id="templateConfigs" class="template-configs">
+                        <!-- Template configs will be shown here -->
                     </div>
                 </div>
                 
@@ -2285,7 +2337,9 @@
                     <div id="addUserSuccess" class="success-message hidden"></div>
                     
                     <button type="submit" class="form-button" style="width: 100%; padding: 16px; font-size: 16px;">
-                        <span id="addUserBtnText">افزودن کاربر (VLESS)</span>
+                        <span id="addUserBtnText">
+                            <i class="fas fa-clone"></i> افزودن کاربر (بر اساس Template)
+                        </span>
                         <div id="addUserSpinner" class="loading-spinner hidden"></div>
                     </button>
                 </form>
@@ -2501,32 +2555,32 @@
                     </div>
                 </div>
 
-                <!-- Inbound Configuration Settings -->
+                <!-- Template Configuration Settings -->
                 <div class="chart-container">
-                    <h4 class="chart-title"><i class="fas fa-network-wired"></i> تنظیمات اینباند و VLESS</h4>
+                    <h4 class="chart-title"><i class="fas fa-clone"></i> تنظیمات Template و کانفیگ</h4>
                     
                     <div class="form-group">
-                        <label class="form-label">کاربر Admin انتخابی برای اینباندها</label>
-                        <select id="adminUserSelect" class="form-select" onchange="changeSelectedAdmin()">
+                        <label class="form-label">کاربر Template انتخابی برای کپی تنظیمات</label>
+                        <select id="templateUserSelect" class="form-select" onchange="changeSelectedTemplate()">
                             <option value="Admin">Admin (پیش‌فرض)</option>
                         </select>
                     </div>
                     
                     <div class="form-group">
-                        <label class="form-label">وضعیت اینباندهای انتخابی</label>
-                        <div id="settingsInboundList" class="inbound-list">
-                            <div class="inbound-tag loading">
+                        <label class="form-label">وضعیت تنظیمات انتخابی</label>
+                        <div id="settingsTemplateList" class="template-list">
+                            <div class="template-tag loading">
                                 <i class="fas fa-sync-alt"></i> در حال بارگذاری...
                             </div>
                         </div>
                     </div>
 
                     <div style="display: flex; gap: 12px; margin-top: 16px;">
-                        <button onclick="loadAdminUsers()" class="form-button info" style="flex: 1;">
-                            <i class="fas fa-user-cog"></i> بارگذاری کاربران Admin
+                        <button onclick="loadTemplateUsers()" class="form-button info" style="flex: 1;">
+                            <i class="fas fa-user-cog"></i> بارگذاری کاربران Template
                         </button>
-                        <button onclick="loadAdminInbounds()" class="form-button warning" style="flex: 1;">
-                            <i class="fas fa-sync-alt"></i> بروزرسانی اینباندها
+                        <button onclick="loadTemplateConfigs()" class="form-button warning" style="flex: 1;">
+                            <i class="fas fa-sync-alt"></i> بروزرسانی تنظیمات
                         </button>
                     </div>
                 </div>
@@ -2660,6 +2714,8 @@
                     else if (className.includes('fa-envelope')) fallback = '✉️';
                     else if (className.includes('fa-crown')) fallback = '👑';
                     else if (className.includes('fa-network')) fallback = '🌐';
+                    else if (className.includes('fa-clone')) fallback = '📋';
+                    else if (className.includes('fa-magic')) fallback = '✨';
                     
                     icon.innerHTML = `<span class="icon-fallback">${fallback}</span>`;
                 }
@@ -2701,7 +2757,9 @@
                 'fa-envelope-open': '📭',
                 'fa-crown': '👑',
                 'fa-user-cog': '⚙️',
-                'fa-network-wired': '🌐'
+                'fa-network-wired': '🌐',
+                'fa-clone': '📋',
+                'fa-magic': '✨'
             };
 
             Object.keys(iconMap).forEach(className => {
@@ -3024,10 +3082,10 @@
         let filteredUsers = [];
         let loginAttempts = 0;
         let sessionFingerprint = '';
-        let adminInbounds = []; // Store Admin user inbounds
-        let availableInbounds = []; // Store all available inbounds
-        let selectedAdminUser = 'Admin'; // Selected admin user for inbounds
-        let adminUsers = []; // List of admin users
+        let templateConfigs = []; // Store template user configurations
+        let availableTemplates = []; // Store all available template configurations
+        let selectedTemplateUser = 'Admin'; // Selected template user for new users
+        let templateUsers = []; // List of template users
         let sectionsLoaded = {
             dashboard: false,
             users: false,
@@ -3107,9 +3165,9 @@
                 expireDateInput.value = expireDate.toISOString().split('T')[0];
             }
             
-            // Reload admin users and inbounds
-            loadAdminUsers();
-            loadAdminInbounds();
+            // Reload template users and configs
+            loadTemplateUsers();
+            loadTemplateConfigs();
             
             showNotification('فرم افزودن کاربر بازنشانی شد! 🔄', 'success');
         }
@@ -3161,10 +3219,10 @@
             if (usernameInput) usernameInput.value = currentUsername;
             if (serverUrlInput) serverUrlInput.value = getServerUrl();
             
-            // Update admin user select
-            updateAdminUserSelect();
-            updateInboundDisplay('loading');
-            loadAdminInbounds();
+            // Update template user select
+            updateTemplateUserSelect();
+            updateTemplateDisplay('loading');
+            loadTemplateConfigs();
             
             showNotification('تنظیمات بروزرسانی شد! 🔄', 'success');
         }
@@ -3203,8 +3261,8 @@
                             showPanel();
                             loadDashboardData();
                             startAutoUpdate();
-                            loadAdminUsers();
-                            loadAdminInbounds();
+                            loadTemplateUsers();
+                            loadTemplateConfigs();
                         } else {
                             logout();
                         }
@@ -3357,9 +3415,9 @@
                             loadDashboardData();
                             startAutoUpdate();
                             
-                            // Load admin users and inbounds for new users
-                            await loadAdminUsers();
-                            await loadAdminInbounds();
+                            // Load template users and configs for new users
+                            await loadTemplateUsers();
+                            await loadTemplateConfigs();
                             
                             showNotification('ورود موفقیت‌آمیز بود! 🎉', 'success');
                         } else {
@@ -3386,90 +3444,103 @@
             hideLoading();
         }
 
-        // Enhanced Admin User Management
-        async function loadAdminUsers() {
+        // Enhanced Template User Management
+        async function loadTemplateUsers() {
             try {
-                console.log('🔄 شروع بارگذاری کاربران Admin...');
+                console.log('🔄 شروع بارگذاری کاربران Template...');
                 
                 const usersData = await apiCall('/users');
                 if (usersData && usersData.users && Array.isArray(usersData.users)) {
-                    // Filter admin users (users with inbounds or specific patterns)
-                    adminUsers = usersData.users.filter(user => {
+                    // Filter users with configurations (prioritize users with inbounds and links)
+                    templateUsers = usersData.users.filter(user => {
                         return user.username && (
+                            // Users with inbounds
+                            (user.inbounds && user.inbounds.length > 0) ||
+                            // Users with existing configs
+                            (user.links && user.links.length > 0) ||
+                            // Users with proxies
+                            (user.proxies && Object.keys(user.proxies).length > 0) ||
+                            // Traditional admin patterns
                             user.username.toLowerCase().includes('admin') ||
                             user.username.toLowerCase().includes('root') ||
-                            user.username.toLowerCase().includes('super') ||
-                            (user.inbounds && user.inbounds.length > 0)
+                            user.username.toLowerCase().includes('template') ||
+                            user.username.toLowerCase().includes('sample')
                         );
+                    }).sort((a, b) => {
+                        // Sort by priority: users with more inbounds first
+                        const aScore = (a.inbounds?.length || 0) * 10 + (a.links?.length || 0);
+                        const bScore = (b.inbounds?.length || 0) * 10 + (b.links?.length || 0);
+                        return bScore - aScore;
                     });
                     
                     // Always include 'Admin' if not already present
-                    if (!adminUsers.find(u => u.username === 'Admin')) {
-                        adminUsers.unshift({ username: 'Admin', inbounds: [] });
+                    if (!templateUsers.find(u => u.username === 'Admin')) {
+                        templateUsers.unshift({ username: 'Admin', inbounds: [], links: [] });
                     }
                     
-                    console.log('✅ کاربران Admin بارگذاری شد:', adminUsers);
-                    updateAdminUsersList();
-                    updateAdminUserSelect();
-                    showNotification(`${adminUsers.length} کاربر Admin یافت شد`, 'success');
+                    console.log('✅ کاربران Template بارگذاری شد:', templateUsers);
+                    updateTemplateUsersList();
+                    updateTemplateUserSelect();
+                    showNotification(`${templateUsers.length} کاربر Template یافت شد`, 'success');
                     
                 } else {
                     console.log('⚠️ هیچ کاربری یافت نشد، استفاده از پیش‌فرض');
-                    adminUsers = [{ username: 'Admin', inbounds: [] }];
-                    updateAdminUsersList();
-                    updateAdminUserSelect();
+                    templateUsers = [{ username: 'Admin', inbounds: [], links: [] }];
+                    updateTemplateUsersList();
+                    updateTemplateUserSelect();
                 }
                 
             } catch (error) {
-                console.error('❌ خطا در بارگذاری کاربران Admin:', error);
-                adminUsers = [{ username: 'Admin', inbounds: [] }];
-                updateAdminUsersList();
-                updateAdminUserSelect();
-                showNotification('خطا در بارگذاری کاربران Admin', 'error');
+                console.error('❌ خطا در بارگذاری کاربران Template:', error);
+                templateUsers = [{ username: 'Admin', inbounds: [], links: [] }];
+                updateTemplateUsersList();
+                updateTemplateUserSelect();
+                showNotification('خطا در بارگذاری کاربران Template', 'error');
             }
         }
 
-        function updateAdminUsersList() {
-            const container = document.getElementById('adminUsersList');
+        function updateTemplateUsersList() {
+            const container = document.getElementById('templateUsersList');
             if (!container) return;
             
             container.innerHTML = '';
             
-            if (adminUsers.length === 0) {
-                const noUsersMsg = Security.safeCreateElement('p', 'هیچ کاربر Admin یافت نشد');
+            if (templateUsers.length === 0) {
+                const noUsersMsg = Security.safeCreateElement('p', 'هیچ کاربر Template یافت نشد');
                 noUsersMsg.style.cssText = 'text-align: center; color: var(--text-muted); padding: 20px;';
                 container.appendChild(noUsersMsg);
                 return;
             }
             
-            adminUsers.forEach(user => {
+            templateUsers.forEach(user => {
                 const userCard = document.createElement('div');
-                userCard.className = `admin-user-card ${user.username === selectedAdminUser ? 'selected' : ''}`;
-                userCard.onclick = () => selectAdminUser(user.username);
+                userCard.className = `template-user-card ${user.username === selectedTemplateUser ? 'selected' : ''}`;
+                userCard.onclick = () => selectTemplateUser(user.username);
                 
                 const userInfo = document.createElement('div');
-                userInfo.className = 'admin-user-info';
+                userInfo.className = 'template-user-info';
                 
                 const avatar = document.createElement('div');
-                avatar.className = 'admin-user-avatar';
+                avatar.className = 'template-user-avatar';
                 const initial = user.username.charAt(0).toUpperCase();
                 avatar.textContent = initial;
                 
                 const details = document.createElement('div');
-                details.className = 'admin-user-details';
+                details.className = 'template-user-details';
                 
                 const username = Security.safeCreateElement('h6', user.username);
-                const inboundCount = Security.safeCreateElement('p', `${(user.inbounds || []).length} اینباند`);
+                const configCount = (user.inbounds?.length || 0) + (user.links?.length || 0);
+                const configInfo = Security.safeCreateElement('p', `${configCount} تنظیمات موجود`);
                 
                 details.appendChild(username);
-                details.appendChild(inboundCount);
+                details.appendChild(configInfo);
                 userInfo.appendChild(avatar);
                 userInfo.appendChild(details);
                 
                 const statusDiv = document.createElement('div');
-                statusDiv.className = 'admin-user-status';
+                statusDiv.className = 'template-user-status';
                 
-                if (user.username === selectedAdminUser) {
+                if (user.username === selectedTemplateUser) {
                     const selectedBadge = Security.safeCreateElement('span', 'انتخاب شده', 'status-badge status-active');
                     const selectedIcon = document.createElement('i');
                     selectedIcon.className = 'fas fa-check-circle';
@@ -3477,7 +3548,7 @@
                     statusDiv.appendChild(selectedBadge);
                 } else {
                     const selectIcon = document.createElement('i');
-                    selectIcon.className = 'fas fa-crown';
+                    selectIcon.className = 'fas fa-clone';
                     selectIcon.style.color = 'var(--text-muted)';
                     statusDiv.appendChild(selectIcon);
                 }
@@ -3488,154 +3559,170 @@
             });
         }
 
-        function updateAdminUserSelect() {
-            const select = document.getElementById('adminUserSelect');
+        function updateTemplateUserSelect() {
+            const select = document.getElementById('templateUserSelect');
             if (!select) return;
             
             select.innerHTML = '';
             
-            adminUsers.forEach(user => {
+            templateUsers.forEach(user => {
                 const option = Security.safeCreateElement('option', user.username);
                 option.value = user.username;
-                if (user.username === selectedAdminUser) {
+                if (user.username === selectedTemplateUser) {
                     option.selected = true;
                 }
                 select.appendChild(option);
             });
         }
 
-        function selectAdminUser(username) {
+        function selectTemplateUser(username) {
             if (!Security.validateInput(username, 'username')) return;
             
-            selectedAdminUser = username;
+            selectedTemplateUser = username;
             
             // Update displays
-            updateAdminUsersList();
-            updateSelectedAdminDisplays();
+            updateTemplateUsersList();
+            updateSelectedTemplateDisplays();
             
-            // Reload inbounds for the selected admin
-            loadAdminInbounds();
+            // Reload configs for the selected template
+            loadTemplateConfigs();
             
-            showNotification(`کاربر Admin انتخاب شد: ${Security.sanitizeHtml(username)}`, 'success');
+            showNotification(`کاربر Template انتخاب شد: ${Security.sanitizeHtml(username)}`, 'success');
         }
 
-        function changeSelectedAdmin() {
-            const select = document.getElementById('adminUserSelect');
+        function changeSelectedTemplate() {
+            const select = document.getElementById('templateUserSelect');
             if (!select) return;
             
             const selectedValue = select.value;
-            if (selectedValue && selectedValue !== selectedAdminUser) {
-                selectAdminUser(selectedValue);
+            if (selectedValue && selectedValue !== selectedTemplateUser) {
+                selectTemplateUser(selectedValue);
             }
         }
 
-        function updateSelectedAdminDisplays() {
+        function updateSelectedTemplateDisplays() {
             const displays = [
-                'selectedAdminDisplay',
-                'selectedAdminForUser'
+                'selectedTemplateDisplay',
+                'selectedTemplateForUser'
             ];
             
             displays.forEach(id => {
                 const element = document.getElementById(id);
                 if (element) {
-                    Security.safeSetContent(element, selectedAdminUser);
+                    Security.safeSetContent(element, selectedTemplateUser);
                 }
             });
         }
 
-        // Enhanced Inbound Management
-        async function loadAdminInbounds() {
+        // Enhanced Template Configuration Management
+        async function loadTemplateConfigs() {
             try {
-                console.log('🔄 شروع بارگذاری اینباندها از کاربر:', selectedAdminUser);
-                updateInboundDisplay('loading');
+                console.log('🔄 شروع بارگذاری تنظیمات Template از کاربر:', selectedTemplateUser);
+                updateTemplateDisplay('loading');
                 
-                // Try to get selected admin user inbounds
-                const adminUser = await apiCall(`/user/${encodeURIComponent(selectedAdminUser)}`);
-                console.log('📊 داده‌های کاربر Admin:', adminUser);
+                // Try to get selected template user configs
+                const templateUser = await apiCall(`/user/${encodeURIComponent(selectedTemplateUser)}`);
+                console.log('📊 داده‌های کاربر Template:', templateUser);
                 
-                if (adminUser && adminUser.inbounds && Array.isArray(adminUser.inbounds) && adminUser.inbounds.length > 0) {
-                    adminInbounds = adminUser.inbounds;
-                    console.log('✅ اینباندهای کاربر Admin بارگذاری شد:', adminInbounds);
-                    showNotification(`${adminInbounds.length} اینباند از ${selectedAdminUser} بارگذاری شد`, 'success');
-                    updateInboundDisplay('admin', adminInbounds);
-                    return;
-                }
-                
-                console.log('⚠️ اینباندی در کاربر انتخابی یافت نشد، تلاش برای دریافت اینباندهای سیستم...');
-                
-                // If selected admin user has no inbounds, try to get system inbounds
-                const systemInbounds = await apiCall('/inbounds');
-                console.log('🔧 اینباندهای سیستم:', systemInbounds);
-                
-                if (systemInbounds && Array.isArray(systemInbounds) && systemInbounds.length > 0) {
-                    // Filter active inbounds and take first few
-                    availableInbounds = systemInbounds.filter(inbound => 
-                        inbound && inbound.enable !== false && inbound.tag
-                    ).slice(0, 5);
+                if (templateUser) {
+                    templateConfigs = [];
                     
-                    if (availableInbounds.length > 0) {
-                        // Convert to Admin format
-                        adminInbounds = availableInbounds.map(inbound => ({
-                            tag: inbound.tag,
-                            protocol: inbound.protocol || 'vless'
-                        }));
-                        
-                        console.log('🚀 اینباندهای سیستم تبدیل شد:', adminInbounds);
-                        showNotification(`${adminInbounds.length} اینباند سیستم استفاده شد`, 'info');
-                        updateInboundDisplay('system', adminInbounds);
+                    // Collect inbounds
+                    if (templateUser.inbounds && Array.isArray(templateUser.inbounds) && templateUser.inbounds.length > 0) {
+                        templateUser.inbounds.forEach(inbound => {
+                            templateConfigs.push({
+                                type: 'inbound',
+                                tag: inbound.tag,
+                                protocol: inbound.protocol || 'vless'
+                            });
+                        });
+                        console.log('✅ اینباندهای Template بارگذاری شد:', templateUser.inbounds);
+                    }
+                    
+                    // Collect proxies
+                    if (templateUser.proxies && typeof templateUser.proxies === 'object') {
+                        Object.keys(templateUser.proxies).forEach(protocol => {
+                            templateConfigs.push({
+                                type: 'proxy',
+                                protocol: protocol,
+                                details: templateUser.proxies[protocol]
+                            });
+                        });
+                        console.log('🔧 پروکسی‌های Template بارگذاری شد:', templateUser.proxies);
+                    }
+                    
+                    // Collect links
+                    if (templateUser.links && Array.isArray(templateUser.links) && templateUser.links.length > 0) {
+                        templateUser.links.forEach((link, index) => {
+                            const protocol = link.split('://')[0].toLowerCase();
+                            templateConfigs.push({
+                                type: 'link',
+                                protocol: protocol,
+                                link: link,
+                                index: index + 1
+                            });
+                        });
+                        console.log('🔗 لینک‌های Template بارگذاری شد:', templateUser.links);
+                    }
+                    
+                    if (templateConfigs.length > 0) {
+                        console.log('🚀 تنظیمات Template موفقیت‌آمیز بارگذاری شد:', templateConfigs);
+                        showNotification(`${templateConfigs.length} تنظیمات از ${selectedTemplateUser} بارگذاری شد`, 'success');
+                        updateTemplateDisplay('template', templateConfigs);
+                        showTemplateConfigInfo(templateUser);
                         return;
                     }
                 }
                 
-                console.log('❌ هیچ اینباندی یافت نشد، استفاده از اینباندهای پیش‌فرض...');
+                console.log('❌ هیچ تنظیماتی از کاربر Template یافت نشد');
                 
-                // Last resort: use default inbounds
-                adminInbounds = [
-                    { tag: "REALITY", protocol: "vless" },
-                    { tag: "Websocket", protocol: "vless" },
-                    { tag: "gRPC", protocol: "vless" }
+                // Last resort: use default configs
+                templateConfigs = [
+                    { type: 'inbound', tag: "REALITY", protocol: "vless" },
+                    { type: 'inbound', tag: "Websocket", protocol: "vless" },
+                    { type: 'inbound', tag: "gRPC", protocol: "vless" }
                 ];
                 
-                console.log('🔄 اینباندهای پیش‌فرض تنظیم شد:', adminInbounds);
-                showNotification('اینباندهای پیش‌فرض استفاده شد', 'warning');
-                updateInboundDisplay('default', adminInbounds);
+                console.log('🔄 تنظیمات پیش‌فرض تعیین شد:', templateConfigs);
+                showNotification('تنظیمات پیش‌فرض استفاده شد', 'warning');
+                updateTemplateDisplay('default', templateConfigs);
                 
             } catch (error) {
-                console.error('❌ خطا در بارگذاری اینباندها:', error);
+                console.error('❌ خطا در بارگذاری تنظیمات Template:', error);
                 
                 // Emergency fallback
-                adminInbounds = [
-                    { tag: "REALITY", protocol: "vless" },
-                    { tag: "Websocket", protocol: "vless" },
-                    { tag: "gRPC", protocol: "vless" }
+                templateConfigs = [
+                    { type: 'inbound', tag: "REALITY", protocol: "vless" },
+                    { type: 'inbound', tag: "Websocket", protocol: "vless" },
+                    { type: 'inbound', tag: "gRPC", protocol: "vless" }
                 ];
                 
-                showNotification('خطا در بارگذاری اینباندها - پیش‌فرض استفاده شد', 'error');
-                updateInboundDisplay('error', adminInbounds);
+                showNotification('خطا در بارگذاری تنظیمات - پیش‌فرض استفاده شد', 'error');
+                updateTemplateDisplay('error', templateConfigs);
             }
         }
 
-        function updateInboundDisplay(status, inbounds = []) {
-            // Update dashboard inbound display
-            const inboundList = document.getElementById('inboundList');
-            if (inboundList) {
-                updateInboundList(inboundList, status, inbounds);
+        function updateTemplateDisplay(status, configs = []) {
+            // Update dashboard template display
+            const templateList = document.getElementById('templateList');
+            if (templateList) {
+                updateTemplateList(templateList, status, configs);
             }
             
-            // Update add user section inbound display
-            const addUserInboundList = document.getElementById('addUserInboundList');
-            if (addUserInboundList) {
-                updateInboundList(addUserInboundList, status, inbounds);
+            // Update add user section template display
+            const addUserTemplateList = document.getElementById('addUserTemplateList');
+            if (addUserTemplateList) {
+                updateTemplateList(addUserTemplateList, status, configs);
             }
 
-            // Update settings inbound display
-            const settingsInboundList = document.getElementById('settingsInboundList');
-            if (settingsInboundList) {
-                updateInboundList(settingsInboundList, status, inbounds);
+            // Update settings template display
+            const settingsTemplateList = document.getElementById('settingsTemplateList');
+            if (settingsTemplateList) {
+                updateTemplateList(settingsTemplateList, status, configs);
             }
         }
 
-        function updateInboundList(container, status, inbounds = []) {
+        function updateTemplateList(container, status, configs = []) {
             if (!container) return;
             
             container.innerHTML = '';
@@ -3643,51 +3730,49 @@
             switch (status) {
                 case 'loading':
                     const loadingTag = document.createElement('div');
-                    loadingTag.className = 'inbound-tag loading';
+                    loadingTag.className = 'template-tag loading';
                     loadingTag.innerHTML = '<i class="fas fa-sync-alt"></i> در حال بارگذاری...';
                     container.appendChild(loadingTag);
                     break;
                     
-                case 'admin':
-                    inbounds.forEach(inbound => {
+                case 'template':
+                    configs.forEach(config => {
                         const tag = document.createElement('div');
-                        tag.className = 'inbound-tag selected';
-                        tag.innerHTML = `<i class="fas fa-server"></i> ${Security.sanitizeHtml(inbound.tag)} (${Security.sanitizeHtml(inbound.protocol || 'vless')})`;
-                        container.appendChild(tag);
-                    });
-                    break;
-                    
-                case 'system':
-                    inbounds.forEach(inbound => {
-                        const tag = document.createElement('div');
-                        tag.className = 'inbound-tag';
-                        tag.style.background = 'var(--info-color)';
-                        tag.innerHTML = `<i class="fas fa-cog"></i> ${Security.sanitizeHtml(inbound.tag)} (${Security.sanitizeHtml(inbound.protocol || 'vless')})`;
+                        tag.className = 'template-tag selected';
+                        let content = '';
+                        if (config.type === 'inbound') {
+                            content = `<i class="fas fa-server"></i> ${Security.sanitizeHtml(config.tag)} (${Security.sanitizeHtml(config.protocol)})`;
+                        } else if (config.type === 'proxy') {
+                            content = `<i class="fas fa-network-wired"></i> ${Security.sanitizeHtml(config.protocol)}`;
+                        } else if (config.type === 'link') {
+                            content = `<i class="fas fa-link"></i> ${Security.sanitizeHtml(config.protocol)} #${config.index}`;
+                        }
+                        tag.innerHTML = content;
                         container.appendChild(tag);
                     });
                     break;
                     
                 case 'default':
-                    inbounds.forEach(inbound => {
+                    configs.forEach(config => {
                         const tag = document.createElement('div');
-                        tag.className = 'inbound-tag';
+                        tag.className = 'template-tag';
                         tag.style.background = 'var(--warning-color)';
-                        tag.innerHTML = `<i class="fas fa-exclamation-triangle"></i> ${Security.sanitizeHtml(inbound.tag)} (${Security.sanitizeHtml(inbound.protocol || 'vless')})`;
+                        tag.innerHTML = `<i class="fas fa-exclamation-triangle"></i> ${Security.sanitizeHtml(config.tag)} (پیش‌فرض)`;
                         container.appendChild(tag);
                     });
                     break;
                     
                 case 'error':
                     const errorTag = document.createElement('div');
-                    errorTag.className = 'inbound-tag none';
+                    errorTag.className = 'template-tag none';
                     errorTag.innerHTML = '<i class="fas fa-times"></i> خطا در بارگذاری';
                     container.appendChild(errorTag);
                     
-                    if (inbounds.length > 0) {
-                        inbounds.forEach(inbound => {
+                    if (configs.length > 0) {
+                        configs.forEach(config => {
                             const tag = document.createElement('div');
-                            tag.className = 'inbound-tag none';
-                            tag.innerHTML = `<i class="fas fa-exclamation-triangle"></i> ${Security.sanitizeHtml(inbound.tag)} (اضطراری)`;
+                            tag.className = 'template-tag none';
+                            tag.innerHTML = `<i class="fas fa-exclamation-triangle"></i> ${Security.sanitizeHtml(config.tag)} (اضطراری)`;
                             container.appendChild(tag);
                         });
                     }
@@ -3695,9 +3780,60 @@
                     
                 default:
                     const defaultTag = document.createElement('div');
-                    defaultTag.className = 'inbound-tag none';
+                    defaultTag.className = 'template-tag none';
                     defaultTag.innerHTML = '<i class="fas fa-question"></i> وضعیت نامشخص';
                     container.appendChild(defaultTag);
+            }
+        }
+
+        function showTemplateConfigInfo(templateUser) {
+            const configInfoPanel = document.getElementById('templateConfigInfo');
+            const configsContainer = document.getElementById('templateConfigs');
+            
+            if (!configInfoPanel || !configsContainer) return;
+            
+            configsContainer.innerHTML = '';
+            
+            // Show subscription URL
+            if (templateUser.subscription_url) {
+                const subItem = document.createElement('div');
+                subItem.className = 'template-config-item';
+                subItem.innerHTML = `<i class="fas fa-link"></i> Subscription URL موجود`;
+                configsContainer.appendChild(subItem);
+            }
+            
+            // Show inbounds
+            if (templateUser.inbounds && templateUser.inbounds.length > 0) {
+                templateUser.inbounds.forEach(inbound => {
+                    const inboundItem = document.createElement('div');
+                    inboundItem.className = 'template-config-item';
+                    inboundItem.innerHTML = `<i class="fas fa-server"></i> اینباند: ${Security.sanitizeHtml(inbound.tag)} (${Security.sanitizeHtml(inbound.protocol || 'vless')})`;
+                    configsContainer.appendChild(inboundItem);
+                });
+            }
+            
+            // Show proxies
+            if (templateUser.proxies && Object.keys(templateUser.proxies).length > 0) {
+                Object.keys(templateUser.proxies).forEach(protocol => {
+                    const proxyItem = document.createElement('div');
+                    proxyItem.className = 'template-config-item';
+                    proxyItem.innerHTML = `<i class="fas fa-network-wired"></i> پروکسی: ${Security.sanitizeHtml(protocol)}`;
+                    configsContainer.appendChild(proxyItem);
+                });
+            }
+            
+            // Show links count
+            if (templateUser.links && templateUser.links.length > 0) {
+                const linksItem = document.createElement('div');
+                linksItem.className = 'template-config-item';
+                linksItem.innerHTML = `<i class="fas fa-link"></i> تعداد کانفیگ: ${templateUser.links.length}`;
+                configsContainer.appendChild(linksItem);
+            }
+            
+            if (configsContainer.children.length > 0) {
+                configInfoPanel.classList.remove('hidden');
+            } else {
+                configInfoPanel.classList.add('hidden');
             }
         }
 
@@ -3714,10 +3850,10 @@
             
             authToken = '';
             currentUsername = '';
-            adminInbounds = [];
-            availableInbounds = [];
-            selectedAdminUser = 'Admin';
-            adminUsers = [];
+            templateConfigs = [];
+            availableTemplates = [];
+            selectedTemplateUser = 'Admin';
+            templateUsers = [];
             sectionsLoaded = { dashboard: false, users: false, traffic: false, analytics: false, support: false };
             
             // Clear any sensitive form data
@@ -3765,8 +3901,8 @@
             if (settingsUsername) settingsUsername.value = currentUsername;
             if (currentServerUrl) currentServerUrl.value = getServerUrl();
 
-            // Update selected admin displays
-            updateSelectedAdminDisplays();
+            // Update selected template displays
+            updateSelectedTemplateDisplays();
         }
 
         function showSection(sectionName) {
@@ -3828,16 +3964,16 @@
                     }
                     break;
                 case 'addUser':
-                    // Load admin users when accessing add user section
-                    if (adminUsers.length === 0) {
-                        loadAdminUsers();
+                    // Load template users when accessing add user section
+                    if (templateUsers.length === 0) {
+                        loadTemplateUsers();
                     }
                     break;
                 case 'settings':
                     // Update settings displays
-                    updateSelectedAdminDisplays();
-                    if (adminUsers.length === 0) {
-                        loadAdminUsers();
+                    updateSelectedTemplateDisplays();
+                    if (templateUsers.length === 0) {
+                        loadTemplateUsers();
                     }
                     break;
                 default:
@@ -4981,7 +5117,7 @@
             hideMessage('editUserSuccess');
         }
 
-        // Enhanced Add User Functions (افزودن کاربر) with Improved Inbound Integration
+        // Enhanced Add User Functions (افزودن کاربر) with Template Integration
         async function handleAddUser(e) {
             e.preventDefault();
             
@@ -5025,14 +5161,14 @@
                 return;
             }
             
-            // Check if inbounds are available
-            if (!adminInbounds || adminInbounds.length === 0) {
-                showMessage('addUserError', `هیچ اینباندی از کاربر ${selectedAdminUser} یافت نشد - لطفاً کاربر Admin دیگری انتخاب کنید`);
-                console.log('🚨 اینباند موجود نیست، تلاش برای بارگذاری مجدد...');
-                await loadAdminInbounds();
+            // Check if template configs are available
+            if (!templateConfigs || templateConfigs.length === 0) {
+                showMessage('addUserError', `هیچ تنظیماتی از کاربر ${selectedTemplateUser} یافت نشد - لطفاً کاربر Template دیگری انتخاب کنید`);
+                console.log('🚨 تنظیمات Template موجود نیست، تلاش برای بارگذاری مجدد...');
+                await loadTemplateConfigs();
                 
-                if (!adminInbounds || adminInbounds.length === 0) {
-                    showMessage('addUserError', 'امکان ایجاد کاربر بدون اینباند وجود ندارد');
+                if (!templateConfigs || templateConfigs.length === 0) {
+                    showMessage('addUserError', 'امکان ایجاد کاربر بدون Template وجود ندارد');
                     return;
                 }
             }
@@ -5050,8 +5186,8 @@
             
             showLoading('در حال افزودن کاربر...');
             
-            // Create comprehensive user data with selected admin inbounds
-            console.log('🔧 ایجاد کاربر با اینباندهای کاربر', selectedAdminUser, ':', adminInbounds);
+            // Create comprehensive user data with template configurations
+            console.log('🔧 ایجاد کاربر با تنظیمات Template کاربر', selectedTemplateUser, ':', templateConfigs);
             
             const userData = {
                 username,
@@ -5059,12 +5195,25 @@
                 expire,
                 proxies: {
                     vless: {}
-                },
-                inbounds: adminInbounds.map(inbound => ({
+                }
+            };
+            
+            // Add inbounds from template
+            const inbounds = templateConfigs.filter(config => config.type === 'inbound');
+            if (inbounds.length > 0) {
+                userData.inbounds = inbounds.map(inbound => ({
                     tag: inbound.tag,
                     protocol: inbound.protocol || 'vless'
-                }))
-            };
+                }));
+            }
+            
+            // Add proxies from template
+            const proxies = templateConfigs.filter(config => config.type === 'proxy');
+            if (proxies.length > 0) {
+                proxies.forEach(proxy => {
+                    userData.proxies[proxy.protocol] = proxy.details || {};
+                });
+            }
             
             console.log('📤 ارسال داده‌های کاربر:', userData);
             
@@ -5073,7 +5222,7 @@
                 console.log('📨 پاسخ سرور:', result);
                 
                 if (result) {
-                    showMessage('addUserSuccess', `کاربر ${Security.sanitizeHtml(username)} با موفقیت اضافه شد (${adminInbounds.length} اینباند از ${selectedAdminUser})`);
+                    showMessage('addUserSuccess', `کاربر ${Security.sanitizeHtml(username)} با موفقیت اضافه شد (${templateConfigs.length} تنظیمات از ${selectedTemplateUser})`);
                     
                     const addUserForm = document.getElementById('addUserForm');
                     if (addUserForm) addUserForm.reset();
@@ -5090,7 +5239,7 @@
                     
                     await loadUsers(); // Refresh users list
                     
-                    showNotification(`✅ کاربر ${Security.sanitizeHtml(username)} با ${adminInbounds.length} اینباند از ${selectedAdminUser} اضافه شد`, 'success');
+                    showNotification(`✅ کاربر ${Security.sanitizeHtml(username)} با ${templateConfigs.length} تنظیمات از ${selectedTemplateUser} اضافه شد`, 'success');
                 } else {
                     showMessage('addUserError', 'خطا در افزودن کاربر - لطفاً دوباره تلاش کنید');
                 }
@@ -5121,29 +5270,35 @@
                 
                 configsContainer.innerHTML = '';
                 
-                // Show information about selected admin and inbounds
-                if (adminInbounds && adminInbounds.length > 0) {
-                    const inboundInfo = document.createElement('div');
-                    inboundInfo.className = 'inbound-status';
-                    inboundInfo.style.marginBottom = '16px';
+                // Show information about selected template and configs
+                if (templateConfigs && templateConfigs.length > 0) {
+                    const templateInfo = document.createElement('div');
+                    templateInfo.className = 'template-status';
+                    templateInfo.style.marginBottom = '16px';
                     
-                    const inboundTitle = document.createElement('h5');
-                    inboundTitle.innerHTML = `<i class="fas fa-server"></i> اینباندهای استفاده شده از کاربر: ${Security.sanitizeHtml(selectedAdminUser)}`;
-                    inboundTitle.style.marginBottom = '12px';
+                    const templateTitle = document.createElement('h5');
+                    templateTitle.innerHTML = `<i class="fas fa-clone"></i> تنظیمات استفاده شده از Template: ${Security.sanitizeHtml(selectedTemplateUser)}`;
+                    templateTitle.style.marginBottom = '12px';
                     
-                    const inboundList = document.createElement('div');
-                    inboundList.className = 'inbound-list';
+                    const templateList = document.createElement('div');
+                    templateList.className = 'template-list';
                     
-                    adminInbounds.forEach(inbound => {
+                    templateConfigs.forEach(config => {
                         const tag = document.createElement('div');
-                        tag.className = 'inbound-tag selected';
-                        tag.innerHTML = `<i class="fas fa-check"></i> ${Security.sanitizeHtml(inbound.tag)} (${Security.sanitizeHtml(inbound.protocol || 'vless')})`;
-                        inboundList.appendChild(tag);
+                        tag.className = 'template-tag selected';
+                        if (config.type === 'inbound') {
+                            tag.innerHTML = `<i class="fas fa-server"></i> ${Security.sanitizeHtml(config.tag)} (${Security.sanitizeHtml(config.protocol)})`;
+                        } else if (config.type === 'proxy') {
+                            tag.innerHTML = `<i class="fas fa-network-wired"></i> ${Security.sanitizeHtml(config.protocol)}`;
+                        } else if (config.type === 'link') {
+                            tag.innerHTML = `<i class="fas fa-link"></i> ${Security.sanitizeHtml(config.protocol)} #${config.index}`;
+                        }
+                        templateList.appendChild(tag);
                     });
                     
-                    inboundInfo.appendChild(inboundTitle);
-                    inboundInfo.appendChild(inboundList);
-                    configsContainer.appendChild(inboundInfo);
+                    templateInfo.appendChild(templateTitle);
+                    templateInfo.appendChild(templateList);
+                    configsContainer.appendChild(templateInfo);
                 }
                 
                 // Show subscription URL
@@ -5401,7 +5556,7 @@
             try {
                 sessionStorage.setItem('toofan_default_data_limit', defaultDataLimit);
                 sessionStorage.setItem('toofan_default_duration', defaultDuration);
-                sessionStorage.setItem('toofan_selected_admin', selectedAdminUser);
+                sessionStorage.setItem('toofan_selected_template', selectedTemplateUser);
                 showNotification('تنظیمات با موفقیت ذخیره شد ✅', 'success');
             } catch (error) {
                 showNotification('خطا در ذخیره تنظیمات', 'error');
