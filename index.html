@@ -1224,7 +1224,7 @@
             white-space: nowrap;
             font-family: 'Vazir', 'Vazir-Local', 'Tahoma', 'Arial', sans-serif !important;
         }
-
+        
         /* Inbound Status Display */
         .inbound-status {
             background: var(--bg-secondary);
@@ -2749,7 +2749,7 @@
         let sectionsLoaded = { dashboard: false, users: false, traffic: false, analytics: false, support: false };
 
         // Chart instances
-        let userStatusChartInstance = null, protocolChartInstance = null, expiryChartInstance = null, dailyTrafficChartInstance = null, userTrafficChartInstance = null, overallTrafficChartInstance = null;
+        let userStatusChartInstance = null, protocolChartInstance = null, expiryChartInstance = null, dailyTrafficChartInstance = null, userTrafficChartInstance = null;
 
         // Enhanced Loading Functions
         function showLoading(message = 'منتظر بمانید...') {
@@ -3477,9 +3477,6 @@
             }
             document.getElementById('userCreationResult').classList.remove('hidden');
         }
-
-        // Other functions (edit, config modal, etc.) remain largely the same
-        // but will now benefit from the stable user creation process.
         
         function editUser(username) {
             const user = users.find(u => u.username === username);
@@ -3500,8 +3497,6 @@
             const username = document.getElementById('editUsername').value;
             const dataLimitGB = parseFloat(document.getElementById('editDataLimit').value);
             const expireDateStr = document.getElementById('editExpireDate').value;
-            
-            // Validation...
             
             setLoadingState('editUserForm', 'editUserBtnText', 'editUserSpinner', true);
             showLoading('در حال بروزرسانی...');
@@ -3646,86 +3641,172 @@
                 }
             }
 
-            const totalLimit = users.reduce((sum, u) => sum + (u.data_limit || 0), 0);
-            const totalUsed = users.reduce((sum, u) => sum + (u.used_traffic || 0), 0);
-            const totalRemaining = totalLimit - totalUsed;
-
             container.innerHTML = `
                 <div class="traffic-grid">
                     <div class="traffic-card">
-                        <div class="traffic-icon"><i class="fas fa-cloud-upload-alt"></i></div>
-                        <div class="traffic-number">${formatBytes(totalLimit)}</div>
-                        <div class="traffic-label">کل ترافیک اختصاص یافته</div>
+                        <div class="traffic-icon"><i class="fas fa-cloud-download-alt"></i></div>
+                        <div class="traffic-number" id="totalDownload">0 GB</div>
+                        <div class="traffic-label">کل دانلود (شبیه‌سازی)</div>
                     </div>
                     <div class="traffic-card">
-                        <div class="traffic-icon"><i class="fas fa-cloud-download-alt"></i></div>
-                        <div class="traffic-number">${formatBytes(totalUsed)}</div>
-                        <div class="traffic-label">کل ترافیک مصرف شده</div>
+                        <div class="traffic-icon"><i class="fas fa-cloud-upload-alt"></i></div>
+                        <div class="traffic-number" id="totalUpload">0 GB</div>
+                        <div class="traffic-label">کل آپلود (شبیه‌سازی)</div>
                     </div>
                     <div class="traffic-card">
                         <div class="traffic-icon"><i class="fas fa-exchange-alt"></i></div>
-                        <div class="traffic-number">${formatBytes(totalRemaining > 0 ? totalRemaining : 0)}</div>
-                        <div class="traffic-label">کل ترافیک باقی‌مانده</div>
+                        <div class="traffic-number" id="totalBandwidth">0 GB</div>
+                        <div class="traffic-label">کل ترافیک مصرفی</div>
                     </div>
                 </div>
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 24px;">
                     <div class="chart-container">
-                        <h4 class="chart-title">نمودار کلی مصرف ترافیک</h4>
-                        <canvas id="overallTrafficChart"></canvas>
+                        <h4 class="chart-title">نمودار مصرف روزانه (شبیه‌سازی)</h4>
+                        <canvas id="dailyTrafficChart"></canvas>
                     </div>
                     <div class="chart-container">
-                        <h4 class="chart-title">کاربران با بیشترین درصد مصرف</h4>
-                        <div id="topUsagePercentList"></div>
+                        <h4 class="chart-title">توزیع مصرف کاربران</h4>
+                        <canvas id="userTrafficChart"></canvas>
                     </div>
+                </div>
+                <div class="chart-container">
+                    <h4 class="chart-title">جزئیات مصرف کاربران</h4>
+                    <div id="trafficDetails"></div>
                 </div>
             `;
 
-            // Render Overall Traffic Chart
-            if (overallTrafficChartInstance) overallTrafficChartInstance.destroy();
-            const overallTrafficCanvas = document.getElementById('overallTrafficChart');
-            if (overallTrafficCanvas) {
-                overallTrafficChartInstance = new Chart(overallTrafficCanvas.getContext('2d'), {
-                    type: 'doughnut',
+            updateTrafficStats(users);
+            updateTrafficCharts(users);
+            loadTrafficDetails(users);
+        }
+
+        function updateTrafficStats(users) {
+            if (!Array.isArray(users)) return;
+            
+            const totalTraffic = users.reduce((sum, user) => sum + (user.used_traffic || 0), 0);
+            // Simulate download/upload split as seen in reference code
+            const totalDownload = totalTraffic * 0.7;
+            const totalUpload = totalTraffic * 0.3;
+            
+            Security.safeSetContent(document.getElementById('totalDownload'), formatBytes(totalDownload));
+            Security.safeSetContent(document.getElementById('totalUpload'), formatBytes(totalUpload));
+            Security.safeSetContent(document.getElementById('totalBandwidth'), formatBytes(totalTraffic));
+        }
+
+        function updateTrafficCharts(users) {
+            if (!Array.isArray(users)) return;
+
+            if (dailyTrafficChartInstance) dailyTrafficChartInstance.destroy();
+            if (userTrafficChartInstance) userTrafficChartInstance.destroy();
+
+            // Daily Traffic Chart (Simulated)
+            const dailyData = generateDailyTrafficData(users);
+            const dailyCanvas = document.getElementById('dailyTrafficChart');
+            if (dailyCanvas) {
+                dailyTrafficChartInstance = new Chart(dailyCanvas.getContext('2d'), {
+                    type: 'line',
                     data: {
-                        labels: ['مصرف شده', 'باقی‌مانده'],
+                        labels: dailyData.labels,
                         datasets: [{
-                            data: [totalUsed, totalRemaining > 0 ? totalRemaining : 0],
-                            backgroundColor: ['var(--warning-color)', 'var(--success-color)'],
-                            borderWidth: 3,
-                            borderColor: 'var(--card-bg)'
+                            label: 'ترافیک روزانه (GB)',
+                            data: dailyData.data,
+                            borderColor: 'var(--accent-color)',
+                            backgroundColor: 'rgba(204, 155, 80, 0.1)',
+                            fill: true,
+                            tension: 0.4
                         }]
                     },
-                    options: { responsive: true, plugins: { legend: { position: 'bottom', labels: { color: 'var(--text-secondary)' } } } }
+                    options: { responsive: true, scales: { y: { ticks: { color: 'var(--text-secondary)' } }, x: { ticks: { color: 'var(--text-secondary)' } } } }
                 });
             }
 
-            // Render Top Usage Percent List
-            const topUsageListContainer = document.getElementById('topUsagePercentList');
-            const usersWithLimit = users.filter(u => u.data_limit > 0);
-            usersWithLimit.forEach(u => {
-                u.usage_percent = ((u.used_traffic || 0) / u.data_limit) * 100;
-            });
-            const topUsageUsers = usersWithLimit.sort((a, b) => b.usage_percent - a.usage_percent).slice(0, 5);
-            
-            if (topUsageListContainer) {
-                if (topUsageUsers.length === 0) {
-                    topUsageListContainer.innerHTML = `<p style="text-align: center; color: var(--text-muted); padding: 20px;">هیچ کاربری با محدودیت ترافیک یافت نشد</p>`;
-                } else {
-                    topUsageUsers.forEach(user => {
-                        topUsageListContainer.innerHTML += `
-                            <div style="margin-bottom: 12px;">
-                                <div style="display: flex; justify-content: space-between; font-size: 13px; color: var(--text-secondary); margin-bottom: 6px;">
-                                    <span>${Security.sanitizeHtml(user.username)}</span>
-                                    <span style="font-weight: 600; color: var(--text-primary);">${user.usage_percent.toFixed(1)}%</span>
-                                </div>
-                                <div class="progress-bar">
-                                    <div class="progress-fill" style="width: ${user.usage_percent}%; background: linear-gradient(135deg, var(--accent-color), var(--warning-color));"></div>
-                                </div>
-                            </div>
-                        `;
-                    });
-                }
+            // User Traffic Distribution Chart
+            const topTrafficUsers = users.filter(u => u.used_traffic > 0).sort((a, b) => (b.used_traffic || 0) - (a.used_traffic || 0)).slice(0, 10);
+            const userTrafficCanvas = document.getElementById('userTrafficChart');
+            if (userTrafficCanvas) {
+                userTrafficChartInstance = new Chart(userTrafficCanvas.getContext('2d'), {
+                    type: 'bar',
+                    data: {
+                        labels: topTrafficUsers.map(user => Security.sanitizeHtml(user.username)),
+                        datasets: [{
+                            label: 'مصرف (GB)',
+                            data: topTrafficUsers.map(user => (user.used_traffic || 0) / (1024 * 1024 * 1024)),
+                            backgroundColor: 'var(--primary-color)',
+                            borderRadius: 4
+                        }]
+                    },
+                    options: { responsive: true, scales: { y: { ticks: { color: 'var(--text-secondary)' } }, x: { ticks: { color: 'var(--text-secondary)' } } } }
+                });
             }
+        }
+
+        function generateDailyTrafficData(users) {
+            const labels = [];
+            const data = [];
+            const totalUsedGB = users.reduce((sum, u) => sum + (u.used_traffic || 0), 0) / (1024*1024*1024);
+            let remainingTraffic = totalUsedGB;
+
+            for (let i = 6; i >= 0; i--) {
+                const date = new Date();
+                date.setDate(date.getDate() - i);
+                labels.push(date.toLocaleDateString('fa-IR', { month: 'short', day: 'numeric' }));
+                
+                let dailyUsage;
+                if (i === 0) {
+                    dailyUsage = remainingTraffic > 0 ? remainingTraffic : 0;
+                } else {
+                    const randomFactor = Math.random() * 0.2 + 0.05; 
+                    dailyUsage = Math.min(remainingTraffic, totalUsedGB * randomFactor);
+                }
+                data.push(dailyUsage.toFixed(2));
+                remainingTraffic -= dailyUsage;
+            }
+            return { labels, data };
+        }
+
+        function loadTrafficDetails(users) {
+            if (!Array.isArray(users)) return;
+            const container = document.getElementById('trafficDetails');
+            if (!container) return;
+
+            const sortedUsers = [...users].sort((a, b) => (b.used_traffic || 0) - (a.used_traffic || 0));
+            const totalTraffic = users.reduce((sum, user) => sum + (user.used_traffic || 0), 0);
+
+            container.innerHTML = '';
+            const table = document.createElement('table');
+            table.className = 'data-table';
+            table.innerHTML = `<thead><tr>
+                <th><i class="fas fa-user"></i> کاربر</th>
+                <th><i class="fas fa-download"></i> مصرف</th>
+                <th><i class="fas fa-percentage"></i> درصد از کل</th>
+                <th><i class="fas fa-chart-line"></i> درصد از سهمیه</th>
+            </tr></thead>`;
+            const tbody = document.createElement('tbody');
+
+            sortedUsers.forEach(user => {
+                const usagePercentOfTotal = totalTraffic > 0 ? ((user.used_traffic || 0) / totalTraffic * 100) : 0;
+                const usagePercentOfLimit = user.data_limit > 0 ? ((user.used_traffic || 0) / user.data_limit * 100) : 0;
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td style="font-weight: 600;">${Security.sanitizeHtml(user.username)}</td>
+                    <td>${formatBytes(user.used_traffic || 0)}</td>
+                    <td>
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <span>${usagePercentOfTotal.toFixed(1)}%</span>
+                            <div class="progress-bar" style="width: 60px;"><div class="progress-fill" style="width: ${usagePercentOfTotal.toFixed(1)}%;"></div></div>
+                        </div>
+                    </td>
+                    <td>
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <span>${usagePercentOfLimit.toFixed(1)}%</span>
+                            <div class="progress-bar" style="width: 60px;"><div class="progress-fill" style="width: ${usagePercentOfLimit.toFixed(1)}%; background: var(--accent-color);"></div></div>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+            table.appendChild(tbody);
+            container.appendChild(table);
         }
 
         async function loadAnalytics() {
@@ -3746,7 +3827,7 @@
             container.innerHTML = `
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 24px;">
                     <div class="chart-container">
-                        <h4 class="chart-title">توزیع پروتکل‌ها بین کاربران</h4>
+                        <h4 class="chart-title">توزیع پروتکل‌ها</h4>
                         <canvas id="protocolChart"></canvas>
                     </div>
                     <div class="chart-container">
@@ -3754,15 +3835,10 @@
                         <canvas id="expiryChart"></canvas>
                     </div>
                 </div>
-                <div class="chart-container">
-                    <h4 class="chart-title">مصرف ترافیک روزانه (30 روز گذشته - شبیه‌سازی شده)</h4>
-                    <canvas id="dailyTrafficChart"></canvas>
-                </div>
             `;
 
             renderProtocolChart();
             renderExpiryChart();
-            renderDailyTrafficChart();
         }
 
         function renderProtocolChart() {
@@ -3772,10 +3848,12 @@
 
             const protocolCounts = {};
             users.forEach(user => {
-                if (user.inbounds) {
+                // This part is adapted for your 'inbounds' structure
+                if (user.inbounds && typeof user.inbounds === 'object') {
                     Object.keys(user.inbounds).forEach(protocol => {
-                        if (user.inbounds[protocol].length > 0) {
-                            protocolCounts[protocol] = (protocolCounts[protocol] || 0) + 1;
+                        if (Array.isArray(user.inbounds[protocol]) && user.inbounds[protocol].length > 0) {
+                            const sanitizedProtocol = Security.sanitizeHtml(protocol);
+                            protocolCounts[sanitizedProtocol] = (protocolCounts[sanitizedProtocol] || 0) + 1;
                         }
                     });
                 }
@@ -3787,7 +3865,7 @@
                     labels: Object.keys(protocolCounts),
                     datasets: [{
                         data: Object.values(protocolCounts),
-                        backgroundColor: ['#2C3E50', '#4A6741', '#CC9B50', '#34495E', '#1976d2'],
+                        backgroundColor: ['#2C3E50', '#4A6741', '#CC9B50', '#34495E', '#1976d2', '#d32f2f'],
                         borderWidth: 3,
                         borderColor: 'var(--card-bg)'
                     }]
@@ -3804,14 +3882,14 @@
             const now = new Date();
             const expiryData = { 'منقضی شده': 0, 'کمتر از ۷ روز': 0, 'کمتر از ۳۰ روز': 0, 'بیش از ۳۰ روز': 0, 'نامحدود': 0 };
             users.forEach(user => {
-                if (!user.expire) {
+                if (!user.expire || user.expire === 0) {
                     expiryData['نامحدود']++;
                 } else {
                     const expireDate = new Date(user.expire * 1000);
                     const diffDays = (expireDate - now) / (1000 * 60 * 60 * 24);
                     if (diffDays < 0) expiryData['منقضی شده']++;
-                    else if (diffDays < 7) expiryData['کمتر از ۷ روز']++;
-                    else if (diffDays < 30) expiryData['کمتر از ۳۰ روز']++;
+                    else if (diffDays <= 7) expiryData['کمتر از ۷ روز']++;
+                    else if (diffDays <= 30) expiryData['کمتر از ۳۰ روز']++;
                     else expiryData['بیش از ۳۰ روز']++;
                 }
             });
@@ -3825,54 +3903,6 @@
                         data: Object.values(expiryData),
                         backgroundColor: ['#d32f2f', '#ff9800', '#1976d2', '#2e7d32', '#64748B'],
                         borderRadius: 4
-                    }]
-                },
-                options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { ticks: { color: 'var(--text-secondary)' } }, x: { ticks: { color: 'var(--text-secondary)' } } } }
-            });
-        }
-
-        function renderDailyTrafficChart() {
-            if (dailyTrafficChartInstance) dailyTrafficChartInstance.destroy();
-            const dailyTrafficCanvas = document.getElementById('dailyTrafficChart');
-            if (!dailyTrafficCanvas) return;
-
-            // --- SIMULATED DATA ---
-            // The API does not provide daily traffic data, so we simulate it for demonstration.
-            const labels = [];
-            const data = [];
-            const totalUsedGB = users.reduce((sum, u) => sum + (u.used_traffic || 0), 0) / (1024 * 1024 * 1024);
-            let remainingTraffic = totalUsedGB;
-
-            for (let i = 29; i >= 0; i--) {
-                const date = new Date();
-                date.setDate(date.getDate() - i);
-                labels.push(date.toLocaleDateString('fa-IR', { month: 'short', day: 'numeric' }));
-                
-                let dailyUsage;
-                if (i === 0) {
-                    dailyUsage = remainingTraffic; // Assign remaining traffic to the last day
-                } else {
-                    // Use a random factor to make the chart look realistic
-                    const randomFactor = Math.random() * 0.1 + 0.02; 
-                    dailyUsage = Math.min(remainingTraffic, totalUsedGB * randomFactor * (1 + Math.sin(i)));
-                }
-                data.push(dailyUsage.toFixed(2));
-                remainingTraffic -= dailyUsage;
-                if (remainingTraffic < 0) remainingTraffic = 0;
-            }
-            // --- END OF SIMULATED DATA ---
-
-            dailyTrafficChartInstance = new Chart(dailyTrafficCanvas.getContext('2d'), {
-                type: 'line',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: 'ترافیک مصرفی (GB)',
-                        data: data,
-                        borderColor: 'var(--primary-color)',
-                        backgroundColor: 'rgba(44, 62, 80, 0.1)',
-                        fill: true,
-                        tension: 0.3
                     }]
                 },
                 options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { ticks: { color: 'var(--text-secondary)' } }, x: { ticks: { color: 'var(--text-secondary)' } } } }
