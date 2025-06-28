@@ -3837,6 +3837,290 @@
             }
         }
 
+        // Enhanced Add User Functions (افزودن کاربر) - اصلاح شده برای درست عمل کردن اینباندها
+        async function handleAddUser(e) {
+            e.preventDefault();
+            
+            if (!Security.requestLimiter.isAllowed('add_user')) {
+                showMessage('addUserError', 'لطفاً کمی صبر کنید');
+                return;
+            }
+            
+            const usernameInput = document.getElementById('newUsername');
+            const dataLimitInput = document.getElementById('newDataLimit');
+            const expireDateInput = document.getElementById('newExpireDate');
+            
+            if (!usernameInput || !dataLimitInput || !expireDateInput) {
+                showMessage('addUserError', 'خطا در فرم افزودن کاربر');
+                return;
+            }
+            
+            const username = usernameInput.value.trim();
+            const dataLimitGB = parseFloat(dataLimitInput.value);
+            const expireDateStr = expireDateInput.value;
+            
+            // Enhanced validation
+            if (!Security.validateInput(username, 'username')) {
+                showMessage('addUserError', 'نام کاربری نامعتبر است (فقط حروف انگلیسی، اعداد و _ مجاز است)');
+                return;
+            }
+            
+            if (!Security.validateInput(dataLimitGB.toString(), 'number', { min: 1, max: 1000 })) {
+                showMessage('addUserError', 'حجم ترافیک باید بین 1 تا 1000 گیگابایت باشد');
+                return;
+            }
+            
+            if (!Security.validateInput(expireDateStr, 'date')) {
+                showMessage('addUserError', 'تاریخ انقضا نامعتبر است');
+                return;
+            }
+            
+            // Check if username already exists
+            if (users.some(user => user.username === username)) {
+                showMessage('addUserError', 'نام کاربری قبلاً وجود دارد');
+                return;
+            }
+            
+            const dataLimit = dataLimitGB * 1024 * 1024 * 1024;
+            const expireDate = new Date(expireDateStr);
+            const expire = Math.floor(expireDate.getTime() / 1000);
+            
+            setLoadingState('addUserForm', 'addUserBtnText', 'addUserSpinner', true);
+            hideMessage('addUserError');
+            hideMessage('addUserSuccess');
+            
+            const userCreationResult = document.getElementById('userCreationResult');
+            if (userCreationResult) userCreationResult.classList.add('hidden');
+            
+            showLoading('در حال ایجاد کاربر...');
+            
+            try {
+                // مرحله ۱: ابتدا کاربر پایه را ایجاد می‌کنیم
+                console.log('🔄 ایجاد کاربر پایه:', username);
+                const basicUserData = {
+                    username,
+                    data_limit: dataLimit,
+                    expire
+                };
+                
+                console.log('📤 ارسال داده‌های پایه کاربر:', basicUserData);
+                const createResult = await apiCall('/user', 'POST', basicUserData);
+                console.log('📨 پاسخ ایجاد کاربر:', createResult);
+                
+                if (!createResult) {
+                    throw new Error('خطا در ایجاد کاربر پایه');
+                }
+                
+                // مرحله ۲: کمی صبر می‌کنیم تا کاربر کاملاً ایجاد شود
+                await new Promise(resolve => setTimeout(resolve, 1500));
+                
+                // مرحله ۳: حالا تنظیمات Template را اعمال می‌کنیم (اگر موجود باشد)
+                let configsApplied = 0;
+                if (templateConfigs && templateConfigs.length > 0) {
+                    console.log('🔧 اعمال تنظیمات Template از کاربر', selectedTemplateUser, ':', templateConfigs);
+                    showLoading('در حال اعمال تنظیمات Template...');
+                    
+                    // داده‌های Template User را برای کپی دریافت می‌کنیم
+                    const templateUserData = await apiCall(`/user/${encodeURIComponent(selectedTemplateUser)}`);
+                    if (templateUserData) {
+                        console.log('📋 اطلاعات Template User:', templateUserData);
+                        
+                        // داده‌های بروزرسانی را با تنظیمات Template آماده می‌کنیم
+                        const updateData = {};
+                        
+                        // کپی اینباندها از Template
+                        if (templateUserData.inbounds && Array.isArray(templateUserData.inbounds) && templateUserData.inbounds.length > 0) {
+                            updateData.inbounds = templateUserData.inbounds.map(inbound => ({
+                                tag: inbound.tag,
+                                protocol: inbound.protocol || 'vless'
+                            }));
+                            console.log('📥 اینباندهای کپی شده:', updateData.inbounds);
+                            configsApplied += templateUserData.inbounds.length;
+                        }
+                        
+                        // کپی پروکسی‌ها از Template
+                        if (templateUserData.proxies && typeof templateUserData.proxies === 'object' && Object.keys(templateUserData.proxies).length > 0) {
+                            updateData.proxies = { ...templateUserData.proxies };
+                            console.log('🔧 پروکسی‌های کپی شده:', updateData.proxies);
+                            configsApplied += Object.keys(templateUserData.proxies).length;
+                        }
+                        
+                        // اعمال تنظیمات در صورت وجود
+                        if (Object.keys(updateData).length > 0) {
+                            console.log('🚀 اعمال تنظیمات Template:', updateData);
+                            const updateResult = await apiCall(`/user/${encodeURIComponent(username)}`, 'PUT', updateData);
+                            console.log('📨 پاسخ بروزرسانی:', updateResult);
+                            
+                            if (updateResult) {
+                                console.log('✅ تنظیمات Template با موفقیت اعمال شد');
+                                // کمی صبر می‌کنیم تا تنظیمات اعمال شود
+                                await new Promise(resolve => setTimeout(resolve, 2000));
+                            } else {
+                                console.warn('⚠️ مشکل در اعمال تنظیمات Template');
+                            }
+                        } else {
+                            console.log('📋 هیچ تنظیمات Template یافت نشد برای کپی');
+                        }
+                    }
+                }
+                
+                // مرحله ۴: تأیید نهایی داده‌های کاربر
+                showLoading('در حال تأیید نهایی...');
+                await new Promise(resolve => setTimeout(resolve, 2000));
+                
+                showMessage('addUserSuccess', `کاربر ${Security.sanitizeHtml(username)} با موفقیت ایجاد شد ${configsApplied > 0 ? `(${configsApplied} تنظیمات از ${selectedTemplateUser} اعمال شد)` : ''}`);
+                
+                const addUserForm = document.getElementById('addUserForm');
+                if (addUserForm) addUserForm.reset();
+                
+                // تنظیم مجدد تاریخ انقضا
+                const newExpireDate = new Date();
+                newExpireDate.setDate(newExpireDate.getDate() + 30);
+                expireDateInput.value = newExpireDate.toISOString().split('T')[0];
+                
+                // نمایش کانفیگ‌ها
+                setTimeout(async () => {
+                    await showNewUserConfigs(username);
+                }, 1000);
+                
+                await loadUsers(); // بروزرسانی لیست کاربران
+                
+                showNotification(`✅ کاربر ${Security.sanitizeHtml(username)} ایجاد شد ${configsApplied > 0 ? `با ${configsApplied} تنظیمات` : ''}`, 'success');
+                
+            } catch (error) {
+                console.error('❌ خطا در ایجاد کاربر:', error);
+                showMessage('addUserError', 'خطا در ایجاد کاربر - لطفاً دوباره تلاش کنید');
+            }
+            
+            setLoadingState('addUserForm', 'addUserBtnText', 'addUserSpinner', false);
+            hideLoading();
+        }
+
+        async function showNewUserConfigs(username) {
+            if (!Security.validateInput(username, 'username')) return;
+            
+            try {
+                console.log('🔍 دریافت کانفیگ کاربر:', username);
+                const userData = await apiCall(`/user/${encodeURIComponent(username)}`);
+                console.log('📋 اطلاعات کاربر دریافت شده:', userData);
+                
+                if (!userData) {
+                    console.warn('⚠️ اطلاعات کاربر دریافت نشد');
+                    return;
+                }
+                
+                const configsContainer = document.getElementById('newUserConfigs');
+                if (!configsContainer) return;
+                
+                configsContainer.innerHTML = '';
+                
+                // Show information about selected template and configs
+                if (templateConfigs && templateConfigs.length > 0) {
+                    const templateInfo = document.createElement('div');
+                    templateInfo.className = 'template-status';
+                    templateInfo.style.marginBottom = '16px';
+                    
+                    const templateTitle = document.createElement('h5');
+                    templateTitle.innerHTML = `<i class="fas fa-clone"></i> تنظیمات استفاده شده از Template: ${Security.sanitizeHtml(selectedTemplateUser)}`;
+                    templateTitle.style.marginBottom = '12px';
+                    
+                    const templateList = document.createElement('div');
+                    templateList.className = 'template-list';
+                    
+                    templateConfigs.forEach(config => {
+                        const tag = document.createElement('div');
+                        tag.className = 'template-tag selected';
+                        if (config.type === 'inbound') {
+                            tag.innerHTML = `<i class="fas fa-server"></i> ${Security.sanitizeHtml(config.tag)} (${Security.sanitizeHtml(config.protocol)})`;
+                        } else if (config.type === 'proxy') {
+                            tag.innerHTML = `<i class="fas fa-network-wired"></i> ${Security.sanitizeHtml(config.protocol)}`;
+                        } else if (config.type === 'link') {
+                            tag.innerHTML = `<i class="fas fa-link"></i> ${Security.sanitizeHtml(config.protocol)} #${config.index}`;
+                        }
+                        templateList.appendChild(tag);
+                    });
+                    
+                    templateInfo.appendChild(templateTitle);
+                    templateInfo.appendChild(templateList);
+                    configsContainer.appendChild(templateInfo);
+                }
+                
+                // Show subscription URL
+                if (userData.subscription_url) {
+                    const subDiv = document.createElement('div');
+                    subDiv.className = 'config-display';
+                    
+                    const subInfo = document.createElement('div');
+                    subInfo.className = 'config-info';
+                    subInfo.innerHTML = `
+                        <strong><i class="fas fa-link"></i> لینک ساب (Subscription):</strong>
+                        <button onclick="copyText('${Security.sanitizeHtml(userData.subscription_url)}')" class="form-button success">
+                            <i class="fas fa-copy"></i> کپی
+                        </button>
+                    `;
+                    
+                    const subText = Security.safeCreateElement('div', userData.subscription_url, 'config-text');
+                    
+                    subDiv.appendChild(subInfo);
+                    subDiv.appendChild(subText);
+                    configsContainer.appendChild(subDiv);
+                }
+                
+                // Show individual configurations
+                if (userData.links && Array.isArray(userData.links) && userData.links.length > 0) {
+                    userData.links.forEach((config, index) => {
+                        const protocol = Security.sanitizeHtml(config.split('://')[0].toUpperCase());
+                        
+                        const configDiv = document.createElement('div');
+                        configDiv.className = 'config-display';
+                        
+                        const configInfo = document.createElement('div');
+                        configInfo.className = 'config-info';
+                        configInfo.innerHTML = `
+                            <strong><i class="fas fa-cog"></i> کانفیگ ${protocol} #${index + 1}:</strong>
+                            <button onclick="copyText('${Security.sanitizeHtml(config)}')" class="form-button success">
+                                <i class="fas fa-copy"></i> کپی
+                            </button>
+                        `;
+                        
+                        const configText = Security.safeCreateElement('div', config, 'config-text');
+                        
+                        configDiv.appendChild(configInfo);
+                        configDiv.appendChild(configText);
+                        configsContainer.appendChild(configDiv);
+                    });
+                    
+                    console.log(`✅ ${userData.links.length} کانفیگ نمایش داده شد`);
+                } else {
+                    console.warn('⚠️ هیچ کانفیگی یافت نشد');
+                    const noConfigMsg = Security.safeCreateElement('p', 'در حال ایجاد کانفیگ‌ها... لطفاً چند لحظه صبر کنید');
+                    noConfigMsg.style.cssText = 'text-align: center; color: var(--text-muted); padding: 20px; font-style: italic;';
+                    configsContainer.appendChild(noConfigMsg);
+                    
+                    // Try to reload configs after a delay
+                    setTimeout(() => {
+                        showNewUserConfigs(username);
+                    }, 5000);
+                }
+                
+                const userCreationResult = document.getElementById('userCreationResult');
+                if (userCreationResult) userCreationResult.classList.remove('hidden');
+                
+            } catch (error) {
+                console.error('❌ خطا در نمایش کانفیگ‌ها:', error);
+                
+                const configsContainer = document.getElementById('newUserConfigs');
+                if (configsContainer) {
+                    const errorMsg = Security.safeCreateElement('p', 'خطا در دریافت کانفیگ‌ها - لطفاً از بخش "کاربران" مشاهده کنید');
+                    errorMsg.style.cssText = 'text-align: center; color: var(--danger-color); padding: 20px;';
+                    configsContainer.appendChild(errorMsg);
+                    
+                    const userCreationResult = document.getElementById('userCreationResult');
+                    if (userCreationResult) userCreationResult.classList.remove('hidden');
+                }
+            }
+        }
+
         function logout() {
             // Clear all session data
             sessionStorage.removeItem(CONFIG.tokenKey);
@@ -5115,266 +5399,6 @@
             
             hideMessage('editUserError');
             hideMessage('editUserSuccess');
-        }
-
-        // Enhanced Add User Functions (افزودن کاربر) with Template Integration
-        async function handleAddUser(e) {
-            e.preventDefault();
-            
-            if (!Security.requestLimiter.isAllowed('add_user')) {
-                showMessage('addUserError', 'لطفاً کمی صبر کنید');
-                return;
-            }
-            
-            const usernameInput = document.getElementById('newUsername');
-            const dataLimitInput = document.getElementById('newDataLimit');
-            const expireDateInput = document.getElementById('newExpireDate');
-            
-            if (!usernameInput || !dataLimitInput || !expireDateInput) {
-                showMessage('addUserError', 'خطا در فرم افزودن کاربر');
-                return;
-            }
-            
-            const username = usernameInput.value.trim();
-            const dataLimitGB = parseFloat(dataLimitInput.value);
-            const expireDateStr = expireDateInput.value;
-            
-            // Enhanced validation
-            if (!Security.validateInput(username, 'username')) {
-                showMessage('addUserError', 'نام کاربری نامعتبر است (فقط حروف انگلیسی، اعداد و _ مجاز است)');
-                return;
-            }
-            
-            if (!Security.validateInput(dataLimitGB.toString(), 'number', { min: 1, max: 1000 })) {
-                showMessage('addUserError', 'حجم ترافیک باید بین 1 تا 1000 گیگابایت باشد');
-                return;
-            }
-            
-            if (!Security.validateInput(expireDateStr, 'date')) {
-                showMessage('addUserError', 'تاریخ انقضا نامعتبر است');
-                return;
-            }
-            
-            // Check if username already exists
-            if (users.some(user => user.username === username)) {
-                showMessage('addUserError', 'نام کاربری قبلاً وجود دارد');
-                return;
-            }
-            
-            // Check if template configs are available
-            if (!templateConfigs || templateConfigs.length === 0) {
-                showMessage('addUserError', `هیچ تنظیماتی از کاربر ${selectedTemplateUser} یافت نشد - لطفاً کاربر Template دیگری انتخاب کنید`);
-                console.log('🚨 تنظیمات Template موجود نیست، تلاش برای بارگذاری مجدد...');
-                await loadTemplateConfigs();
-                
-                if (!templateConfigs || templateConfigs.length === 0) {
-                    showMessage('addUserError', 'امکان ایجاد کاربر بدون Template وجود ندارد');
-                    return;
-                }
-            }
-            
-            const dataLimit = dataLimitGB * 1024 * 1024 * 1024;
-            const expireDate = new Date(expireDateStr);
-            const expire = Math.floor(expireDate.getTime() / 1000);
-            
-            setLoadingState('addUserForm', 'addUserBtnText', 'addUserSpinner', true);
-            hideMessage('addUserError');
-            hideMessage('addUserSuccess');
-            
-            const userCreationResult = document.getElementById('userCreationResult');
-            if (userCreationResult) userCreationResult.classList.add('hidden');
-            
-            showLoading('در حال افزودن کاربر...');
-            
-            // Create comprehensive user data with template configurations
-            console.log('🔧 ایجاد کاربر با تنظیمات Template کاربر', selectedTemplateUser, ':', templateConfigs);
-            
-            const userData = {
-                username,
-                data_limit: dataLimit,
-                expire,
-                proxies: {
-                    vless: {}
-                }
-            };
-            
-            // Add inbounds from template
-            const inbounds = templateConfigs.filter(config => config.type === 'inbound');
-            if (inbounds.length > 0) {
-                userData.inbounds = inbounds.map(inbound => ({
-                    tag: inbound.tag,
-                    protocol: inbound.protocol || 'vless'
-                }));
-            }
-            
-            // Add proxies from template
-            const proxies = templateConfigs.filter(config => config.type === 'proxy');
-            if (proxies.length > 0) {
-                proxies.forEach(proxy => {
-                    userData.proxies[proxy.protocol] = proxy.details || {};
-                });
-            }
-            
-            console.log('📤 ارسال داده‌های کاربر:', userData);
-            
-            try {
-                const result = await apiCall('/user', 'POST', userData);
-                console.log('📨 پاسخ سرور:', result);
-                
-                if (result) {
-                    showMessage('addUserSuccess', `کاربر ${Security.sanitizeHtml(username)} با موفقیت اضافه شد (${templateConfigs.length} تنظیمات از ${selectedTemplateUser})`);
-                    
-                    const addUserForm = document.getElementById('addUserForm');
-                    if (addUserForm) addUserForm.reset();
-                    
-                    // Reset expire date
-                    const newExpireDate = new Date();
-                    newExpireDate.setDate(newExpireDate.getDate() + 30);
-                    expireDateInput.value = newExpireDate.toISOString().split('T')[0];
-                    
-                    // Show configurations with delay to ensure user is created
-                    setTimeout(async () => {
-                        await showNewUserConfigs(username);
-                    }, 1000);
-                    
-                    await loadUsers(); // Refresh users list
-                    
-                    showNotification(`✅ کاربر ${Security.sanitizeHtml(username)} با ${templateConfigs.length} تنظیمات از ${selectedTemplateUser} اضافه شد`, 'success');
-                } else {
-                    showMessage('addUserError', 'خطا در افزودن کاربر - لطفاً دوباره تلاش کنید');
-                }
-            } catch (error) {
-                console.error('❌ خطا در افزودن کاربر:', error);
-                showMessage('addUserError', 'خطا در ارتباط با سرور - لطفاً دوباره تلاش کنید');
-            }
-            
-            setLoadingState('addUserForm', 'addUserBtnText', 'addUserSpinner', false);
-            hideLoading();
-        }
-
-        async function showNewUserConfigs(username) {
-            if (!Security.validateInput(username, 'username')) return;
-            
-            try {
-                console.log('🔍 دریافت کانفیگ کاربر:', username);
-                const userData = await apiCall(`/user/${encodeURIComponent(username)}`);
-                console.log('📋 اطلاعات کاربر دریافت شده:', userData);
-                
-                if (!userData) {
-                    console.warn('⚠️ اطلاعات کاربر دریافت نشد');
-                    return;
-                }
-                
-                const configsContainer = document.getElementById('newUserConfigs');
-                if (!configsContainer) return;
-                
-                configsContainer.innerHTML = '';
-                
-                // Show information about selected template and configs
-                if (templateConfigs && templateConfigs.length > 0) {
-                    const templateInfo = document.createElement('div');
-                    templateInfo.className = 'template-status';
-                    templateInfo.style.marginBottom = '16px';
-                    
-                    const templateTitle = document.createElement('h5');
-                    templateTitle.innerHTML = `<i class="fas fa-clone"></i> تنظیمات استفاده شده از Template: ${Security.sanitizeHtml(selectedTemplateUser)}`;
-                    templateTitle.style.marginBottom = '12px';
-                    
-                    const templateList = document.createElement('div');
-                    templateList.className = 'template-list';
-                    
-                    templateConfigs.forEach(config => {
-                        const tag = document.createElement('div');
-                        tag.className = 'template-tag selected';
-                        if (config.type === 'inbound') {
-                            tag.innerHTML = `<i class="fas fa-server"></i> ${Security.sanitizeHtml(config.tag)} (${Security.sanitizeHtml(config.protocol)})`;
-                        } else if (config.type === 'proxy') {
-                            tag.innerHTML = `<i class="fas fa-network-wired"></i> ${Security.sanitizeHtml(config.protocol)}`;
-                        } else if (config.type === 'link') {
-                            tag.innerHTML = `<i class="fas fa-link"></i> ${Security.sanitizeHtml(config.protocol)} #${config.index}`;
-                        }
-                        templateList.appendChild(tag);
-                    });
-                    
-                    templateInfo.appendChild(templateTitle);
-                    templateInfo.appendChild(templateList);
-                    configsContainer.appendChild(templateInfo);
-                }
-                
-                // Show subscription URL
-                if (userData.subscription_url) {
-                    const subDiv = document.createElement('div');
-                    subDiv.className = 'config-display';
-                    
-                    const subInfo = document.createElement('div');
-                    subInfo.className = 'config-info';
-                    subInfo.innerHTML = `
-                        <strong><i class="fas fa-link"></i> لینک ساب (Subscription):</strong>
-                        <button onclick="copyText('${Security.sanitizeHtml(userData.subscription_url)}')" class="form-button success">
-                            <i class="fas fa-copy"></i> کپی
-                        </button>
-                    `;
-                    
-                    const subText = Security.safeCreateElement('div', userData.subscription_url, 'config-text');
-                    
-                    subDiv.appendChild(subInfo);
-                    subDiv.appendChild(subText);
-                    configsContainer.appendChild(subDiv);
-                }
-                
-                // Show individual configurations
-                if (userData.links && Array.isArray(userData.links) && userData.links.length > 0) {
-                    userData.links.forEach((config, index) => {
-                        const protocol = Security.sanitizeHtml(config.split('://')[0].toUpperCase());
-                        
-                        const configDiv = document.createElement('div');
-                        configDiv.className = 'config-display';
-                        
-                        const configInfo = document.createElement('div');
-                        configInfo.className = 'config-info';
-                        configInfo.innerHTML = `
-                            <strong><i class="fas fa-cog"></i> کانفیگ ${protocol} #${index + 1}:</strong>
-                            <button onclick="copyText('${Security.sanitizeHtml(config)}')" class="form-button success">
-                                <i class="fas fa-copy"></i> کپی
-                            </button>
-                        `;
-                        
-                        const configText = Security.safeCreateElement('div', config, 'config-text');
-                        
-                        configDiv.appendChild(configInfo);
-                        configDiv.appendChild(configText);
-                        configsContainer.appendChild(configDiv);
-                    });
-                    
-                    console.log(`✅ ${userData.links.length} کانفیگ نمایش داده شد`);
-                } else {
-                    console.warn('⚠️ هیچ کانفیگی یافت نشد');
-                    const noConfigMsg = Security.safeCreateElement('p', 'در حال ایجاد کانفیگ‌ها... لطفاً چند لحظه صبر کنید');
-                    noConfigMsg.style.cssText = 'text-align: center; color: var(--text-muted); padding: 20px; font-style: italic;';
-                    configsContainer.appendChild(noConfigMsg);
-                    
-                    // Try to reload configs after a delay
-                    setTimeout(() => {
-                        showNewUserConfigs(username);
-                    }, 3000);
-                }
-                
-                const userCreationResult = document.getElementById('userCreationResult');
-                if (userCreationResult) userCreationResult.classList.remove('hidden');
-                
-            } catch (error) {
-                console.error('❌ خطا در نمایش کانفیگ‌ها:', error);
-                
-                const configsContainer = document.getElementById('newUserConfigs');
-                if (configsContainer) {
-                    const errorMsg = Security.safeCreateElement('p', 'خطا در دریافت کانفیگ‌ها - لطفاً از بخش "کاربران" مشاهده کنید');
-                    errorMsg.style.cssText = 'text-align: center; color: var(--danger-color); padding: 20px;';
-                    configsContainer.appendChild(errorMsg);
-                    
-                    const userCreationResult = document.getElementById('userCreationResult');
-                    if (userCreationResult) userCreationResult.classList.remove('hidden');
-                }
-            }
         }
 
         // Enhanced Config Functions (کانفیگ)
