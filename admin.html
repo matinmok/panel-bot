@@ -5,11 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>پنل مدیریت طوفان سرور - ادمین</title>
     
-    <!-- Enhanced Font Awesome with Multiple CDNs -->
-    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     
-    <!-- Vazir Font Sources -->
+    <!-- Vazir Font -->
     <link href="https://v1.fontapi.ir/css/Vazir" rel="stylesheet">
     
     <!-- Chart.js -->
@@ -312,6 +311,7 @@
         .notification { position: fixed; top: 20px; right: 20px; padding: 16px 20px; border-radius: 12px; color: #fff; font-weight: 600; z-index: 2100; animation: slideInRight 0.3s ease; max-width: 320px; box-shadow: var(--shadow-lg); backdrop-filter: blur(10px); }
         .notification.success { background: var(--success-color); }
         .notification.error { background: var(--danger-color); }
+        .notification.warning { background: var(--warning-color); }
         @keyframes slideInRight { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
 
         /* Chart containers */
@@ -358,6 +358,7 @@
             .data-table { display: block; overflow-x: auto; white-space: nowrap; }
             .modal-content { max-width: calc(100vw - 24px); }
             .settings-grid { grid-template-columns: 1fr !important; }
+            .chart-container { grid-column: span 2 !important; }
         }
         @media (min-width: 769px) {
             .mobile-header, .mobile-nav, .mobile-overlay { display: none !important; }
@@ -377,7 +378,7 @@
     </div>
 
     <!-- Server URL Setting -->
-    <div class="server-setting" onclick="changeServerUrl()">
+    <div class="server-setting" onclick="showSection('settings')">
         <i class="fas fa-server"></i>
         <span>تنظیم سرور</span>
     </div>
@@ -494,7 +495,7 @@
                     <div class="stats-card"><div class="stats-icon"><i class="fas fa-globe"></i></div><div class="stats-number" id="onlineUsers">0</div><div class="stats-label">کاربران آنلاین</div></div>
                     <div class="stats-card"><div class="stats-icon"><i class="fas fa-download"></i></div><div class="stats-number" id="totalTraffic">0 GB</div><div class="stats-label">ترافیک امروز</div></div>
                 </div>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 24px;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 24px;" class="stats-grid">
                     <div class="chart-container"><h4 class="chart-title">ترافیک روزانه</h4><canvas id="dailyTrafficChart"></canvas></div>
                     <div class="chart-container"><h4 class="chart-title">رشد کاربران</h4><canvas id="userGrowthChart"></canvas></div>
                 </div>
@@ -553,10 +554,70 @@
                 <div id="representativesContent"><div class="section-loading"><div class="loading-spinner"></div><span>در حال بارگذاری نمایندگان...</span></div></div>
             </div>
 
-            <!-- Analytics, Admins, Settings Sections (unchanged for brevity but would be here) -->
-            <div id="analyticsSection" class="content-section">...</div>
-            <div id="adminsSection" class="content-section">...</div>
-            <div id="settingsSection" class="content-section">...</div>
+            <!-- Analytics Section -->
+            <div id="analyticsSection" class="content-section">
+                <div class="section-header">
+                    <h3 class="section-title"><i class="fas fa-chart-area"></i> آمار و گزارش‌ها</h3>
+                    <button class="refresh-btn" onclick="loadAnalyticsData()"><i class="fas fa-sync-alt"></i> بروزرسانی</button>
+                </div>
+                <div id="analyticsContent">
+                    <div class="section-loading"><div class="loading-spinner"></div><span>در حال بارگذاری گزارش‌ها...</span></div>
+                </div>
+            </div>
+
+            <!-- Admins Management Section -->
+            <div id="adminsSection" class="content-section">
+                <div class="section-header">
+                    <h3 class="section-title"><i class="fas fa-user-shield"></i> مدیریت ادمین‌ها</h3>
+                    <button class="form-button success" onclick="showAdminModal()"><i class="fas fa-plus"></i> افزودن ادمین جدید</button>
+                </div>
+                <div class="admin-profile-section" style="background: rgba(245, 158, 11, 0.1); border-color: rgba(245, 158, 11, 0.2); color: var(--warning-color);">
+                    <i class="fas fa-exclamation-triangle"></i> <strong>توجه:</strong> مدیریت ادمین‌ها در این پنل به صورت محلی و در حافظه مرورگر (LocalStorage) انجام می‌شود. این روش برای محیط‌های تولیدی امن نیست.
+                </div>
+                <div id="adminsTableContainer">
+                    <div class="section-loading"><div class="loading-spinner"></div><span>در حال بارگذاری لیست ادمین‌ها...</span></div>
+                </div>
+            </div>
+
+            <!-- Settings Section -->
+            <div id="settingsSection" class="content-section">
+                <div class="section-header">
+                    <h3 class="section-title"><i class="fas fa-cog"></i> تنظیمات پنل</h3>
+                </div>
+                <div class="settings-grid">
+                    <div class="settings-section">
+                        <h4 class="settings-title"><i class="fas fa-server"></i> سرور اصلی Marzban</h4>
+                        <form id="mainServerForm">
+                            <div class="form-group">
+                                <label class="form-label">آدرس سرور (با پورت)</label>
+                                <input type="url" id="mainServerUrl" class="form-input" placeholder="https://example.com:8443" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">توکن دسترسی API</label>
+                                <input type="text" id="mainServerToken" class="form-input" placeholder="توکن دریافتی از Marzban" required>
+                            </div>
+                            <div style="display: flex; gap: 12px;">
+                                <button type="submit" class="form-button success" style="flex: 1;"><i class="fas fa-save"></i> ذخیره تنظیمات</button>
+                                <button type="button" onclick="testMainServerConnection()" class="form-button info" style="flex: 1;"><i class="fas fa-plug"></i> تست اتصال</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="settings-section">
+                        <h4 class="settings-title"><i class="fas fa-user-shield"></i> پروفایل ادمین</h4>
+                        <form id="changePasswordForm">
+                            <div class="form-group">
+                                <label class="form-label">نام کاربری</label>
+                                <input type="text" id="currentAdminUsername" class="form-input" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">رمز عبور جدید</label>
+                                <input type="password" id="newAdminPassword" class="form-input" placeholder="حداقل 8 کاراکتر" required>
+                            </div>
+                            <button type="submit" class="form-button" style="width: 100%;"><i class="fas fa-key"></i> تغییر رمز عبور</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
             
             <div class="footer-copyright">پنل مدیریت طوفان سرور - © 2025</div>
         </div>
@@ -613,39 +674,52 @@
             </div>
         </div>
     </div>
+
+    <!-- Admin Modal -->
+    <div id="adminModal" class="modal hidden">
+        <div class="modal-content" style="max-width: 500px;">
+            <div class="modal-header">
+                <h3 class="modal-title" id="adminModalTitle">افزودن ادمین جدید</h3>
+                <button class="modal-close" onclick="closeAdminModal()"><i class="fas fa-times"></i></button>
+            </div>
+            <form id="adminForm">
+                <input type="hidden" id="originalAdminUsername">
+                <div class="form-group">
+                    <label class="form-label">نام کاربری</label>
+                    <input type="text" id="adminFormUsername" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">رمز عبور</label>
+                    <input type="password" id="adminFormPassword" class="form-input" required>
+                </div>
+                <div id="adminFormError" class="error-message hidden"></div>
+                <button type="submit" class="form-button success" style="width:100%; padding: 12px;"><i class="fas fa-save"></i> ذخیره</button>
+            </form>
+        </div>
+    </div>
     
     <div id="loadingOverlay" class="loading-overlay hidden">
         <div class="loading-content"><div class="loading-spinner"></div><p class="loading-text">منتظر بمانید...</p></div>
     </div>
 
     <script>
-        // --- CONFIGURATION ---
-        const CONFIG = {
-            defaultServerUrl: 'https://admin.jozveraygan.xyz:8443',
-            sessionTimeout: 24 * 60 * 60 * 1000, // 24 hours
-            tokenKey: 'toofan_admin_session_token',
-            serverUrlKey: 'toofan_admin_server_url',
-            adminUsernameKey: 'toofan_admin_username',
+        // --- CONFIGURATION & KEYS ---
+        const CONFIG_KEYS = {
+            sessionToken: 'toofan_admin_session_token',
+            adminUsername: 'toofan_admin_username',
+            mainServer: 'toofan_main_server_config',
+            adminCredentials: 'toofan_admin_credentials',
+            theme: 'toofan_theme',
+        };
+
+        const DEFAULTS = {
             usersPerPage: 20,
-            // ** NEW ADMIN CREDENTIALS **
-            adminCredentials: {
-                shahriyar: 'shahriyarpanel112'
-            }
+            initialAdmin: { shahriyar: 'shahriyarpanel112' }
         };
 
         // --- MARZBAN API HELPER ---
         const MarzbanAPI = {
-            async login(serverUrl, username, password) {
-                // This is a local login, not Marzban API login
-                if (CONFIG.adminCredentials[username] && CONFIG.adminCredentials[username] === password) {
-                    // Generate a fake token for session management
-                    return { access_token: `local_token_${Date.now()}` };
-                }
-                throw new Error("نام کاربری یا رمز عبور پنل ادمین اشتباه است.");
-            },
-
             async request(serverUrl, token, endpoint, options = {}) {
-                // The token here is the Marzban token from the mainServer config, not the local session token
                 const response = await fetch(`${serverUrl}${endpoint}`, {
                     ...options,
                     headers: {
@@ -661,7 +735,6 @@
                 }
                 return response.status !== 204 ? await response.json() : null;
             },
-
             getUsers: (url, token, params) => MarzbanAPI.request(url, token, `/api/users?${new URLSearchParams(params)}`),
             getUser: (url, token, username) => MarzbanAPI.request(url, token, `/api/user/${username}`),
             addUser: (url, token, userData) => MarzbanAPI.request(url, token, '/api/user', { method: 'POST', body: JSON.stringify(userData) }),
@@ -677,31 +750,21 @@
         let chartInstances = {};
 
         // --- UTILITY & UI FUNCTIONS ---
-        const setLoadingState = (formId, loading) => {
-            const form = document.getElementById(formId);
-            if (form) form.querySelectorAll('input, button, select').forEach(el => el.disabled = loading);
+        const setLoadingState = (btn, loading) => {
+            if (!btn) return;
+            btn.disabled = loading;
+            const spinner = btn.querySelector('.loading-spinner');
+            const text = btn.querySelector('span');
+            if (spinner) spinner.classList.toggle('hidden', !loading);
+            if(text) text.style.opacity = loading ? 0.7 : 1;
         };
-        const showMessage = (id, msg, isError = true) => {
-            const el = document.getElementById(id);
-            if (el) {
-                el.textContent = msg;
-                el.className = `message ${isError ? 'error-message' : 'success-message'}`;
-                el.classList.remove('hidden');
-            }
-        };
-        const hideMessage = (id) => document.getElementById(id)?.classList.add('hidden');
         const showNotification = (message, type = 'success') => {
             const el = document.createElement('div');
             el.className = `notification ${type}`;
-            el.innerHTML = `<i class="fas fa-${type === 'success' ? 'check' : 'times'}-circle"></i> ${message}`;
+            el.innerHTML = `<i class="fas fa-${type === 'success' ? 'check' : type === 'error' ? 'times' : 'exclamation'}-circle"></i> ${message}`;
             document.body.appendChild(el);
-            setTimeout(() => el.remove(), 3000);
+            setTimeout(() => el.remove(), 4000);
         };
-        const showLoading = (msg = 'منتظر بمانید...') => {
-            document.getElementById('loadingOverlay').classList.remove('hidden');
-            document.querySelector('.loading-text').textContent = msg;
-        };
-        const hideLoading = () => document.getElementById('loadingOverlay').classList.add('hidden');
         const formatBytes = (bytes, decimals = 2) => {
             if (!+bytes) return '0 Bytes';
             const k = 1024;
@@ -717,47 +780,72 @@
             const text = status === 'connected' ? 'متصل' : status === 'disconnected' ? 'قطع' : 'در حال اتصال';
             indicator.innerHTML = `<i class="fas fa-${icon}"></i><span>${text}</span>`;
         };
+        const destroyChart = (chartId) => {
+            if (chartInstances[chartId]) {
+                chartInstances[chartId].destroy();
+                delete chartInstances[chartId];
+            }
+        };
 
         // --- THEME MANAGEMENT ---
         const initTheme = () => {
-            const savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            const savedTheme = localStorage.getItem(CONFIG_KEYS.theme) || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
             setTheme(savedTheme);
         };
         const setTheme = (theme) => {
             document.documentElement.setAttribute('data-theme', theme);
             document.getElementById('themeIcon').className = `fas fa-${theme === 'dark' ? 'moon' : 'sun'}`;
-            localStorage.setItem('theme', theme);
+            localStorage.setItem(CONFIG_KEYS.theme, theme);
+            // Update charts for new theme
+            Object.values(chartInstances).forEach(chart => {
+                const isDark = theme === 'dark';
+                const textColor = isDark ? '#F8FAFC' : '#1E293B';
+                const gridColor = isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
+                chart.options.scales.x.ticks.color = textColor;
+                chart.options.scales.y.ticks.color = textColor;
+                chart.options.scales.x.grid.color = gridColor;
+                chart.options.scales.y.grid.color = gridColor;
+                chart.options.plugins.legend.labels.color = textColor;
+                chart.update();
+            });
         };
         const toggleTheme = () => setTheme(document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
 
-        // --- AUTHENTICATION & SESSION ---
+        // --- AUTHENTICATION & ADMINS ---
+        const getAdminCredentials = () => {
+            const stored = localStorage.getItem(CONFIG_KEYS.adminCredentials);
+            return stored ? JSON.parse(stored) : DEFAULTS.initialAdmin;
+        };
+        const saveAdminCredentials = (creds) => {
+            localStorage.setItem(CONFIG_KEYS.adminCredentials, JSON.stringify(creds));
+        };
+
         const handleLogin = async (e) => {
             e.preventDefault();
-            setLoadingState('loginForm', true);
-            hideMessage('loginError');
+            const loginBtn = document.getElementById('loginBtn');
+            setLoadingState(loginBtn, true);
+            document.getElementById('loginError').classList.add('hidden');
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
-
-            try {
-                updateConnectionStatus('connecting');
-                // Use the local login function
-                const { access_token } = await MarzbanAPI.login(null, username, password);
-                sessionStorage.setItem(CONFIG.tokenKey, access_token);
-                sessionStorage.setItem(CONFIG.adminUsernameKey, username);
+            
+            const admins = getAdminCredentials();
+            if (admins[username] && admins[username] === password) {
+                sessionStorage.setItem(CONFIG_KEYS.sessionToken, `local_token_${Date.now()}`);
+                sessionStorage.setItem(CONFIG_KEYS.adminUsername, username);
                 updateConnectionStatus('connected');
                 showPanel();
-            } catch (error) {
+            } else {
+                document.getElementById('loginError').textContent = "نام کاربری یا رمز عبور پنل ادمین اشتباه است.";
+                document.getElementById('loginError').classList.remove('hidden');
                 updateConnectionStatus('disconnected');
-                showMessage('loginError', error.message);
-            } finally {
-                setLoadingState('loginForm', false);
             }
+            setLoadingState(loginBtn, false);
         };
 
         const showPanel = () => {
             document.getElementById('loginSection').classList.add('hidden');
             document.getElementById('panelSection').classList.remove('hidden');
-            const username = sessionStorage.getItem(CONFIG.adminUsernameKey);
+            const username = sessionStorage.getItem(CONFIG_KEYS.adminUsername);
             document.getElementById('navWelcome').textContent = `خوش آمدید، ${username}`;
             document.getElementById('navWelcomeMobile').textContent = `خوش آمدید، ${username}`;
             loadMainServerConfig();
@@ -766,13 +854,11 @@
 
         const logout = () => {
             sessionStorage.clear();
-            document.getElementById('panelSection').classList.add('hidden');
-            document.getElementById('loginSection').classList.remove('hidden');
-            updateConnectionStatus('disconnected');
+            location.reload();
         };
 
         const checkSession = () => {
-            if (sessionStorage.getItem(CONFIG.tokenKey)) {
+            if (sessionStorage.getItem(CONFIG_KEYS.sessionToken)) {
                 updateConnectionStatus('connected');
                 showPanel();
             }
@@ -780,23 +866,11 @@
 
         // --- SERVER CONFIG ---
         const loadMainServerConfig = () => {
-            const stored = localStorage.getItem('mainServer');
+            const stored = localStorage.getItem(CONFIG_KEYS.mainServer);
             if (stored) {
                 mainServer = JSON.parse(stored);
-                // You might want to add a function here to test the connection to the main server
             } else {
-                // This part is commented out to avoid forcing the user to the settings page immediately.
-                // showSection('settings');
-                // showNotification('لطفا ابتدا اطلاعات سرور اصلی را در تنظیمات وارد کنید', 'warning');
-            }
-        };
-        const changeServerUrl = () => {
-            // This function is now less critical as login is local, but can be used for other purposes.
-            const currentUrl = localStorage.getItem(CONFIG.serverUrlKey) || CONFIG.defaultServerUrl;
-            const newUrl = prompt('این URL در حال حاضر استفاده نمی‌شود. برای تنظیم سرور اصلی به بخش تنظیمات بروید.', currentUrl);
-            if (newUrl) {
-                // localStorage.setItem(CONFIG.serverUrlKey, newUrl);
-                // showNotification('آدرس سرور برای صفحه ورود تغییر کرد.', 'success');
+                showNotification('پیکربندی سرور اصلی یافت نشد. لطفا به بخش تنظیمات بروید.', 'warning');
             }
         };
 
@@ -805,14 +879,17 @@
             document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
             document.getElementById(`${sectionName}Section`).classList.add('active');
-            document.querySelectorAll(`[data-section="${sectionName}"]`).forEach(i => i.classList.add('active'));
+            document.querySelectorAll(`.nav-item[data-section="${sectionName}"]`).forEach(i => i.classList.add('active'));
 
-            if (!sectionsLoaded[sectionName]) {
+            if (!sectionsLoaded[sectionName] || ['dashboard', 'system'].includes(sectionName)) {
                 const loader = {
                     'dashboard': loadDashboardData,
                     'users': () => loadUsers(1),
                     'system': loadSystemStatus,
-                    'monitor': () => {}, // Placeholder for monitor section logic
+                    'monitor': () => { document.getElementById('representativesContent').innerHTML = '<div class="section-loading">این بخش در حال توسعه است.</div>'; },
+                    'analytics': loadAnalyticsData,
+                    'admins': loadAdmins,
+                    'settings': loadSettings,
                 }[sectionName];
                 if (loader) loader();
                 sectionsLoaded[sectionName] = true;
@@ -826,7 +903,7 @@
         // --- DASHBOARD ---
         const loadDashboardData = async () => {
             if (!mainServer || !mainServer.token) {
-                showNotification('اطلاعات سرور اصلی (مخصوصا توکن) در تنظیمات ثبت نشده است.', 'error');
+                showNotification('اطلاعات سرور اصلی در تنظیمات ثبت نشده است.', 'error');
                 return;
             }
             try {
@@ -837,31 +914,28 @@
                 
                 const users = usersData.users;
                 const onlineUsers = users.filter(u => u.online_at && (new Date() - new Date(u.online_at) < 300000)).length;
-                const totalTrafficToday = users.reduce((acc, u) => acc + (u.used_traffic || 0), 0); // used_traffic_today might not exist
+                const totalTrafficToday = users.reduce((acc, u) => acc + (u.used_traffic || 0), 0);
 
                 document.getElementById('totalUsers').textContent = usersData.total;
                 document.getElementById('onlineUsers').textContent = onlineUsers;
                 document.getElementById('totalTraffic').textContent = formatBytes(totalTrafficToday);
-                // totalReps can be updated in monitor section
             } catch (error) {
                 showNotification(`خطا در بارگذاری داشبورد: ${error.message}`, 'error');
             }
         };
+        const refreshDashboard = () => loadDashboardData();
 
         // --- USER MANAGEMENT ---
         const loadUsers = async (page = 1, username = '') => {
             const usersContent = document.getElementById('usersContent');
             if (!mainServer || !mainServer.token) {
-                usersContent.innerHTML = '<div class="section-loading">پیکربندی سرور اصلی (با توکن) یافت نشد. لطفا به تنظیمات بروید.</div>';
+                usersContent.innerHTML = '<div class="section-loading">پیکربندی سرور اصلی یافت نشد. لطفا به تنظیمات بروید.</div>';
                 return;
             }
             usersContent.innerHTML = '<div class="section-loading"><div class="loading-spinner"></div></div>';
             
             try {
-                const params = {
-                    offset: (page - 1) * CONFIG.usersPerPage,
-                    limit: CONFIG.usersPerPage,
-                };
+                const params = { offset: (page - 1) * DEFAULTS.usersPerPage, limit: DEFAULTS.usersPerPage };
                 if (username) params.username = username;
 
                 const data = await MarzbanAPI.getUsers(mainServer.serverUrl, mainServer.token, params);
@@ -871,7 +945,6 @@
                 usersContent.innerHTML = `<div class="section-loading">خطا: ${error.message}</div>`;
             }
         };
-
         const renderUsersTable = (users) => {
             const content = document.getElementById('usersContent');
             if (!users || users.length === 0) {
@@ -901,10 +974,9 @@
             content.innerHTML = '';
             content.appendChild(table);
         };
-
         const renderUsersPagination = (currentPage, totalUsers, searchTerm = '') => {
             const pagination = document.getElementById('usersPagination');
-            const totalPages = Math.ceil(totalUsers / CONFIG.usersPerPage);
+            const totalPages = Math.ceil(totalUsers / DEFAULTS.usersPerPage);
             if (totalPages <= 1) {
                 pagination.innerHTML = '';
                 return;
@@ -915,21 +987,13 @@
                 <button class="pagination-btn" onclick="loadUsers(${currentPage + 1}, '${searchTerm}')" ${currentPage >= totalPages ? 'disabled' : ''}><i class="fas fa-chevron-left"></i></button>
             `;
         };
-        
-        const handleUserSearch = () => {
-            const searchTerm = document.getElementById('userSearch').value;
-            loadUsers(1, searchTerm);
-        };
-
+        const handleUserSearch = () => loadUsers(1, document.getElementById('userSearch').value);
         const showUserModal = async (username = null) => {
-            const modal = document.getElementById('userModal');
-            const form = document.getElementById('userForm');
-            form.reset();
-            hideMessage('userFormError');
+            document.getElementById('userForm').reset();
+            document.getElementById('userFormError').classList.add('hidden');
             document.getElementById('userModalDetails').classList.add('hidden');
             
             if (username) {
-                // Edit mode
                 document.getElementById('userModalTitle').innerHTML = `<i class="fas fa-user-edit"></i> ویرایش کاربر: ${username}`;
                 document.getElementById('userFormUsername').value = username;
                 document.getElementById('userFormUsername').readOnly = true;
@@ -943,44 +1007,32 @@
                     document.getElementById('userFormExpiry').value = user.expire ? new Date(user.expire * 1000).toISOString().split('T')[0] : '';
                     document.getElementById('userFormStatus').value = user.status;
                     
-                    // QR Code & Subscription Link
                     const subLink = user.subscription_url;
                     document.getElementById('subscriptionLink').value = subLink;
                     document.getElementById('qrCodeContainer').innerHTML = `<img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(subLink)}" alt="QR Code">`;
-
                 } catch (error) {
-                    showMessage('userFormError', `خطا در دریافت اطلاعات کاربر: ${error.message}`);
+                    document.getElementById('userFormError').textContent = `خطا در دریافت اطلاعات کاربر: ${error.message}`;
+                    document.getElementById('userFormError').classList.remove('hidden');
                 }
-
             } else {
-                // Create mode
                 document.getElementById('userModalTitle').innerHTML = '<i class="fas fa-user-plus"></i> کاربر جدید';
                 document.getElementById('userFormUsername').readOnly = false;
                 document.getElementById('userFormSubmitText').textContent = 'ایجاد کاربر';
             }
-            modal.classList.remove('hidden');
+            document.getElementById('userModal').classList.remove('hidden');
         };
-
         const closeUserModal = () => document.getElementById('userModal').classList.add('hidden');
-
         const handleUserFormSubmit = async (e) => {
             e.preventDefault();
             const username = document.getElementById('userFormUsername').value;
             const originalUsername = document.getElementById('userModalUsername').value;
             const isEdit = !!originalUsername;
-
             const userData = {
                 username: username,
                 data_limit: document.getElementById('userFormTraffic').value * (1024**3),
                 status: document.getElementById('userFormStatus').value,
+                expire: document.getElementById('userFormExpiry').value ? Math.floor(new Date(document.getElementById('userFormExpiry').value).getTime() / 1000) : 0,
             };
-            const expireDate = document.getElementById('userFormExpiry').value;
-            if (expireDate) {
-                userData.expire = Math.floor(new Date(expireDate).getTime() / 1000);
-            } else {
-                userData.expire = 0; // Explicitly set to no expiry
-            }
-
             try {
                 if (isEdit) {
                     await MarzbanAPI.modifyUser(mainServer.serverUrl, mainServer.token, originalUsername, userData);
@@ -990,42 +1042,41 @@
                     showNotification(`کاربر ${username} با موفقیت ایجاد شد.`, 'success');
                 }
                 closeUserModal();
-                loadUsers(1); // Refresh list
+                loadUsers(1);
             } catch (error) {
-                showMessage('userFormError', `خطا: ${error.message}`);
+                document.getElementById('userFormError').textContent = `خطا: ${error.message}`;
+                document.getElementById('userFormError').classList.remove('hidden');
             }
         };
-
         const deleteUser = async (username) => {
             if (confirm(`آیا از حذف کاربر ${username} مطمئن هستید؟`)) {
                 try {
                     await MarzbanAPI.deleteUser(mainServer.serverUrl, mainServer.token, username);
                     showNotification(`کاربر ${username} حذف شد.`, 'success');
-                    loadUsers(1); // Refresh list
+                    loadUsers(1);
                 } catch (error) {
                     showNotification(`خطا در حذف کاربر: ${error.message}`, 'error');
                 }
             }
         };
-        
         const resetUserTraffic = async (username) => {
              if (confirm(`آیا از ریست کردن ترافیک کاربر ${username} مطمئن هستید؟`)) {
                 try {
                     await MarzbanAPI.resetUserTraffic(mainServer.serverUrl, mainServer.token, username);
                     showNotification(`ترافیک کاربر ${username} ریست شد.`, 'success');
-                    loadUsers(1); // Refresh list
+                    loadUsers(1);
                 } catch (error) {
                     showNotification(`خطا در ریست ترافیک: ${error.message}`, 'error');
                 }
             }
         };
-        
         const copySubscriptionLink = () => {
             const input = document.getElementById('subscriptionLink');
             input.select();
             document.execCommand('copy');
             showNotification('لینک اشتراک کپی شد!', 'success');
         };
+        const refreshUsersSection = () => loadUsers(1);
 
         // --- SYSTEM STATUS ---
         const loadSystemStatus = async () => {
@@ -1033,39 +1084,226 @@
              try {
                 const data = await MarzbanAPI.getSystemInfo(mainServer.serverUrl, mainServer.token);
                 const stats = data.stats;
-                
                 document.getElementById('cpuUsage').textContent = `${stats.cpu_usage.toFixed(1)}%`;
                 document.getElementById('cpuProgress').style.width = `${stats.cpu_usage}%`;
-                
-                const memUsed = formatBytes(stats.mem_total - stats.mem_free);
-                const memTotal = formatBytes(stats.mem_total);
-                const memPercent = ((stats.mem_total - stats.mem_free) / stats.mem_total * 100).toFixed(1);
-                document.getElementById('ramUsage').textContent = `${memPercent}%`;
+                const memPercent = ((stats.mem_total - stats.mem_free) / stats.mem_total * 100);
+                document.getElementById('ramUsage').textContent = `${memPercent.toFixed(1)}%`;
                 document.getElementById('ramProgress').style.width = `${memPercent}%`;
-                document.getElementById('ramDetails').textContent = `${memUsed} / ${memTotal}`;
-                
-                // Bandwidth needs continuous monitoring, this is just a snapshot
-                document.getElementById('downloadSpeed').textContent = formatBytes(stats.net_speed.down);
-                document.getElementById('uploadSpeed').textContent = formatBytes(stats.net_speed.up);
-
+                document.getElementById('ramDetails').textContent = `${formatBytes(stats.mem_total - stats.mem_free)} / ${formatBytes(stats.mem_total)}`;
+                document.getElementById('downloadSpeed').textContent = formatBytes(stats.net_speed.down) + '/s';
+                document.getElementById('uploadSpeed').textContent = formatBytes(stats.net_speed.up) + '/s';
              } catch(error) {
                  showNotification(`خطا در دریافت وضعیت سیستم: ${error.message}`, 'error');
              }
         };
-
-        // --- REFRESH FUNCTIONS ---
-        const refreshUsersSection = () => loadUsers(1);
-        const refreshDashboard = () => loadDashboardData();
         const refreshSystemSection = () => loadSystemStatus();
+
+        // --- ANALYTICS SECTION ---
+        const loadAnalyticsData = async () => {
+            const content = document.getElementById('analyticsContent');
+            if (!mainServer || !mainServer.token) {
+                content.innerHTML = '<div class="section-loading">پیکربندی سرور اصلی یافت نشد. لطفا به تنظیمات بروید.</div>';
+                return;
+            }
+            content.innerHTML = '<div class="section-loading"><div class="loading-spinner"></div><span>در حال پردازش گزارشات...</span></div>';
+            try {
+                const data = await MarzbanAPI.getUsers(mainServer.serverUrl, mainServer.token, { limit: 0 });
+                const users = data.users;
+
+                // Process data
+                const statusCounts = users.reduce((acc, user) => {
+                    acc[user.status] = (acc[user.status] || 0) + 1;
+                    return acc;
+                }, { active: 0, disabled: 0, expired: 0, limited: 0 });
+
+                const topUsers = users.sort((a, b) => b.used_traffic - a.used_traffic).slice(0, 5);
+
+                // Render HTML structure
+                content.innerHTML = `
+                    <div class="stats-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+                        <div class="stats-card"><div class="stats-icon" style="background: var(--success-color);"><i class="fas fa-user-check"></i></div><div class="stats-number">${statusCounts.active}</div><div class="stats-label">کاربران فعال</div></div>
+                        <div class="stats-card"><div class="stats-icon" style="background: var(--danger-color);"><i class="fas fa-user-times"></i></div><div class="stats-number">${statusCounts.expired}</div><div class="stats-label">کاربران منقضی</div></div>
+                        <div class="stats-card"><div class="stats-icon" style="background: var(--text-muted);"><i class="fas fa-user-slash"></i></div><div class="stats-number">${statusCounts.disabled}</div><div class="stats-label">کاربران غیرفعال</div></div>
+                        <div class="stats-card"><div class="stats-icon" style="background: var(--warning-color);"><i class="fas fa-user-lock"></i></div><div class="stats-number">${statusCounts.limited}</div><div class="stats-label">کاربران محدود</div></div>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 24px; margin-top: 24px;" class="stats-grid">
+                        <div class="chart-container"><h4 class="chart-title">پراکندگی وضعیت کاربران</h4><canvas id="userStatusChart"></canvas></div>
+                        <div class="chart-container"><h4 class="chart-title">۵ کاربر پرمصرف</h4><canvas id="topUsersChart"></canvas></div>
+                    </div>
+                `;
+
+                // Render charts
+                renderUserStatusChart(statusCounts);
+                renderTopUsersChart(topUsers);
+                setTheme(localStorage.getItem(CONFIG_KEYS.theme) || 'light'); // Apply theme to new charts
+
+            } catch (error) {
+                content.innerHTML = `<div class="section-loading">خطا در بارگذاری گزارشات: ${error.message}</div>`;
+            }
+        };
+        const renderUserStatusChart = (statusCounts) => {
+            destroyChart('userStatusChart');
+            const ctx = document.getElementById('userStatusChart').getContext('2d');
+            chartInstances.userStatusChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['فعال', 'منقضی', 'غیرفعال', 'محدود'],
+                    datasets: [{
+                        data: [statusCounts.active, statusCounts.expired, statusCounts.disabled, statusCounts.limited],
+                        backgroundColor: ['#10B981', '#EF4444', '#6B7280', '#F59E0B'],
+                        borderColor: 'var(--card-bg)',
+                        borderWidth: 4,
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: '#64748B' } } } }
+            });
+        };
+        const renderTopUsersChart = (topUsers) => {
+            destroyChart('topUsersChart');
+            const ctx = document.getElementById('topUsersChart').getContext('2d');
+            chartInstances.topUsersChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: topUsers.map(u => u.username),
+                    datasets: [{
+                        label: 'ترافیک مصرفی (GB)',
+                        data: topUsers.map(u => (u.used_traffic / (1024 ** 3)).toFixed(2)),
+                        backgroundColor: 'rgba(59, 130, 246, 0.7)',
+                        borderColor: '#3b82f6',
+                        borderWidth: 2,
+                        borderRadius: 6,
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, indexAxis: 'y', scales: { x: { beginAtZero: true }, y: { ticks: { autoSkip: false } } }, plugins: { legend: { display: false } } }
+            });
+        };
+
+        // --- ADMINS MANAGEMENT SECTION ---
+        const loadAdmins = () => {
+            const container = document.getElementById('adminsTableContainer');
+            const admins = getAdminCredentials();
+            const usernames = Object.keys(admins);
+            if (usernames.length === 0) {
+                container.innerHTML = '<div class="section-loading">ادمینی یافت نشد.</div>';
+                return;
+            }
+            container.innerHTML = `
+                <table class="data-table">
+                    <thead><tr><th>نام کاربری ادمین</th><th>عملیات</th></tr></thead>
+                    <tbody>
+                        ${usernames.map(username => `
+                            <tr>
+                                <td><strong>${username}</strong></td>
+                                <td>
+                                    <button class="form-button danger" onclick="deleteAdmin('${username}')" title="حذف ادمین"><i class="fas fa-trash"></i></button>
+                                </td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+        };
+        const showAdminModal = () => {
+            document.getElementById('adminForm').reset();
+            document.getElementById('adminFormError').classList.add('hidden');
+            document.getElementById('adminModal').classList.remove('hidden');
+        };
+        const closeAdminModal = () => document.getElementById('adminModal').classList.add('hidden');
+        const handleAdminFormSubmit = (e) => {
+            e.preventDefault();
+            const username = document.getElementById('adminFormUsername').value.trim();
+            const password = document.getElementById('adminFormPassword').value;
+            if (!username || !password) {
+                showNotification('نام کاربری و رمز عبور الزامی است.', 'error');
+                return;
+            }
+            const admins = getAdminCredentials();
+            if (admins[username]) {
+                document.getElementById('adminFormError').textContent = 'این نام کاربری قبلا استفاده شده است.';
+                document.getElementById('adminFormError').classList.remove('hidden');
+                return;
+            }
+            admins[username] = password;
+            saveAdminCredentials(admins);
+            showNotification(`ادمین ${username} با موفقیت اضافه شد.`, 'success');
+            closeAdminModal();
+            loadAdmins();
+        };
+        const deleteAdmin = (username) => {
+            const loggedInUser = sessionStorage.getItem(CONFIG_KEYS.adminUsername);
+            if (username === loggedInUser) {
+                showNotification('شما نمی‌توانید حساب کاربری خودتان را حذف کنید.', 'error');
+                return;
+            }
+            if (confirm(`آیا از حذف ادمین ${username} مطمئن هستید؟`)) {
+                const admins = getAdminCredentials();
+                delete admins[username];
+                saveAdminCredentials(admins);
+                showNotification(`ادمین ${username} حذف شد.`, 'success');
+                loadAdmins();
+            }
+        };
+
+        // --- SETTINGS SECTION ---
+        const loadSettings = () => {
+            const storedServer = localStorage.getItem(CONFIG_KEYS.mainServer);
+            if (storedServer) {
+                const server = JSON.parse(storedServer);
+                document.getElementById('mainServerUrl').value = server.serverUrl || '';
+                document.getElementById('mainServerToken').value = server.token || '';
+            }
+            document.getElementById('currentAdminUsername').value = sessionStorage.getItem(CONFIG_KEYS.adminUsername);
+        };
+        const handleMainServerFormSubmit = (e) => {
+            e.preventDefault();
+            const serverConfig = {
+                serverUrl: document.getElementById('mainServerUrl').value.trim(),
+                token: document.getElementById('mainServerToken').value.trim(),
+            };
+            localStorage.setItem(CONFIG_KEYS.mainServer, JSON.stringify(serverConfig));
+            mainServer = serverConfig; // Update global variable
+            showNotification('تنظیمات سرور اصلی با موفقیت ذخیره شد.', 'success');
+        };
+        const testMainServerConnection = async () => {
+            const serverUrl = document.getElementById('mainServerUrl').value.trim();
+            const token = document.getElementById('mainServerToken').value.trim();
+            if (!serverUrl || !token) {
+                showNotification('لطفا آدرس سرور و توکن را وارد کنید.', 'warning');
+                return;
+            }
+            try {
+                await MarzbanAPI.getSystemInfo(serverUrl, token);
+                showNotification('اتصال به سرور با موفقیت برقرار شد.', 'success');
+            } catch (error) {
+                showNotification(`خطا در اتصال به سرور: ${error.message}`, 'error');
+            }
+        };
+        const handleChangePasswordFormSubmit = (e) => {
+            e.preventDefault();
+            const username = document.getElementById('currentAdminUsername').value;
+            const newPassword = document.getElementById('newAdminPassword').value;
+            if (newPassword.length < 6) {
+                showNotification('رمز عبور باید حداقل ۶ کاراکتر باشد.', 'error');
+                return;
+            }
+            const admins = getAdminCredentials();
+            admins[username] = newPassword;
+            saveAdminCredentials(admins);
+            document.getElementById('newAdminPassword').value = '';
+            showNotification('رمز عبور شما با موفقیت تغییر کرد.', 'success');
+        };
 
         // --- INITIALIZATION ---
         document.addEventListener('DOMContentLoaded', () => {
             initTheme();
             checkSession();
+            // Event Listeners
             document.getElementById('loginForm').addEventListener('submit', handleLogin);
             document.getElementById('userForm').addEventListener('submit', handleUserFormSubmit);
+            document.getElementById('adminForm').addEventListener('submit', handleAdminFormSubmit);
+            document.getElementById('mainServerForm').addEventListener('submit', handleMainServerFormSubmit);
+            document.getElementById('changePasswordForm').addEventListener('submit', handleChangePasswordFormSubmit);
         });
-
     </script>
 </body>
 </html>
