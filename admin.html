@@ -520,8 +520,8 @@
                     <div class="stats-card"><div class="stats-icon"><i class="fas fa-globe"></i></div><div class="stats-number" id="onlineUsers">0</div><div class="stats-label">کاربران آنلاین</div></div>
                     <div class="stats-card"><div class="stats-icon"><i class="fas fa-download"></i></div><div class="stats-number" id="totalTraffic">0 GB</div><div class="stats-label">ترافیک امروز</div></div>
                 </div>
-                <div style="display: grid; grid-template-columns: 1fr; gap: 24px; margin-bottom: 24px;">
-                    <div class="chart-container"><h4 class="chart-title">آمار کلی سیستم</h4><canvas id="overallSystemChart"></canvas></div>
+                <div id="dashboardChartContainer" style="display: grid; grid-template-columns: 1fr; gap: 24px; margin-bottom: 24px;">
+                    <!-- Chart will be injected here -->
                 </div>
             </div>
 
@@ -986,8 +986,12 @@
         const loadDashboardData = async () => {
             const btn = document.getElementById('refreshDashboardBtn');
             setLoadingState(btn, true);
+            const chartContainer = document.getElementById('dashboardChartContainer');
+            chartContainer.innerHTML = '<div class="section-loading"><div class="loading-spinner"></div></div>';
+
             if (!mainServer || !mainServer.token) {
                 showNotification('اتصال به سرور اصلی برقرار نیست. لطفا تنظیمات را بررسی کنید.', 'error');
+                chartContainer.innerHTML = '<div class="section-loading">اتصال به سرور برقرار نیست.</div>';
                 setLoadingState(btn, false);
                 return;
             }
@@ -1007,15 +1011,24 @@
                 document.getElementById('totalTraffic').textContent = formatBytes(totalTrafficToday);
                 document.getElementById('totalReps').textContent = totalReps;
                 
-                // Render overall system chart
+                chartContainer.innerHTML = `
+                    <div class="chart-container">
+                        <h4 class="chart-title">آمار کلی سیستم</h4>
+                        <div style="position: relative; height: 350px;">
+                            <canvas id="overallSystemChart"></canvas>
+                        </div>
+                    </div>`;
+                
                 renderOverallSystemChart({
                     totalUsers: usersData.total,
                     totalTraffic: totalTrafficToday,
                     totalReps: totalReps,
                     totalAdmins: totalAdmins
                 });
+                setTheme(localStorage.getItem(CONFIG_KEYS.theme) || 'light');
             } catch (error) {
                 showNotification(`خطا در بارگذاری داشبورد: ${error.message}`, 'error');
+                chartContainer.innerHTML = `<div class="section-loading">خطا: ${error.message}</div>`;
             } finally {
                 setLoadingState(btn, false);
             }
@@ -1192,15 +1205,29 @@
              if (!mainServer || !mainServer.token) return;
              try {
                 const data = await MarzbanAPI.getSystemInfo(mainServer.serverUrl, mainServer.token);
-                const stats = data.stats;
-                document.getElementById('cpuUsage').textContent = `${stats.cpu_usage.toFixed(1)}%`;
-                document.getElementById('cpuProgress').style.width = `${stats.cpu_usage}%`;
-                const memPercent = ((stats.mem_total - stats.mem_free) / stats.mem_total * 100);
-                document.getElementById('ramUsage').textContent = `${memPercent.toFixed(1)}%`;
-                document.getElementById('ramProgress').style.width = `${memPercent}%`;
-                document.getElementById('ramDetails').textContent = `${formatBytes(stats.mem_total - stats.mem_free)} / ${formatBytes(stats.mem_total)}`;
-                document.getElementById('downloadSpeed').textContent = formatBytes(stats.net_speed.down) + '/s';
-                document.getElementById('uploadSpeed').textContent = formatBytes(stats.net_speed.up) + '/s';
+                if (data && data.stats) {
+                    const stats = data.stats;
+                    // CPU
+                    document.getElementById('cpuUsage').textContent = `${stats.cpu_usage.toFixed(1)}%`;
+                    document.getElementById('cpuProgress').style.width = `${stats.cpu_usage}%`;
+                    // RAM
+                    const memPercent = stats.mem_total > 0 ? ((stats.mem_total - stats.mem_free) / stats.mem_total * 100) : 0;
+                    document.getElementById('ramUsage').textContent = `${memPercent.toFixed(1)}%`;
+                    document.getElementById('ramProgress').style.width = `${memPercent}%`;
+                    document.getElementById('ramDetails').textContent = `${formatBytes(stats.mem_total - stats.mem_free)} / ${formatBytes(stats.mem_total)}`;
+                    // Disk
+                    const diskPercent = stats.disk_total > 0 ? (stats.disk_used / stats.disk_total * 100) : 0;
+                    document.getElementById('diskUsage').textContent = `${diskPercent.toFixed(1)}%`;
+                    document.getElementById('diskProgress').style.width = `${diskPercent}%`;
+                    document.getElementById('diskDetails').textContent = `${formatBytes(stats.disk_used)} / ${formatBytes(stats.disk_total)}`;
+                    // Network
+                    const totalBandwidth = (stats.net_speed.down + stats.net_speed.up);
+                    document.getElementById('bandwidthUsage').textContent = formatBytes(totalBandwidth) + '/s';
+                    document.getElementById('downloadSpeed').textContent = formatBytes(stats.net_speed.down) + '/s';
+                    document.getElementById('uploadSpeed').textContent = formatBytes(stats.net_speed.up) + '/s';
+                } else {
+                    showNotification('پاسخ وضعیت سیستم معتبر نبود.', 'warning');
+                }
              } catch(error) {
                  showNotification(`خطا در دریافت وضعیت سیستم: ${error.message}`, 'error');
              }
@@ -1231,8 +1258,18 @@
                         <div class="stats-card"><div class="stats-icon" style="background: var(--warning-color);"><i class="fas fa-user-lock"></i></div><div class="stats-number">${statusCounts.limited}</div><div class="stats-label">محدود</div></div>
                     </div>
                     <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 24px; margin-top: 24px;" class="stats-grid">
-                        <div class="chart-container"><h4 class="chart-title">پراکندگی وضعیت</h4><canvas id="userStatusChart"></canvas></div>
-                        <div class="chart-container"><h4 class="chart-title">۵ کاربر پرمصرف</h4><canvas id="topUsersChart"></canvas></div>
+                        <div class="chart-container">
+                            <h4 class="chart-title">پراکندگی وضعیت</h4>
+                            <div style="position: relative; height: 300px;">
+                                <canvas id="userStatusChart"></canvas>
+                            </div>
+                        </div>
+                        <div class="chart-container">
+                            <h4 class="chart-title">۵ کاربر پرمصرف</h4>
+                            <div style="position: relative; height: 300px;">
+                                <canvas id="topUsersChart"></canvas>
+                            </div>
+                        </div>
                     </div>
                 `;
                 renderUserStatusChart(statusCounts);
@@ -1274,13 +1311,13 @@
                         'rgba(16, 185, 129, 0.8)', // Green for users
                         'rgba(245, 158, 11, 0.8)', // Orange for traffic
                         'rgba(59, 130, 246, 0.8)', // Blue for reps
-                        'rgba(139, 69, 19, 0.8)'   // Brown for admins
+                        'rgba(239, 68, 68, 0.8)'   // Red for admins
                     ],
                     borderColor: [
                         '#10B981',
                         '#F59E0B', 
                         '#3B82F6',
-                        '#8B4513'
+                        '#EF4444'
                     ],
                     borderWidth: 2,
                     borderRadius: 8,
@@ -1301,12 +1338,10 @@
                         tooltip: {
                             callbacks: {
                                 label: function(context) {
-                                    const label = context.dataset.label || '';
+                                    const label = context.chart.data.labels[context.dataIndex] || '';
                                     const value = context.parsed.y;
-                                    const dataIndex = context.dataIndex;
-                                    
-                                    if (dataIndex === 1) { // Traffic data
-                                        return `${label}: ${value} گیگابایت`;
+                                    if (label.includes('(GB)')) {
+                                        return `${value} گیگابایت`;
                                     }
                                     return `${label}: ${value}`;
                                 }
@@ -1314,25 +1349,8 @@
                         }
                     },
                     scales: {
-                        y: {
-                            beginAtZero: true,
-                            ticks: {
-                                color: '#64748B'
-                            },
-                            grid: {
-                                color: 'rgba(0, 0, 0, 0.1)'
-                            }
-                        },
-                        x: {
-                            ticks: {
-                                color: '#64748B',
-                                maxRotation: 45,
-                                minRotation: 45
-                            },
-                            grid: {
-                                display: false
-                            }
-                        }
+                        y: { beginAtZero: true },
+                        x: { grid: { display: false } }
                     }
                 }
             });
