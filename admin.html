@@ -330,8 +330,10 @@
         .loading-text { color: var(--text-primary); font-weight: 600; font-size: 16px; }
 
         /* Section Loading Indicator */
-        .section-loading { display: flex; align-items: center; justify-content: center; padding: 60px 20px; color: var(--text-secondary); font-size: 16px; gap: 12px; }
+        .section-loading { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 60px 20px; color: var(--text-secondary); font-size: 16px; gap: 12px; text-align: center; }
         .section-loading .loading-spinner { width: 24px; height: 24px; border-width: 2px; }
+        .section-loading a { color: var(--primary-color); font-weight: 600; text-decoration: none; }
+        .section-loading a:hover { text-decoration: underline; }
 
         /* Settings Form Styles */
         .settings-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 24px; }
@@ -514,14 +516,8 @@
                     <h3 class="section-title"><i class="fas fa-tachometer-alt"></i> داشبورد مدیریت</h3>
                     <button class="refresh-btn" id="refreshDashboardBtn" onclick="refreshDashboard()"><i class="fas fa-sync-alt"></i> <span>بروزرسانی</span><div class="loading-spinner hidden"></div></button>
                 </div>
-                <div class="stats-grid">
-                    <div class="stats-card"><div class="stats-icon"><i class="fas fa-users"></i></div><div class="stats-number" id="totalUsers">0</div><div class="stats-label">کل کاربران</div></div>
-                    <div class="stats-card"><div class="stats-icon"><i class="fas fa-user-shield"></i></div><div class="stats-number" id="totalReps">0</div><div class="stats-label">نمایندگان فعال</div></div>
-                    <div class="stats-card"><div class="stats-icon"><i class="fas fa-globe"></i></div><div class="stats-number" id="onlineUsers">0</div><div class="stats-label">کاربران آنلاین</div></div>
-                    <div class="stats-card"><div class="stats-icon"><i class="fas fa-download"></i></div><div class="stats-number" id="totalTraffic">0 GB</div><div class="stats-label">ترافیک امروز</div></div>
-                </div>
-                <div id="dashboardChartContainer" style="display: grid; grid-template-columns: 1fr; gap: 24px; margin-bottom: 24px;">
-                    <!-- Chart will be injected here -->
+                <div id="dashboardContent">
+                    <!-- Content will be injected by JS -->
                 </div>
             </div>
 
@@ -529,30 +525,21 @@
             <div id="usersSection" class="content-section">
                 <div class="section-header">
                     <h3 class="section-title"><i class="fas fa-users"></i> مدیریت کاربران</h3>
-                    <button class="refresh-btn" onclick="refreshUsersSection()"><i class="fas fa-sync-alt"></i> بروزرسانی</button>
+                    <button class="refresh-btn" id="refreshUsersBtn" onclick="refreshUsersSection()"><i class="fas fa-sync-alt"></i> <span>بروزرسانی</span><div class="loading-spinner hidden"></div></button>
                 </div>
-                <div class="users-controls">
-                    <input type="text" id="userSearch" placeholder="جستجوی نام کاربری..." class="search-box" style="flex: 1; min-width: 250px; margin-bottom: 0;">
-                    <button onclick="handleUserSearch()" class="form-button"><i class="fas fa-search"></i> جستجو</button>
-                    <button onclick="showUserModal()" class="form-button success"><i class="fas fa-plus"></i> کاربر جدید</button>
+                <div id="usersContentWrapper">
+                    <!-- Content will be injected by JS -->
                 </div>
-                <div id="usersContent">
-                    <div class="section-loading"><div class="loading-spinner"></div><span>در حال بارگذاری کاربران...</span></div>
-                </div>
-                <div id="usersPagination" class="users-pagination"></div>
             </div>
 
             <!-- System Status Section -->
             <div id="systemSection" class="content-section">
                 <div class="section-header">
                     <h3 class="section-title"><i class="fas fa-server"></i> وضعیت سیستم</h3>
-                    <button class="refresh-btn" onclick="refreshSystemSection()"><i class="fas fa-sync-alt"></i> بروزرسانی</button>
+                    <button class="refresh-btn" id="refreshSystemBtn" onclick="refreshSystemSection()"><i class="fas fa-sync-alt"></i> <span>بروزرسانی</span><div class="loading-spinner hidden"></div></button>
                 </div>
-                <div class="system-grid">
-                    <div class="system-card"><div class="system-icon"><i class="fas fa-microchip"></i></div><div class="system-title">مصرف CPU</div><div class="system-value" id="cpuUsage">0%</div><div class="system-details"><div class="progress-bar"><div class="progress-fill" id="cpuProgress" style="width: 0%;"></div></div></div></div>
-                    <div class="system-card"><div class="system-icon"><i class="fas fa-memory"></i></div><div class="system-title">مصرف RAM</div><div class="system-value" id="ramUsage">0%</div><div class="system-details"><div class="progress-bar"><div class="progress-fill" id="ramProgress" style="width: 0%;"></div></div><small id="ramDetails">0 GB / 0 GB</small></div></div>
-                    <div class="system-card"><div class="system-icon"><i class="fas fa-database"></i></div><div class="system-title">فضای دیسک</div><div class="system-value" id="diskUsage">0%</div><div class="system-details"><div class="progress-bar"><div class="progress-fill" id="diskProgress" style="width: 0%;"></div></div><small id="diskDetails">0 GB / 0 GB</small></div></div>
-                    <div class="system-card"><div class="system-icon"><i class="fas fa-network-wired"></i></div><div class="system-title">پهنای باند</div><div class="system-value" id="bandwidthUsage">0 MB/s</div><div class="system-details"><small>⬇️ <span id="downloadSpeed">0 MB/s</span></small> <small>⬆️ <span id="uploadSpeed">0 MB/s</span></small></div></div>
+                <div id="systemContent">
+                    <!-- Content will be injected by JS -->
                 </div>
             </div>
 
@@ -588,7 +575,7 @@
                     <button class="refresh-btn" id="refreshAnalyticsBtn" onclick="loadAnalyticsData()"><i class="fas fa-sync-alt"></i> <span>بروزرسانی</span><div class="loading-spinner hidden"></div></button>
                 </div>
                 <div id="analyticsContent">
-                    <div class="section-loading"><div class="loading-spinner"></div><span>در حال بارگذاری گزارش‌ها...</span></div>
+                    <!-- Content will be injected by JS -->
                 </div>
             </div>
 
@@ -878,6 +865,20 @@
                 delete chartInstances[chartId];
             }
         };
+        const renderSectionError = (container, message, showSettingsLink = false) => {
+            let settingsLinkHtml = '';
+            if (showSettingsLink) {
+                settingsLinkHtml = `<p style="font-size: 14px; color: var(--text-secondary); margin-top: 8px;">
+                    لطفاً به بخش <a href="#" onclick="showSection('settings')">تنظیمات</a> بروید و اطلاعات سرور Marzban خود را وارد کنید.
+                </p>`;
+            }
+            container.innerHTML = `
+                <div class="section-loading">
+                    <i class="fas fa-exclamation-triangle" style="color: var(--warning-color); font-size: 24px;"></i>
+                    <span>${message}</span>
+                    ${settingsLinkHtml}
+                </div>`;
+        };
 
         // --- THEME MANAGEMENT ---
         const initTheme = () => {
@@ -985,13 +986,12 @@
         // --- DASHBOARD ---
         const loadDashboardData = async () => {
             const btn = document.getElementById('refreshDashboardBtn');
+            const container = document.getElementById('dashboardContent');
             setLoadingState(btn, true);
-            const chartContainer = document.getElementById('dashboardChartContainer');
-            chartContainer.innerHTML = '<div class="section-loading"><div class="loading-spinner"></div></div>';
+            container.innerHTML = '<div class="section-loading"><div class="loading-spinner"></div></div>';
 
             if (!mainServer || !mainServer.token) {
-                showNotification('اتصال به سرور اصلی برقرار نیست. لطفا تنظیمات را بررسی کنید.', 'error');
-                chartContainer.innerHTML = '<div class="section-loading">اتصال به سرور برقرار نیست.</div>';
+                renderSectionError(container, 'اتصال به سرور اصلی برقرار نیست.', true);
                 setLoadingState(btn, false);
                 return;
             }
@@ -1003,19 +1003,21 @@
                 const users = usersData.users;
                 const onlineUsers = users.filter(u => u.online_at && (new Date() - new Date(u.online_at) < 300000)).length;
                 const totalTrafficToday = users.reduce((acc, u) => acc + (u.used_traffic || 0), 0);
-                const totalAdmins = Object.keys(getAdminCredentials()).length;
                 const totalReps = (JSON.parse(localStorage.getItem(CONFIG_KEYS.monitoredReps)) || []).length;
                 
-                document.getElementById('totalUsers').textContent = usersData.total;
-                document.getElementById('onlineUsers').textContent = onlineUsers;
-                document.getElementById('totalTraffic').textContent = formatBytes(totalTrafficToday);
-                document.getElementById('totalReps').textContent = totalReps;
-                
-                chartContainer.innerHTML = `
-                    <div class="chart-container">
-                        <h4 class="chart-title">آمار کلی سیستم</h4>
-                        <div style="position: relative; height: 350px;">
-                            <canvas id="overallSystemChart"></canvas>
+                container.innerHTML = `
+                    <div class="stats-grid">
+                        <div class="stats-card"><div class="stats-icon"><i class="fas fa-users"></i></div><div class="stats-number" id="totalUsers">${usersData.total}</div><div class="stats-label">کل کاربران</div></div>
+                        <div class="stats-card"><div class="stats-icon"><i class="fas fa-user-shield"></i></div><div class="stats-number" id="totalReps">${totalReps}</div><div class="stats-label">نمایندگان فعال</div></div>
+                        <div class="stats-card"><div class="stats-icon"><i class="fas fa-globe"></i></div><div class="stats-number" id="onlineUsers">${onlineUsers}</div><div class="stats-label">کاربران آنلاین</div></div>
+                        <div class="stats-card"><div class="stats-icon"><i class="fas fa-download"></i></div><div class="stats-number" id="totalTraffic">${formatBytes(totalTrafficToday)}</div><div class="stats-label">ترافیک امروز</div></div>
+                    </div>
+                    <div id="dashboardChartContainer" style="display: grid; grid-template-columns: 1fr; gap: 24px; margin-bottom: 24px;">
+                        <div class="chart-container">
+                            <h4 class="chart-title">آمار کلی سیستم</h4>
+                            <div style="position: relative; height: 350px;">
+                                <canvas id="overallSystemChart"></canvas>
+                            </div>
                         </div>
                     </div>`;
                 
@@ -1023,12 +1025,11 @@
                     totalUsers: usersData.total,
                     totalTraffic: totalTrafficToday,
                     totalReps: totalReps,
-                    totalAdmins: totalAdmins
+                    totalAdmins: Object.keys(getAdminCredentials()).length
                 });
                 setTheme(localStorage.getItem(CONFIG_KEYS.theme) || 'light');
             } catch (error) {
-                showNotification(`خطا در بارگذاری داشبورد: ${error.message}`, 'error');
-                chartContainer.innerHTML = `<div class="section-loading">خطا: ${error.message}</div>`;
+                renderSectionError(container, `خطا در بارگذاری داشبورد: ${error.message}`);
             } finally {
                 setLoadingState(btn, false);
             }
@@ -1037,12 +1038,30 @@
 
         // --- USER MANAGEMENT (Main Server) ---
         const loadUsers = async (page = 1, username = '') => {
-            const usersContent = document.getElementById('usersContent');
+            const btn = document.getElementById('refreshUsersBtn');
+            const container = document.getElementById('usersContentWrapper');
+            setLoadingState(btn, true);
+            
             if (!mainServer || !mainServer.token) {
-                usersContent.innerHTML = '<div class="section-loading">پیکربندی سرور اصلی یافت نشد. لطفا به تنظیمات بروید.</div>';
+                container.innerHTML = `<div class="users-controls">
+                    <input type="text" id="userSearch" placeholder="جستجوی نام کاربری..." class="search-box" style="flex: 1; min-width: 250px; margin-bottom: 0;" disabled>
+                    <button class="form-button" disabled><i class="fas fa-search"></i> جستجو</button>
+                    <button class="form-button success" disabled><i class="fas fa-plus"></i> کاربر جدید</button>
+                </div>`;
+                renderSectionError(container, 'پیکربندی سرور اصلی یافت نشد.', true);
+                setLoadingState(btn, false);
                 return;
             }
-            usersContent.innerHTML = '<div class="section-loading"><div class="loading-spinner"></div></div>';
+
+            container.innerHTML = `
+                <div class="users-controls">
+                    <input type="text" id="userSearch" placeholder="جستجوی نام کاربری..." class="search-box" style="flex: 1; min-width: 250px; margin-bottom: 0;" value="${username}">
+                    <button onclick="handleUserSearch()" class="form-button"><i class="fas fa-search"></i> جستجو</button>
+                    <button onclick="showUserModal()" class="form-button success"><i class="fas fa-plus"></i> کاربر جدید</button>
+                </div>
+                <div id="usersContent"><div class="section-loading"><div class="loading-spinner"></div></div></div>
+                <div id="usersPagination" class="users-pagination"></div>`;
+
             try {
                 const params = { offset: (page - 1) * DEFAULTS.usersPerPage, limit: DEFAULTS.usersPerPage };
                 if (username) params.username = username;
@@ -1050,7 +1069,9 @@
                 renderUsersTable(data.users);
                 renderUsersPagination(page, data.total, username);
             } catch (error) {
-                usersContent.innerHTML = `<div class="section-loading">خطا: ${error.message}</div>`;
+                renderSectionError(document.getElementById('usersContent'), `خطا: ${error.message}`);
+            } finally {
+                setLoadingState(btn, false);
             }
         };
         const renderUsersTable = (users) => {
@@ -1198,39 +1219,72 @@
             document.execCommand('copy');
             showNotification('لینک اشتراک کپی شد!', 'success');
         };
-        const refreshUsersSection = () => loadUsers(1);
+        const refreshUsersSection = () => loadUsers(1, document.getElementById('userSearch')?.value || '');
 
         // --- SYSTEM STATUS ---
         const loadSystemStatus = async () => {
-             if (!mainServer || !mainServer.token) return;
-             try {
+            const btn = document.getElementById('refreshSystemBtn');
+            const container = document.getElementById('systemContent');
+            setLoadingState(btn, true);
+            container.innerHTML = '<div class="section-loading"><div class="loading-spinner"></div></div>';
+
+            if (!mainServer || !mainServer.token) {
+                renderSectionError(container, 'اتصال به سرور اصلی برقرار نیست.', true);
+                setLoadingState(btn, false);
+                return;
+            }
+
+            try {
                 const data = await MarzbanAPI.getSystemInfo(mainServer.serverUrl, mainServer.token);
                 if (data && data.stats) {
                     const stats = data.stats;
-                    // CPU
-                    document.getElementById('cpuUsage').textContent = `${stats.cpu_usage.toFixed(1)}%`;
-                    document.getElementById('cpuProgress').style.width = `${stats.cpu_usage}%`;
-                    // RAM
                     const memPercent = stats.mem_total > 0 ? ((stats.mem_total - stats.mem_free) / stats.mem_total * 100) : 0;
-                    document.getElementById('ramUsage').textContent = `${memPercent.toFixed(1)}%`;
-                    document.getElementById('ramProgress').style.width = `${memPercent}%`;
-                    document.getElementById('ramDetails').textContent = `${formatBytes(stats.mem_total - stats.mem_free)} / ${formatBytes(stats.mem_total)}`;
-                    // Disk
                     const diskPercent = stats.disk_total > 0 ? (stats.disk_used / stats.disk_total * 100) : 0;
-                    document.getElementById('diskUsage').textContent = `${diskPercent.toFixed(1)}%`;
-                    document.getElementById('diskProgress').style.width = `${diskPercent}%`;
-                    document.getElementById('diskDetails').textContent = `${formatBytes(stats.disk_used)} / ${formatBytes(stats.disk_total)}`;
-                    // Network
                     const totalBandwidth = (stats.net_speed.down + stats.net_speed.up);
-                    document.getElementById('bandwidthUsage').textContent = formatBytes(totalBandwidth) + '/s';
-                    document.getElementById('downloadSpeed').textContent = formatBytes(stats.net_speed.down) + '/s';
-                    document.getElementById('uploadSpeed').textContent = formatBytes(stats.net_speed.up) + '/s';
+
+                    container.innerHTML = `
+                        <div class="system-grid">
+                            <div class="system-card">
+                                <div class="system-icon"><i class="fas fa-microchip"></i></div>
+                                <div class="system-title">مصرف CPU</div>
+                                <div class="system-value">${stats.cpu_usage.toFixed(1)}%</div>
+                                <div class="system-details"><div class="progress-bar"><div class="progress-fill" style="width: ${stats.cpu_usage}%;"></div></div></div>
+                            </div>
+                            <div class="system-card">
+                                <div class="system-icon"><i class="fas fa-memory"></i></div>
+                                <div class="system-title">مصرف RAM</div>
+                                <div class="system-value">${memPercent.toFixed(1)}%</div>
+                                <div class="system-details">
+                                    <div class="progress-bar"><div class="progress-fill" style="width: ${memPercent}%;"></div></div>
+                                    <small>${formatBytes(stats.mem_total - stats.mem_free)} / ${formatBytes(stats.mem_total)}</small>
+                                </div>
+                            </div>
+                            <div class="system-card">
+                                <div class="system-icon"><i class="fas fa-database"></i></div>
+                                <div class="system-title">فضای دیسک</div>
+                                <div class="system-value">${diskPercent.toFixed(1)}%</div>
+                                <div class="system-details">
+                                    <div class="progress-bar"><div class="progress-fill" style="width: ${diskPercent}%;"></div></div>
+                                    <small>${formatBytes(stats.disk_used)} / ${formatBytes(stats.disk_total)}</small>
+                                </div>
+                            </div>
+                            <div class="system-card">
+                                <div class="system-icon"><i class="fas fa-network-wired"></i></div>
+                                <div class="system-title">پهنای باند</div>
+                                <div class="system-value">${formatBytes(totalBandwidth)}/s</div>
+                                <div class="system-details">
+                                    <small>⬇️ ${formatBytes(stats.net_speed.down)}/s</small> <small>⬆️ ${formatBytes(stats.net_speed.up)}/s</small>
+                                </div>
+                            </div>
+                        </div>`;
                 } else {
-                    showNotification('پاسخ وضعیت سیستم معتبر نبود.', 'warning');
+                    renderSectionError(container, 'پاسخ وضعیت سیستم از سرور معتبر نبود.');
                 }
-             } catch(error) {
-                 showNotification(`خطا در دریافت وضعیت سیستم: ${error.message}`, 'error');
-             }
+            } catch(error) {
+                renderSectionError(container, `خطا در دریافت وضعیت سیستم: ${error.message}`);
+            } finally {
+                setLoadingState(btn, false);
+            }
         };
         const refreshSystemSection = () => loadSystemStatus();
 
@@ -1239,12 +1293,14 @@
             const content = document.getElementById('analyticsContent');
             const btn = document.getElementById('refreshAnalyticsBtn');
             setLoadingState(btn, true);
+            content.innerHTML = '<div class="section-loading"><div class="loading-spinner"></div></div>';
+
             if (!mainServer || !mainServer.token) {
-                content.innerHTML = '<div class="section-loading">پیکربندی سرور اصلی یافت نشد.</div>';
+                renderSectionError(content, 'پیکربندی سرور اصلی یافت نشد.', true);
                 setLoadingState(btn, false);
                 return;
             }
-            content.innerHTML = '<div class="section-loading"><div class="loading-spinner"></div></div>';
+            
             try {
                 const data = await MarzbanAPI.getUsers(mainServer.serverUrl, mainServer.token, { limit: 0 });
                 const users = data.users;
@@ -1276,7 +1332,7 @@
                 renderTopUsersChart(topUsers);
                 setTheme(localStorage.getItem(CONFIG_KEYS.theme) || 'light');
             } catch (error) {
-                content.innerHTML = `<div class="section-loading">خطا: ${error.message}</div>`;
+                renderSectionError(content, `خطا: ${error.message}`);
             } finally {
                 setLoadingState(btn, false);
             }
