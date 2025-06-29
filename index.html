@@ -2929,6 +2929,15 @@
                         loadDashboardData();
                         startAutoUpdate();
                         showNotification('ورود موفقیت‌آمیز بود! 🎉', 'success');
+                        const repName = username; 
+fetch('api.php', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ repName: repName })
+})
+.then(response => response.json())
+.then(data => console.log(data))
+.catch(error => console.error('خطا در ثبت لاگ ورود:', error));
                     } else {
                         showMessage('loginError', 'خطا در ذخیره‌سازی جلسه');
                     }
