@@ -470,7 +470,6 @@
                 <button class="nav-item" data-section="system" onclick="showSection('system'); toggleMobileMenu()"><span>وضعیت سیستم</span><i class="fas fa-server"></i></button>
                 <button class="nav-item" data-section="monitor" onclick="showSection('monitor'); toggleMobileMenu()"><span>مانیتورینگ نمایندگان</span><i class="fas fa-eye"></i></button>
                 <button class="nav-item" data-section="analytics" onclick="showSection('analytics'); toggleMobileMenu()"><span>آمار و گزارش</span><i class="fas fa-chart-area"></i></button>
-                <button class="nav-item" data-section="announcements" onclick="showSection('announcements'); toggleMobileMenu()"><span>اطلاعیه‌ها</span><i class="fas fa-bullhorn"></i></button>
                 <button class="nav-item" data-section="logs" onclick="showSection('logs'); toggleMobileMenu()"><span>لاگ ورود نمایندگان</span><i class="fas fa-history"></i></button>
                 <button class="nav-item" data-section="admins" onclick="showSection('admins'); toggleMobileMenu()"><span>مدیریت ادمین‌ها</span><i class="fas fa-user-shield"></i></button>
                 <button class="nav-item" data-section="settings" onclick="showSection('settings'); toggleMobileMenu()"><span>تنظیمات</span><i class="fas fa-cog"></i></button>
@@ -495,7 +494,6 @@
                 <button class="nav-item" data-section="system" onclick="showSection('system')"><span>وضعیت سیستم</span><i class="fas fa-server"></i></button>
                 <button class="nav-item" data-section="monitor" onclick="showSection('monitor')"><span>مانیتورینگ نمایندگان</span><i class="fas fa-eye"></i></button>
                 <button class="nav-item" data-section="analytics" onclick="showSection('analytics')"><span>آمار و گزارش</span><i class="fas fa-chart-area"></i></button>
-                <button class="nav-item" data-section="announcements" onclick="showSection('announcements')"><span>اطلاعیه‌ها</span><i class="fas fa-bullhorn"></i></button>
                 <button class="nav-item" data-section="logs" onclick="showSection('logs')"><span>لاگ ورود نمایندگان</span><i class="fas fa-history"></i></button>
                 <button class="nav-item" data-section="admins" onclick="showSection('admins')"><span>مدیریت ادمین‌ها</span><i class="fas fa-user-shield"></i></button>
                 <button class="nav-item" data-section="settings" onclick="showSection('settings')"><span>تنظیمات</span><i class="fas fa-cog"></i></button>
@@ -522,9 +520,8 @@
                     <div class="stats-card"><div class="stats-icon"><i class="fas fa-globe"></i></div><div class="stats-number" id="onlineUsers">0</div><div class="stats-label">کاربران آنلاین</div></div>
                     <div class="stats-card"><div class="stats-icon"><i class="fas fa-download"></i></div><div class="stats-number" id="totalTraffic">0 GB</div><div class="stats-label">ترافیک امروز</div></div>
                 </div>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 24px;" class="stats-grid">
-                    <div class="chart-container"><h4 class="chart-title">ترافیک روزانه</h4><canvas id="dailyTrafficChart"></canvas></div>
-                    <div class="chart-container"><h4 class="chart-title">رشد کاربران</h4><canvas id="userGrowthChart"></canvas></div>
+                <div style="display: grid; grid-template-columns: 1fr; gap: 24px; margin-bottom: 24px;">
+                    <div class="chart-container"><h4 class="chart-title">آمار کلی سیستم</h4><canvas id="overallSystemChart"></canvas></div>
                 </div>
             </div>
 
@@ -593,24 +590,6 @@
                 <div id="analyticsContent">
                     <div class="section-loading"><div class="loading-spinner"></div><span>در حال بارگذاری گزارش‌ها...</span></div>
                 </div>
-            </div>
-
-            <!-- Announcements Section -->
-            <div id="announcementsSection" class="content-section">
-                <div class="section-header">
-                    <h3 class="section-title"><i class="fas fa-bullhorn"></i> مدیریت اطلاعیه‌ها</h3>
-                </div>
-                <p class="api-status-info">این اطلاعیه در بالای پنل تمام نمایندگان (opipanel.html) که اسکریپت مربوطه را دارند، نمایش داده خواهد شد.</p>
-                <form id="announcementForm">
-                    <div class="form-group">
-                        <label class="form-label">متن اطلاعیه (برای حذف، خالی بگذارید)</label>
-                        <textarea id="announcementText" class="form-input" rows="4" placeholder="مثال: سرورها جهت بروزرسانی از ساعت ۲ تا ۳ بامداد در دسترس نخواهند بود."></textarea>
-                    </div>
-                    <div style="display: flex; gap: 12px;">
-                        <button type="submit" class="form-button success" style="flex: 1;"><i class="fas fa-paper-plane"></i> انتشار اطلاعیه</button>
-                        <button type="button" onclick="clearAnnouncement()" class="form-button danger" style="flex: 1;"><i class="fas fa-times-circle"></i> حذف اطلاعیه فعلی</button>
-                    </div>
-                </form>
             </div>
 
             <!-- Logs Section -->
@@ -794,7 +773,6 @@
             monitoredReps: 'toofan_monitored_reps_v2',
             adminCredentials: 'toofan_admin_credentials',
             theme: 'toofan_theme',
-            announcement: 'toofan_global_announcement',
             repLoginLogs: 'toofan_rep_login_logs'
         };
 
@@ -993,7 +971,6 @@
                     'analytics': loadAnalyticsData,
                     'admins': loadAdmins,
                     'settings': loadSettings,
-                    'announcements': loadAnnouncementSettings,
                     'logs': loadRepLogs,
                 }[sectionName];
                 if (loader) loader();
@@ -1022,10 +999,21 @@
                 const users = usersData.users;
                 const onlineUsers = users.filter(u => u.online_at && (new Date() - new Date(u.online_at) < 300000)).length;
                 const totalTrafficToday = users.reduce((acc, u) => acc + (u.used_traffic || 0), 0);
+                const totalAdmins = Object.keys(getAdminCredentials()).length;
+                const totalReps = (JSON.parse(localStorage.getItem(CONFIG_KEYS.monitoredReps)) || []).length;
+                
                 document.getElementById('totalUsers').textContent = usersData.total;
                 document.getElementById('onlineUsers').textContent = onlineUsers;
                 document.getElementById('totalTraffic').textContent = formatBytes(totalTrafficToday);
-                document.getElementById('totalReps').textContent = (JSON.parse(localStorage.getItem(CONFIG_KEYS.monitoredReps)) || []).length;
+                document.getElementById('totalReps').textContent = totalReps;
+                
+                // Render overall system chart
+                renderOverallSystemChart({
+                    totalUsers: usersData.total,
+                    totalTraffic: totalTrafficToday,
+                    totalReps: totalReps,
+                    totalAdmins: totalAdmins
+                });
             } catch (error) {
                 showNotification(`خطا در بارگذاری داشبورد: ${error.message}`, 'error');
             } finally {
@@ -1267,6 +1255,89 @@
             chartInstances.topUsersChart = new Chart(ctx, { type: 'bar', data: { labels: topUsers.map(u => u.username), datasets: [{ label: 'ترافیک (GB)', data: topUsers.map(u => (u.used_traffic / (1024 ** 3)).toFixed(2)), backgroundColor: 'rgba(59, 130, 246, 0.7)', borderColor: '#3b82f6', borderWidth: 2, borderRadius: 6 }] }, options: { responsive: true, maintainAspectRatio: false, indexAxis: 'y', scales: { x: { beginAtZero: true } }, plugins: { legend: { display: false } } } });
         };
 
+        // --- OVERALL SYSTEM CHART ---
+        const renderOverallSystemChart = (data) => {
+            destroyChart('overallSystemChart');
+            const ctx = document.getElementById('overallSystemChart').getContext('2d');
+            
+            const chartData = {
+                labels: ['کل کاربران', 'حجم مصرفی (GB)', 'تعداد نمایندگان', 'تعداد ادمین‌ها'],
+                datasets: [{
+                    label: 'آمار سیستم',
+                    data: [
+                        data.totalUsers,
+                        Math.round(data.totalTraffic / (1024 ** 3)), // Convert to GB
+                        data.totalReps,
+                        data.totalAdmins
+                    ],
+                    backgroundColor: [
+                        'rgba(16, 185, 129, 0.8)', // Green for users
+                        'rgba(245, 158, 11, 0.8)', // Orange for traffic
+                        'rgba(59, 130, 246, 0.8)', // Blue for reps
+                        'rgba(139, 69, 19, 0.8)'   // Brown for admins
+                    ],
+                    borderColor: [
+                        '#10B981',
+                        '#F59E0B', 
+                        '#3B82F6',
+                        '#8B4513'
+                    ],
+                    borderWidth: 2,
+                    borderRadius: 8,
+                    borderSkipped: false,
+                }]
+            };
+
+            chartInstances.overallSystemChart = new Chart(ctx, {
+                type: 'bar',
+                data: chartData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const label = context.dataset.label || '';
+                                    const value = context.parsed.y;
+                                    const dataIndex = context.dataIndex;
+                                    
+                                    if (dataIndex === 1) { // Traffic data
+                                        return `${label}: ${value} گیگابایت`;
+                                    }
+                                    return `${label}: ${value}`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                color: '#64748B'
+                            },
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.1)'
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                color: '#64748B',
+                                maxRotation: 45,
+                                minRotation: 45
+                            },
+                            grid: {
+                                display: false
+                            }
+                        }
+                    }
+                }
+            });
+        };
+
         // --- ADMINS MANAGEMENT SECTION ---
         const loadAdmins = () => {
             const container = document.getElementById('adminsTableContainer');
@@ -1435,25 +1506,7 @@
             }
         };
 
-        // --- ANNOUNCEMENTS & LOGS ---
-        const loadAnnouncementSettings = () => {
-            document.getElementById('announcementText').value = localStorage.getItem(CONFIG_KEYS.announcement) || '';
-        };
-        const handleAnnouncementFormSubmit = (e) => {
-            e.preventDefault();
-            const text = document.getElementById('announcementText').value.trim();
-            if (text) {
-                localStorage.setItem(CONFIG_KEYS.announcement, text);
-                showNotification('اطلاعیه با موفقیت منتشر شد.', 'success');
-            } else {
-                clearAnnouncement();
-            }
-        };
-        const clearAnnouncement = () => {
-            localStorage.removeItem(CONFIG_KEYS.announcement);
-            document.getElementById('announcementText').value = '';
-            showNotification('اطلاعیه حذف شد.', 'success');
-        };
+        // --- LOGS ---
         const loadRepLogs = () => {
             const container = document.getElementById('repLogsContainer');
             const logs = JSON.parse(localStorage.getItem(CONFIG_KEYS.repLoginLogs)) || [];
@@ -1478,7 +1531,6 @@
             document.getElementById('mainServerForm').addEventListener('submit', handleMainServerFormSubmit);
             document.getElementById('changePasswordForm').addEventListener('submit', handleChangePasswordFormSubmit);
             document.getElementById('addMonitorForm').addEventListener('submit', handleAddMonitorFormSubmit);
-            document.getElementById('announcementForm').addEventListener('submit', handleAnnouncementFormSubmit);
         });
     </script>
 </body>
