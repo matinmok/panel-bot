@@ -1236,19 +1236,30 @@
 
             try {
                 const data = await MarzbanAPI.getSystemInfo(mainServer.serverUrl, mainServer.token);
-                if (data && data.stats) {
+                
+                if (data && data.stats && typeof data.stats === 'object') {
                     const stats = data.stats;
-                    const memPercent = stats.mem_total > 0 ? ((stats.mem_total - stats.mem_free) / stats.mem_total * 100) : 0;
-                    const diskPercent = stats.disk_total > 0 ? (stats.disk_used / stats.disk_total * 100) : 0;
-                    const totalBandwidth = (stats.net_speed.down + stats.net_speed.up);
+                    
+                    const cpuUsage = stats.cpu_usage ?? 0;
+                    const memTotal = stats.mem_total ?? 0;
+                    const memFree = stats.mem_free ?? 0;
+                    const diskTotal = stats.disk_total ?? 0;
+                    const diskUsed = stats.disk_used ?? 0;
+                    const netDown = stats.net_speed?.down ?? 0;
+                    const netUp = stats.net_speed?.up ?? 0;
+
+                    const memUsed = memTotal - memFree;
+                    const memPercent = memTotal > 0 ? (memUsed / memTotal * 100) : 0;
+                    const diskPercent = diskTotal > 0 ? (diskUsed / diskTotal * 100) : 0;
+                    const totalBandwidth = netDown + netUp;
 
                     container.innerHTML = `
                         <div class="system-grid">
                             <div class="system-card">
                                 <div class="system-icon"><i class="fas fa-microchip"></i></div>
                                 <div class="system-title">مصرف CPU</div>
-                                <div class="system-value">${stats.cpu_usage.toFixed(1)}%</div>
-                                <div class="system-details"><div class="progress-bar"><div class="progress-fill" style="width: ${stats.cpu_usage}%;"></div></div></div>
+                                <div class="system-value">${cpuUsage.toFixed(1)}%</div>
+                                <div class="system-details"><div class="progress-bar"><div class="progress-fill" style="width: ${cpuUsage}%;"></div></div></div>
                             </div>
                             <div class="system-card">
                                 <div class="system-icon"><i class="fas fa-memory"></i></div>
@@ -1256,7 +1267,7 @@
                                 <div class="system-value">${memPercent.toFixed(1)}%</div>
                                 <div class="system-details">
                                     <div class="progress-bar"><div class="progress-fill" style="width: ${memPercent}%;"></div></div>
-                                    <small>${formatBytes(stats.mem_total - stats.mem_free)} / ${formatBytes(stats.mem_total)}</small>
+                                    <small>${formatBytes(memUsed)} / ${formatBytes(memTotal)}</small>
                                 </div>
                             </div>
                             <div class="system-card">
@@ -1265,7 +1276,7 @@
                                 <div class="system-value">${diskPercent.toFixed(1)}%</div>
                                 <div class="system-details">
                                     <div class="progress-bar"><div class="progress-fill" style="width: ${diskPercent}%;"></div></div>
-                                    <small>${formatBytes(stats.disk_used)} / ${formatBytes(stats.disk_total)}</small>
+                                    <small>${formatBytes(diskUsed)} / ${formatBytes(diskTotal)}</small>
                                 </div>
                             </div>
                             <div class="system-card">
@@ -1273,12 +1284,13 @@
                                 <div class="system-title">پهنای باند</div>
                                 <div class="system-value">${formatBytes(totalBandwidth)}/s</div>
                                 <div class="system-details">
-                                    <small>⬇️ ${formatBytes(stats.net_speed.down)}/s</small> <small>⬆️ ${formatBytes(stats.net_speed.up)}/s</small>
+                                    <small>⬇️ ${formatBytes(netDown)}/s</small> <small>⬆️ ${formatBytes(netUp)}/s</small>
                                 </div>
                             </div>
                         </div>`;
                 } else {
-                    renderSectionError(container, 'پاسخ وضعیت سیستم از سرور معتبر نبود.');
+                    console.error("Invalid system status response from server:", data);
+                    renderSectionError(container, 'پاسخ وضعیت سیستم از سرور معتبر نبود. ممکن است نسخه Marzban شما این اطلاعات را ارائه ندهد یا فرمت داده‌ها متفاوت باشد.');
                 }
             } catch(error) {
                 renderSectionError(container, `خطا در دریافت وضعیت سیستم: ${error.message}`);
