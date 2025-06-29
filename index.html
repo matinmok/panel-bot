@@ -99,6 +99,7 @@
         .fa-clock:before, .fas.fa-clock:before { content: "\f017" !important; }
         .fa-envelope:before, .fas.fa-envelope:before { content: "\f0e0" !important; }
         .fa-envelope-open:before, .fas.fa-envelope-open:before { content: "\f2b6" !important; }
+        .fa-bullhorn:before, .fas.fa-bullhorn:before { content: "\f0a1" !important; }
         
         /* Enhanced Vazir Font Loading */
         @import url('https://v1.fontapi.ir/css/Vazir');
@@ -735,6 +736,159 @@
             color: var(--text-secondary);
             font-size: 13px;
             font-weight: 500;
+            font-family: 'Vazir', 'Vazir-Local', 'Tahoma', 'Arial', sans-serif !important;
+        }
+
+        /* Notifications Box */
+        .notifications-box {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 32px;
+            box-shadow: var(--shadow-md);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .notifications-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(135deg, var(--info-color), var(--primary-color));
+        }
+
+        .notifications-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+        }
+
+        .notifications-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--info-color), var(--primary-color));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            color: #fff;
+            box-shadow: var(--shadow-md);
+        }
+
+        .notifications-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-primary);
+            font-family: 'Vazir', 'Vazir-Local', 'Tahoma', 'Arial', sans-serif !important;
+        }
+
+        .notifications-content {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        .no-notifications {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .no-notifications i {
+            font-size: 32px;
+            color: var(--text-muted);
+            opacity: 0.6;
+        }
+
+        .notification-item {
+            background: var(--card-bg);
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            transition: all 0.3s ease;
+            position: relative;
+            border-right: 4px solid var(--info-color);
+        }
+
+        .notification-item:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .notification-item.important {
+            border-right-color: var(--danger-color);
+            background: rgba(211, 47, 47, 0.05);
+        }
+
+        .notification-item.success {
+            border-right-color: var(--success-color);
+            background: rgba(46, 125, 50, 0.05);
+        }
+
+        .notification-item.warning {
+            border-right-color: var(--warning-color);
+            background: rgba(255, 152, 0, 0.05);
+        }
+
+        .notification-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .notification-type {
+            font-size: 12px;
+            font-weight: 600;
+            padding: 2px 8px;
+            border-radius: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .notification-type.important {
+            background: rgba(211, 47, 47, 0.1);
+            color: var(--danger-color);
+        }
+
+        .notification-type.success {
+            background: rgba(46, 125, 50, 0.1);
+            color: var(--success-color);
+        }
+
+        .notification-type.warning {
+            background: rgba(255, 152, 0, 0.1);
+            color: var(--warning-color);
+        }
+
+        .notification-type.info {
+            background: rgba(25, 118, 210, 0.1);
+            color: var(--info-color);
+        }
+
+        .notification-date {
+            font-size: 11px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .notification-text {
+            color: var(--text-primary);
+            font-size: 14px;
+            line-height: 1.5;
             font-family: 'Vazir', 'Vazir-Local', 'Tahoma', 'Arial', sans-serif !important;
         }
         
@@ -1663,6 +1817,28 @@
                 font-size: 14px;
                 margin-bottom: 12px;
             }
+
+            .notifications-box {
+                padding: 16px;
+                margin-bottom: 16px;
+                width: 100%;
+                max-width: calc(100vw - 24px);
+                box-sizing: border-box;
+            }
+
+            .notifications-icon {
+                width: 32px;
+                height: 32px;
+                font-size: 14px;
+            }
+
+            .notifications-title {
+                font-size: 16px;
+            }
+
+            .notifications-content {
+                padding: 16px;
+            }
             
             .data-table {
                 font-size: 12px;
@@ -1864,6 +2040,18 @@
                 font-size: 11px;
                 margin: 0 4px;
             }
+
+            .notifications-box {
+                padding: 12px;
+            }
+
+            .notifications-title {
+                font-size: 14px;
+            }
+
+            .notifications-content {
+                padding: 12px;
+            }
         }
 
         /* Icon Backup System - If Font Awesome fails, show Unicode */
@@ -1887,6 +2075,7 @@
             .fa-server:before { content: "🖥️"; }
             .fa-bars:before { content: "☰"; }
             .fa-headset:before { content: "🎧"; }
+            .fa-bullhorn:before { content: "📢"; }
         }
 
         /* Force Icon Display */
@@ -2087,6 +2276,22 @@
                         <div class="stats-icon"><i class="fas fa-download"></i></div>
                         <div class="stats-number" id="totalTraffic">0 GB</div>
                         <div class="stats-label">کل ترافیک مصرفی</div>
+                    </div>
+                </div>
+
+                <!-- Notifications Box -->
+                <div class="notifications-box">
+                    <div class="notifications-header">
+                        <div class="notifications-icon">
+                            <i class="fas fa-bullhorn"></i>
+                        </div>
+                        <h4 class="notifications-title">اطلاعیه‌ها</h4>
+                    </div>
+                    <div class="notifications-content" id="notificationsContent">
+                        <div class="no-notifications">
+                            <i class="fas fa-bell"></i>
+                            <span>در حال حاضر اطلاعیه‌ای وجود ندارد!</span>
+                        </div>
                     </div>
                 </div>
                 
@@ -2556,6 +2761,7 @@
                     else if (className.includes('fa-paper-plane')) fallback = '✈️';
                     else if (className.includes('fa-clock')) fallback = '🕐';
                     else if (className.includes('fa-envelope')) fallback = '✉️';
+                    else if (className.includes('fa-bullhorn')) fallback = '📢';
                     
                     icon.innerHTML = `<span class="icon-fallback">${fallback}</span>`;
                 }
@@ -2594,7 +2800,8 @@
                 'fa-paper-plane': '✈️',
                 'fa-clock': '🕐',
                 'fa-envelope': '✉️',
-                'fa-envelope-open': '📭'
+                'fa-envelope-open': '📭',
+                'fa-bullhorn': '📢'
             };
 
             Object.keys(iconMap).forEach(className => {
@@ -2826,6 +3033,61 @@
             showNotification('تنظیمات بروزرسانی شد! 🔄', 'success');
         }
 
+        // Function to load notifications (placeholder for future implementation)
+        function loadNotifications() {
+            const container = document.getElementById('notificationsContent');
+            if (!container) return;
+
+            // Placeholder notifications array (in real implementation, this would come from an API)
+            const notifications = [
+                // Example notification structure:
+                // {
+                //     id: 1,
+                //     type: 'important', // important, success, warning, info
+                //     title: 'اطلاعیه مهم',
+                //     message: 'متن اطلاعیه...',
+                //     date: '1403/08/15',
+                //     isRead: false
+                // }
+            ];
+
+            // Show default message if no notifications
+            if (notifications.length === 0) {
+                container.innerHTML = `
+                    <div class="no-notifications">
+                        <i class="fas fa-bell"></i>
+                        <span>در حال حاضر اطلاعیه‌ای وجود ندارد!</span>
+                    </div>
+                `;
+                return;
+            }
+
+            // Render notifications
+            container.innerHTML = '';
+            notifications.forEach(notification => {
+                const notificationEl = document.createElement('div');
+                notificationEl.className = `notification-item ${notification.type}`;
+                notificationEl.innerHTML = `
+                    <div class="notification-header">
+                        <span class="notification-type ${notification.type}">${getNotificationTypeLabel(notification.type)}</span>
+                        <span class="notification-date">${notification.date}</span>
+                    </div>
+                    <div class="notification-text">${Security.sanitizeHtml(notification.message)}</div>
+                `;
+                container.appendChild(notificationEl);
+            });
+        }
+
+        function getNotificationTypeLabel(type) {
+            const labels = {
+                'important': 'مهم',
+                'success': 'موفقیت',
+                'warning': 'هشدار',
+                'info': 'اطلاع'
+            };
+            return labels[type] || 'عادی';
+        }
+
         // Enhanced Initialize Function
         document.addEventListener('DOMContentLoaded', function() {
             try {
@@ -2849,6 +3111,7 @@
                             showPanel();
                             checkAndLoadTemplateUser(); // Check for template user
                             loadDashboardData();
+                            loadNotifications(); // Load notifications
                             startAutoUpdate();
                         } else {
                             logout();
@@ -2927,17 +3190,9 @@
                         showPanel();
                         checkAndLoadTemplateUser(); // Check for template user after login
                         loadDashboardData();
+                        loadNotifications(); // Load notifications after login
                         startAutoUpdate();
                         showNotification('ورود موفقیت‌آمیز بود! 🎉', 'success');
-                        const repName = username; 
-fetch('api.php', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ repName: repName })
-})
-.then(response => response.json())
-.then(data => console.log(data))
-.catch(error => console.error('خطا در ثبت لاگ ورود:', error));
                     } else {
                         showMessage('loginError', 'خطا در ذخیره‌سازی جلسه');
                     }
@@ -3655,12 +3910,12 @@ fetch('api.php', {
                     <div class="traffic-card">
                         <div class="traffic-icon"><i class="fas fa-cloud-download-alt"></i></div>
                         <div class="traffic-number" id="totalDownload">0 GB</div>
-                        <div class="traffic-label">کل دانلود (شبیه‌سازی)</div>
+                        <div class="traffic-label">کل دانلود</div>
                     </div>
                     <div class="traffic-card">
                         <div class="traffic-icon"><i class="fas fa-cloud-upload-alt"></i></div>
                         <div class="traffic-number" id="totalUpload">0 GB</div>
-                        <div class="traffic-label">کل آپلود (شبیه‌سازی)</div>
+                        <div class="traffic-label">کل آپلود)</div>
                     </div>
                     <div class="traffic-card">
                         <div class="traffic-icon"><i class="fas fa-exchange-alt"></i></div>
@@ -3670,7 +3925,7 @@ fetch('api.php', {
                 </div>
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 24px;">
                     <div class="chart-container">
-                        <h4 class="chart-title">نمودار مصرف روزانه (شبیه‌سازی)</h4>
+                        <h4 class="chart-title">نمودار مصرف روزانه</h4>
                         <canvas id="dailyTrafficChart"></canvas>
                     </div>
                     <div class="chart-container">
