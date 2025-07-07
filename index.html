@@ -1,9 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>پنل نمایندگان طوفان سرور</title>
+    <title>پنل نمایندگان آزادی VPN</title>
     
     <!-- Enhanced Font Awesome with Multiple CDNs -->
     <link rel="preconnect" href="https://cdnjs.cloudflare.com">
@@ -59,6 +60,7 @@
         .fa-shield-alt:before, .fas.fa-shield-alt:before { content: "\f3ed" !important; }
         .fa-tachometer-alt:before, .fas.fa-tachometer-alt:before { content: "\f3f4" !important; }
         .fa-user-plus:before, .fas.fa-user-plus:before { content: "\f234" !important; }
+        .fa-user-clock:before, .fas.fa-user-clock:before { content: "\f4fd" !important; }
         .fa-chart-area:before, .fas.fa-chart-area:before { content: "\f1fe" !important; }
         .fa-credit-card:before, .fas.fa-credit-card:before { content: "\f09d" !important; }
         .fa-chart-bar:before, .fas.fa-chart-bar:before { content: "\f080" !important; }
@@ -100,6 +102,9 @@
         .fa-envelope:before, .fas.fa-envelope:before { content: "\f0e0" !important; }
         .fa-envelope-open:before, .fas.fa-envelope-open:before { content: "\f2b6" !important; }
         .fa-bullhorn:before, .fas.fa-bullhorn:before { content: "\f0a1" !important; }
+        .fa-history:before, .fas.fa-history:before { content: "\f1da" !important; }
+        .fa-plus:before, .fas.fa-plus:before { content: "\f067" !important; }
+        .fa-trash:before, .fas.fa-trash:before { content: "\f1f8" !important; }
         
         /* Enhanced Vazir Font Loading */
         @import url('https://v1.fontapi.ir/css/Vazir');
@@ -368,6 +373,38 @@
             color: var(--text-muted);
             line-height: 1.5;
         }
+
+        /* Terms Agreement Box */
+        .terms-agreement {
+            text-align: center;
+            margin-top: 20px;
+            padding: 16px;
+            background: rgba(44, 62, 80, 0.1);
+            border-radius: 12px;
+            border: 1px solid rgba(44, 62, 80, 0.2);
+        }
+
+        [data-theme="dark"] .terms-agreement {
+            background: rgba(248, 250, 252, 0.1);
+            border-color: rgba(248, 250, 252, 0.2);
+        }
+
+        .terms-link {
+            background: none;
+            border: none;
+            color: var(--primary-color);
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: underline;
+            font-size: 13px;
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
+
+        .terms-link:hover {
+            color: var(--primary-light);
+            text-decoration: none;
+        }
         
         .form-group {
             margin-bottom: 20px;
@@ -609,6 +646,13 @@
             background-clip: text;
             font-family: 'Vazir', 'Vazir-Local', 'Tahoma', 'Arial', sans-serif !important;
         }
+
+        [data-theme="dark"] .content-header {
+            background: none;
+            -webkit-background-clip: initial;
+            -webkit-text-fill-color: initial;
+            color: var(--text-primary);
+        }
         
         .content-section {
             display: none;
@@ -675,6 +719,34 @@
             background: var(--primary-light);
         }
         
+        /* Announcement Card */
+        .announcement-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-right: 4px solid var(--info-color);
+            padding: 16px 20px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .announcement-card h5 {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin: 0 0 8px 0;
+        }
+
+        .announcement-card p {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin: 0;
+        }
+
         /* Stats Cards */
         .stats-grid {
             display: grid;
@@ -736,159 +808,6 @@
             color: var(--text-secondary);
             font-size: 13px;
             font-weight: 500;
-            font-family: 'Vazir', 'Vazir-Local', 'Tahoma', 'Arial', sans-serif !important;
-        }
-
-        /* Notifications Box */
-        .notifications-box {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 24px;
-            margin-bottom: 32px;
-            box-shadow: var(--shadow-md);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .notifications-box::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(135deg, var(--info-color), var(--primary-color));
-        }
-
-        .notifications-header {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 20px;
-            color: var(--text-primary);
-        }
-
-        .notifications-icon {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(135deg, var(--info-color), var(--primary-color));
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 16px;
-            color: #fff;
-            box-shadow: var(--shadow-md);
-        }
-
-        .notifications-title {
-            font-size: 18px;
-            font-weight: 700;
-            color: var(--text-primary);
-            font-family: 'Vazir', 'Vazir-Local', 'Tahoma', 'Arial', sans-serif !important;
-        }
-
-        .notifications-content {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-light);
-            border-radius: 12px;
-            padding: 20px;
-            text-align: center;
-            color: var(--text-muted);
-            line-height: 1.6;
-        }
-
-        .no-notifications {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .no-notifications i {
-            font-size: 32px;
-            color: var(--text-muted);
-            opacity: 0.6;
-        }
-
-        .notification-item {
-            background: var(--card-bg);
-            border: 1px solid var(--border-light);
-            border-radius: 12px;
-            padding: 16px;
-            margin-bottom: 12px;
-            transition: all 0.3s ease;
-            position: relative;
-            border-right: 4px solid var(--info-color);
-        }
-
-        .notification-item:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-md);
-        }
-
-        .notification-item.important {
-            border-right-color: var(--danger-color);
-            background: rgba(211, 47, 47, 0.05);
-        }
-
-        .notification-item.success {
-            border-right-color: var(--success-color);
-            background: rgba(46, 125, 50, 0.05);
-        }
-
-        .notification-item.warning {
-            border-right-color: var(--warning-color);
-            background: rgba(255, 152, 0, 0.05);
-        }
-
-        .notification-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 8px;
-        }
-
-        .notification-type {
-            font-size: 12px;
-            font-weight: 600;
-            padding: 2px 8px;
-            border-radius: 12px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .notification-type.important {
-            background: rgba(211, 47, 47, 0.1);
-            color: var(--danger-color);
-        }
-
-        .notification-type.success {
-            background: rgba(46, 125, 50, 0.1);
-            color: var(--success-color);
-        }
-
-        .notification-type.warning {
-            background: rgba(255, 152, 0, 0.1);
-            color: var(--warning-color);
-        }
-
-        .notification-type.info {
-            background: rgba(25, 118, 210, 0.1);
-            color: var(--info-color);
-        }
-
-        .notification-date {
-            font-size: 11px;
-            color: var(--text-muted);
-            font-weight: 500;
-        }
-
-        .notification-text {
-            color: var(--text-primary);
-            font-size: 14px;
-            line-height: 1.5;
             font-family: 'Vazir', 'Vazir-Local', 'Tahoma', 'Arial', sans-serif !important;
         }
         
@@ -1113,6 +1032,19 @@
             box-shadow: var(--shadow-xl);
             border: 1px solid var(--border-color);
         }
+
+        /* Terms Modal - Larger for better readability */
+        .terms-modal-content {
+            background: var(--card-bg);
+            padding: 32px;
+            border-radius: 16px;
+            max-width: 700px;
+            width: 100%;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-xl);
+            border: 1px solid var(--border-color);
+        }
         
         .modal-header {
             display: flex;
@@ -1149,6 +1081,56 @@
             background: var(--danger-color);
             color: #fff;
             border-color: var(--danger-color);
+        }
+
+        /* Terms Modal Content Styling */
+        .terms-content {
+            line-height: 1.8;
+            color: var(--text-secondary);
+        }
+
+        .terms-content h3 {
+            color: var(--text-primary);
+            font-size: 18px;
+            font-weight: 700;
+            margin: 24px 0 16px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .terms-content h3:first-child {
+            margin-top: 0;
+        }
+
+        .terms-content ul {
+            margin: 16px 0;
+            padding-right: 20px;
+        }
+
+        .terms-content li {
+            margin: 8px 0;
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+        }
+
+        .terms-content .highlight {
+            background: rgba(44, 62, 80, 0.1);
+            padding: 16px;
+            border-radius: 12px;
+            border-right: 4px solid var(--primary-color);
+            margin: 16px 0;
+        }
+
+        .terms-content .warning-highlight {
+            background: rgba(211, 47, 47, 0.1);
+            border-right-color: var(--danger-color);
+        }
+
+        .terms-content .success-highlight {
+            background: rgba(46, 125, 50, 0.1);
+            border-right-color: var(--success-color);
         }
         
         /* Payment Section */
@@ -1421,6 +1403,62 @@
 
         .inbound-tag.none {
             background: var(--danger-color);
+        }
+        
+        /* Test Account Card */
+        .test-account-card {
+            background: linear-gradient(135deg, var(--info-color), var(--accent-color));
+            color: #fff;
+            padding: 24px;
+            border-radius: 16px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-lg);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .test-account-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="rgba(255,255,255,0.1)"/><circle cx="80" cy="40" r="1.5" fill="rgba(255,255,255,0.1)"/></svg>');
+            animation: float 20s infinite linear;
+        }
+
+        .test-account-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            position: relative;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .test-account-features {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .test-account-features li {
+            padding: 6px 0;
+            font-size: 14px;
+            opacity: 0.95;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .test-account-features li i {
+            width: 16px;
+            color: #90EE90;
         }
         
         /* Mobile Header */
@@ -1708,6 +1746,12 @@
                 font-size: 15px;
             }
 
+            .terms-modal-content {
+                max-width: calc(100vw - 24px);
+                padding: 20px;
+                max-height: 90vh;
+            }
+
             /* Mobile Panel Layout */
             .panel-nav {
                 display: none !important;
@@ -1816,28 +1860,6 @@
             .chart-title {
                 font-size: 14px;
                 margin-bottom: 12px;
-            }
-
-            .notifications-box {
-                padding: 16px;
-                margin-bottom: 16px;
-                width: 100%;
-                max-width: calc(100vw - 24px);
-                box-sizing: border-box;
-            }
-
-            .notifications-icon {
-                width: 32px;
-                height: 32px;
-                font-size: 14px;
-            }
-
-            .notifications-title {
-                font-size: 16px;
-            }
-
-            .notifications-content {
-                padding: 16px;
             }
             
             .data-table {
@@ -1955,6 +1977,19 @@
                 padding: 3px 8px;
                 font-size: 11px;
             }
+
+            .test-account-card {
+                padding: 16px;
+                margin-bottom: 16px;
+            }
+
+            .test-account-title {
+                font-size: 16px;
+            }
+
+            .test-account-features li {
+                font-size: 12px;
+            }
         }
 
         @media (min-width: 769px) {
@@ -2040,18 +2075,6 @@
                 font-size: 11px;
                 margin: 0 4px;
             }
-
-            .notifications-box {
-                padding: 12px;
-            }
-
-            .notifications-title {
-                font-size: 14px;
-            }
-
-            .notifications-content {
-                padding: 12px;
-            }
         }
 
         /* Icon Backup System - If Font Awesome fails, show Unicode */
@@ -2061,6 +2084,7 @@
             .fa-shield-alt:before { content: "🛡️"; }
             .fa-tachometer-alt:before { content: "⚡"; }
             .fa-user-plus:before { content: "➕"; }
+            .fa-user-clock:before { content: "⏰"; }
             .fa-chart-area:before { content: "📊"; }
             .fa-credit-card:before { content: "💳"; }
             .fa-chart-bar:before { content: "📈"; }
@@ -2076,6 +2100,9 @@
             .fa-bars:before { content: "☰"; }
             .fa-headset:before { content: "🎧"; }
             .fa-bullhorn:before { content: "📢"; }
+            .fa-history:before { content: "📝"; }
+            .fa-plus:before { content: "➕"; }
+            .fa-trash:before { content: "🗑️"; }
         }
 
         /* Force Icon Display */
@@ -2106,10 +2133,25 @@
             <div class="login-header">
                 <div class="login-logo">⚡</div>
                 <h1 class="login-title">پنل نمایندگان</h1>
-                <p class="login-subtitle">طوفان سرور</p>
+                <p class="login-subtitle">آزادی VPN</p>
             </div>
             
             <form id="loginForm">
+                <div class="form-group">
+                    <label class="form-label">انتخاب سرور</label>
+                    <select id="serverSelect" class="form-input" required>
+                        <option value="">سرور مورد نظر را انتخاب کنید</option>
+                        <option value="https://minister.mikhamtesh.sbs">سرور نمایندگی 1</option>
+                        <option value="https://programingtrade.sbs">سرور نمایندگی 2</option>
+                        <option value="custom">سرور دلخواه...</option>
+                    </select>
+                </div>
+                
+                <div class="form-group hidden" id="customServerGroup">
+                    <label class="form-label">آدرس سرور دلخواه</label>
+                    <input type="url" id="customServerUrl" class="form-input" placeholder="https://example.com:8443">
+                </div>
+                
                 <div class="form-group">
                     <label class="form-label">نام کاربری</label>
                     <input type="text" id="username" class="form-input" placeholder="نام کاربری خود را وارد کنید" required maxlength="50" pattern="[a-zA-Z0-9_]{3,20}">
@@ -2128,9 +2170,18 @@
                 </button>
             </form>
 
+            <!-- Terms Agreement -->
+            <div class="terms-agreement">
+                <p style="color: var(--text-secondary); font-size: 13px; line-height: 1.6; margin: 0;">
+                    استفاده از پنل نمایندگی به منزله رعایت 
+                    <button onclick="showTermsModal()" class="terms-link">قوانین</button>
+                    است
+                </p>
+            </div>
+
             <div class="login-footer">
                 <div class="login-copyright">
-                    تمامی حقوق برای دپارتمان نمایندگان طوفان سرور محفوظ است
+                    تمامی حقوق برای دپارتمان نمایندگان آزادی VPN محفوظ است
                 </div>
             </div>
         </div>
@@ -2142,7 +2193,7 @@
         <div class="mobile-header">
             <div class="mobile-header-title">
                 <i class="fas fa-shield-alt"></i>
-                پنل نمایندگان طوفان سرور
+                پنل نمایندگان آزادی VPN
             </div>
             <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
                 <i class="fas fa-bars"></i>
@@ -2169,6 +2220,9 @@
                 </button>
                 <button class="nav-item" onclick="showSection('addUser'); toggleMobileMenu()">
                     <span>افزودن کاربر</span><i class="fas fa-user-plus"></i>
+                </button>
+                <button class="nav-item" onclick="showSection('testAccount'); toggleMobileMenu()">
+                    <span>اکانت تست</span><i class="fas fa-user-clock"></i>
                 </button>
                 <button class="nav-item" onclick="showSection('traffic'); toggleMobileMenu()">
                     <span>ترافیک</span><i class="fas fa-chart-area"></i>
@@ -2212,6 +2266,9 @@
                 <button class="nav-item" data-section="addUser" onclick="showSection('addUser')">
                     <span>افزودن کاربر</span><i class="fas fa-user-plus"></i>
                 </button>
+                <button class="nav-item" data-section="testAccount" onclick="showSection('testAccount')">
+                    <span>اکانت تست</span><i class="fas fa-user-clock"></i>
+                </button>
                 <button class="nav-item" data-section="traffic" onclick="showSection('traffic')">
                     <span>ترافیک</span><i class="fas fa-chart-area"></i>
                 </button>
@@ -2238,7 +2295,7 @@
 
         <!-- Content -->
         <div class="panel-content">
-            <h1 class="content-header">پنل نمایندگان طوفان سرور</h1>
+            <h1 class="content-header">پنل نمایندگان آزادی VPN</h1>
             
             <!-- Dashboard Section -->
             <div id="dashboardSection" class="content-section active">
@@ -2251,6 +2308,12 @@
                         <i class="fas fa-sync-alt"></i>
                         بروزرسانی
                     </button>
+                </div>
+
+                <!-- Announcement Card -->
+                <div class="announcement-card">
+                    <h5><i class="fas fa-bullhorn"></i> اطلاعیه</h5>
+                    <p>با توجه به اکسس سرور های ایران، پنل نمایندگی صرفا بصورت ترافیکی محاسبه خواهد شد.</p>
                 </div>
                 
                 <div class="stats-grid">
@@ -2276,22 +2339,6 @@
                         <div class="stats-icon"><i class="fas fa-download"></i></div>
                         <div class="stats-number" id="totalTraffic">0 GB</div>
                         <div class="stats-label">کل ترافیک مصرفی</div>
-                    </div>
-                </div>
-
-                <!-- Notifications Box -->
-                <div class="notifications-box">
-                    <div class="notifications-header">
-                        <div class="notifications-icon">
-                            <i class="fas fa-bullhorn"></i>
-                        </div>
-                        <h4 class="notifications-title">اطلاعیه‌ها</h4>
-                    </div>
-                    <div class="notifications-content" id="notificationsContent">
-                        <div class="no-notifications">
-                            <i class="fas fa-bell"></i>
-                            <span>در حال حاضر اطلاعیه‌ای وجود ندارد!</span>
-                        </div>
                     </div>
                 </div>
                 
@@ -2399,6 +2446,103 @@
                 </div>
             </div>
 
+            <!-- Test Account Section -->
+            <div id="testAccountSection" class="content-section">
+                <div class="section-header">
+                    <h3 class="section-title">
+                        <i class="fas fa-user-clock"></i>
+                        اکانت تست
+                    </h3>
+                    <button class="refresh-btn" onclick="refreshTestAccountSection()">
+                        <i class="fas fa-sync-alt"></i>
+                        بروزرسانی
+                    </button>
+                </div>
+
+                <!-- Test Account Information Card -->
+                <div class="test-account-card">
+                    <div class="test-account-title">
+                        <i class="fas fa-flask"></i>
+                        ویژگی‌های اکانت تست
+                    </div>
+                    <ul class="test-account-features">
+                        <li><i class="fas fa-clock"></i>مدت زمان: ۱ روز (۲۴ ساعت)</li>
+                        <li><i class="fas fa-download"></i>حجم ترافیک: ۱ گیگابایت</li>
+                        <li><i class="fas fa-infinity"></i>تعداد ساخت: نامحدود</li>
+                        <li><i class="fas fa-chart-line"></i>محاسبه مصرف در پنل شما</li>
+                        <li><i class="fas fa-cog"></i>استفاده از اینباندهای کاربر الگو</li>
+                        <li><i class="fas fa-trash"></i>حذف خودکار پس از انقضا</li>
+                    </ul>
+                </div>
+
+                <!-- Test Account Creation Form -->
+                <div class="chart-container" style="margin-bottom: 24px;">
+                    <h4 class="chart-title">ایجاد اکانت تست جدید</h4>
+                    <form id="testAccountForm" style="text-align: center;">
+                        <div id="testAccountError" class="error-message hidden"></div>
+                        <div id="testAccountSuccess" class="success-message hidden"></div>
+                        
+                        <button type="submit" class="form-button" style="padding: 16px 32px; font-size: 16px; margin-top: 16px;">
+                            <span id="testAccountBtnText">
+                                <i class="fas fa-plus"></i>
+                                ایجاد اکانت تست
+                            </span>
+                            <div id="testAccountSpinner" class="loading-spinner hidden"></div>
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Test Account Statistics -->
+                <div class="stats-grid" style="margin-bottom: 24px;">
+                    <div class="stats-card">
+                        <div class="stats-icon"><i class="fas fa-flask"></i></div>
+                        <div class="stats-number" id="totalTestAccounts">0</div>
+                        <div class="stats-label">کل اکانت‌های تست</div>
+                    </div>
+                    
+                    <div class="stats-card">
+                        <div class="stats-icon"><i class="fas fa-clock"></i></div>
+                        <div class="stats-number" id="activeTestAccounts">0</div>
+                        <div class="stats-label">اکانت‌های فعال</div>
+                    </div>
+                    
+                    <div class="stats-card">
+                        <div class="stats-icon"><i class="fas fa-history"></i></div>
+                        <div class="stats-number" id="expiredTestAccounts">0</div>
+                        <div class="stats-label">اکانت‌های منقضی</div>
+                    </div>
+                    
+                    <div class="stats-card">
+                        <div class="stats-icon"><i class="fas fa-download"></i></div>
+                        <div class="stats-number" id="testTrafficUsed">0 MB</div>
+                        <div class="stats-label">ترافیک مصرف شده</div>
+                    </div>
+                </div>
+
+                <!-- Test Account Result -->
+                <div id="testAccountResult" class="hidden" style="margin-bottom: 24px;">
+                    <h4 style="color: var(--text-primary); margin-bottom: 20px; font-weight: 700;">
+                        <i class="fas fa-check-circle" style="color: var(--success-color); margin-left: 8px;"></i>
+                        اکانت تست با موفقیت ایجاد شد
+                    </h4>
+                    <div id="testAccountConfigs"></div>
+                </div>
+
+                <!-- Test Accounts List -->
+                <div class="chart-container">
+                    <h4 class="chart-title">
+                        <i class="fas fa-list"></i>
+                        لیست اکانت‌های تست
+                    </h4>
+                    <div id="testAccountsList">
+                        <div class="section-loading">
+                            <div class="loading-spinner"></div>
+                            <span>در حال بارگذاری لیست اکانت‌های تست...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Traffic Section -->
             <div id="trafficSection" class="content-section">
                 <div class="section-header">
@@ -2440,9 +2584,9 @@
                         برای دریافت پشتیبانی کامل و حل سریع مشکلات<br>
                         با ما در تلگرام در ارتباط باشید
                     </div>
-                    <a href="https://t.me/Shahriyarfeyz" target="_blank" class="payment-btn">
+                    <a href="https://t.me/Mykalikal" target="_blank" class="payment-btn">
                         <i class="fab fa-telegram"></i>
-                        @Shahriyarfeyz
+                        @Mykalikal
                     </a>
                 </div>
 
@@ -2479,9 +2623,9 @@
                         جهت پرداخت و خرید ترافیک اضافی<br>
                         با ما در تلگرام در ارتباط باشید
                     </div>
-                    <a href="https://t.me/Shahriyarfeyz" target="_blank" class="payment-btn">
+                    <a href="https://t.me/Mykalikal" target="_blank" class="payment-btn">
                         <i class="fab fa-telegram"></i>
-                        @Shahriyarfeyz
+                        @Mykalikal
                     </a>
                 </div>
                 
@@ -2492,17 +2636,17 @@
                         <div style="display: grid; gap: 16px;">
                             <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; background: var(--card-bg); border-radius: 8px; border: 1px solid var(--border-light);">
                                 <span style="color: var(--text-secondary); font-weight: 500;">🏦 نام بانک:</span>
-                                <span style="color: var(--text-primary); font-weight: 600;">کار آفرین</span>
+                                <span style="color: var(--text-primary); font-weight: 600;">بانک ملی ایران</span>
                             </div>
                             <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; background: var(--card-bg); border-radius: 8px; border: 1px solid var(--border-light);">
                                 <span style="color: var(--text-secondary); font-weight: 500;">👤 نام صاحب حساب:</span>
-                                <span style="color: var(--text-primary); font-weight: 600;">فیض خمبر</span>
+                                <span style="color: var(--text-primary); font-weight: 600;">متین مختاری</span>
                             </div>
                             <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; background: var(--card-bg); border-radius: 8px; border: 1px solid var(--border-light);">
                                 <span style="color: var(--text-secondary); font-weight: 500;">💳 شماره کارت:</span>
                                 <div style="display: flex; align-items: center; gap: 8px;">
-                                    <span style="color: var(--text-primary); font-weight: 600; font-family: monospace; direction: ltr;">6748-8170-0333-734</span>
-                                    <button onclick="copyText('674881700333734')" class="form-button success" style="padding: 4px 8px; font-size: 12px;">
+                                    <span style="color: var(--text-primary); font-weight: 600; font-family: monospace; direction: ltr;">6037-9982-2115-6739</span>
+                                    <button onclick="copyText('6037998221156739')" class="form-button success" style="padding: 4px 8px; font-size: 12px;">
                                         <i class="fas fa-copy"></i>
                                     </button>
                                 </div>
@@ -2513,7 +2657,7 @@
                         <p style="color: var(--info-color); margin: 0; font-weight: 600; line-height: 1.6;">
                             <i class="fas fa-info-circle"></i>
                             بعد از پرداخت، رسید خود را به آیدی 
-                            <a href="https://t.me/Shahriyarfeyz" target="_blank" style="color: var(--info-color); text-decoration: none; font-weight: bold;">@Shahriyarfeyz</a>
+                            <a href="https://t.me/Mykalikal" target="_blank" style="color: var(--info-color); text-decoration: none; font-weight: bold;">@Mykalikal</a>
                             در تلگرام ارسال کنید
                         </p>
                     </div>
@@ -2522,7 +2666,7 @@
                 <div class="chart-container">
                     <h4 class="chart-title">راهنمای پرداخت</h4>
                     <ul style="color: var(--text-secondary); line-height: 2; margin: 0; padding-right: 20px;">
-                        <li>💰 برای خرید ترافیک اضافی، با آیدی @Shahriyarfeyz در تلگرام تماس بگیرید</li>
+                        <li>💰 برای خرید ترافیک اضافی، با آیدی @Mykalikal در تلگرام تماس بگیرید</li>
                         <li>📋 قیمت‌ها و بسته‌های مختلف را از پشتیبانی دریافت کنید</li>
                         <li>💳 پس از واریز به شماره کارت، رسید خود را ارسال کنید</li>
                         <li>✅ بعد از تأیید پرداخت، ترافیک به حساب شما اضافه خواهد شد</li>
@@ -2606,8 +2750,102 @@
             
             <!-- Footer Copyright -->
             <div class="footer-copyright">
-                تمامی حقوق برای دپارتمان نمایندگان طوفان سرور محفوظ است<br>
-                © 2024 ToofanVPN Representatives Panel. All rights reserved.
+                تمامی حقوق برای دپارتمان نمایندگان آزادی VPN محفوظ است<br>
+                © 2024 Azadi VPN Representatives Panel. All rights reserved.
+            </div>
+        </div>
+    </div>
+
+    <!-- Terms Modal -->
+    <div id="termsModal" class="modal hidden">
+        <div class="terms-modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">
+                    <i class="fas fa-file-contract"></i>
+                    قوانین و شرایط استفاده از پنل نمایندگان آزادی VPN
+                </h3>
+                <button class="modal-close" onclick="closeTermsModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="terms-content">
+                <div class="highlight warning-highlight">
+                    <h3><i class="fas fa-exclamation-triangle"></i> ⚠️ لطفاً موارد زیر را با دقت مطالعه کنید:</h3>
+                </div>
+
+                <h3><i class="fas fa-ban"></i> 🚫 ممنوعیت‌های شدید:</h3>
+                <ul>
+                    <li>• ریست ترافیک کاربران اکیداً ممنوع</li>
+                    <li>• حذف کاربران اکیداً ممنوع</li>
+                    <li>• استفاده غیرمجاز از اکانت‌های تست ممنوع</li>
+                    <li>• ساخت کاربران جعلی یا آزمایشی ممنوع</li>
+                </ul>
+
+                <h3><i class="fas fa-money-bill-wave"></i> 💰 شرایط مالی:</h3>
+                <ul>
+                    <li>• ترافیک باید قبل از شروع کار پرداخت شود.</li>
+                    <li>• هیچ‌گونه اعتبار یا امانت تعریف نمی‌شود.</li>
+                    <li>• تمام هزینه‌های ترافیک بر عهده نماینده است.</li>
+                    <li>• مسئولیت مدیریت مالی با نماینده است.</li>
+                </ul>
+
+                <h3><i class="fas fa-shield-alt"></i> 🔒 امنیت و مسئولیت:</h3>
+                <ul>
+                    <li>• محافظت از اطلاعات لاگین حیاتی است.</li>
+                    <li>• استفاده مشترک اکانت نمایندگی ممنوع</li>
+                    <li>• گزارش فوری مشکلات امنیتی الزامی است.</li>
+                </ul>
+
+                <h3><i class="fas fa-users-cog"></i> 📊 مدیریت کاربران:</h3>
+                <ul>
+                    <li>• ایجاد کاربر فقط برای مشتریان واقعی</li>
+                    <li>• ثبت دقیق اطلاعات مشتریان الزامی است.</li>
+                    <li>• رعایت حد مجاز ترافیک و کاربران</li>
+                    <li>• استفاده عادلانه از منابع سرور</li>
+                </ul>
+
+                <h3><i class="fas fa-gavel"></i> ⚖️ عواقب تخلف:</h3>
+                <ul>
+                    <li>• مسدودی فوری اکانت نمایندگی</li>
+                    <li>• قطع دسترسی به تمام خدمات</li>
+                    <li>• عدم بازگردانی هزینه‌های پرداختی</li>
+                </ul>
+
+                <h3><i class="fas fa-bullseye"></i> 🎯 اهداف نمایندگی:</h3>
+                <ul>
+                    <li>• ارائه سرویس باکیفیت به مشتریان</li>
+                    <li>• حفظ اعتماد و اعتبار برند آزادی VPN</li>
+                    <li>• رشد پایدار و درازمدت</li>
+                    <li>• رضایت‌مندی همه طرف‌ها</li>
+                </ul>
+
+                <h3><i class="fas fa-headset"></i> 📞 پشتیبانی:</h3>
+                <ul>
+                    <li>• مراجعه فوری در صورت مشکل: @Mykalikal</li>
+                    <li>• گزارش موارد مشکوک الزامی است.</li>
+                    <li>• همکاری در حل مسائل فنی</li>
+                </ul>
+
+                <div class="highlight success-highlight">
+                    <h3><i class="fas fa-check-circle"></i> ✅ با تأیید این قوانین، شما:</h3>
+                    <ul>
+                        <li>• متعهد به رعایت کامل موارد فوق هستید.</li>
+                        <li>• مسئولیت کامل استفاده از پنل را می‌پذیرید.</li>
+                        <li>• در صورت تخلف، عواقب آن را خواهید پذیرفت.</li>
+                    </ul>
+                </div>
+
+                <div class="highlight warning-highlight">
+                    <h3><i class="fas fa-times-circle"></i> ❌ در صورت عدم پذیرش:</h3>
+                    <ul>
+                        <li>• امکان استفاده از پنل وجود ندارد.</li>
+                        <li>• باید با پشتیبانی تماس بگیرید.</li>
+                    </ul>
+                </div>
+
+                <div class="highlight" style="text-align: center; margin-top: 32px;">
+                    <h3><i class="fas fa-question-circle"></i>با تشکر | تیم آزادی VPN</h3>
+                </div>
             </div>
         </div>
     </div>
@@ -2761,7 +2999,6 @@
                     else if (className.includes('fa-paper-plane')) fallback = '✈️';
                     else if (className.includes('fa-clock')) fallback = '🕐';
                     else if (className.includes('fa-envelope')) fallback = '✉️';
-                    else if (className.includes('fa-bullhorn')) fallback = '📢';
                     
                     icon.innerHTML = `<span class="icon-fallback">${fallback}</span>`;
                 }
@@ -2775,6 +3012,7 @@
                 'fa-shield-alt': '🛡️',
                 'fa-tachometer-alt': '⚡',
                 'fa-user-plus': '➕',
+                'fa-user-clock': '⏰',
                 'fa-chart-area': '📊',
                 'fa-credit-card': '💳',
                 'fa-chart-bar': '📈',
@@ -2801,7 +3039,11 @@
                 'fa-clock': '🕐',
                 'fa-envelope': '✉️',
                 'fa-envelope-open': '📭',
-                'fa-bullhorn': '📢'
+                'fa-bullhorn': '📢',
+                'fa-history': '📝',
+                'fa-plus': '➕',
+                'fa-trash': '🗑️',
+                'fa-flask': '🧪'
             };
 
             Object.keys(iconMap).forEach(className => {
@@ -2812,18 +3054,33 @@
             });
         }
 
+        // Terms Modal Functions
+        function showTermsModal() {
+            const modal = document.getElementById('termsModal');
+            if (modal) modal.classList.remove('hidden');
+        }
+
+        function closeTermsModal() {
+            const modal = document.getElementById('termsModal');
+            if (modal) modal.classList.add('hidden');
+        }
+
         // Enhanced Security Configuration
         const CONFIG = {
-            defaultServerUrl: 'https://admin.jozveraygan.xyz:8443',
+            defaultServerUrl: 'https://minister.mikhamtesh.sbs',
             maxLoginAttempts: 5,
             sessionTimeout: 24 * 60 * 60 * 1000, // 24 hours
-            tokenKey: 'toofan_session',
-            serverUrlKey: 'toofan_server_url',
-            templateUserKey: 'toofan_template_user', // Key for template user
+            tokenKey: 'azadi_session',
+            serverUrlKey: 'azadi_server_url',
+            templateUserKey: 'azadi_template_user', // Key for template user
             csrfProtection: true,
             inputSanitization: true,
             requestRateLimit: 100, // requests per minute
-            sessionFingerprint: true
+            sessionFingerprint: true,
+            servers: [
+                { name: 'سرور نمایندگی 1', url: 'https://admin.jozveraygan.xyz:8443' },
+                { name: 'سرور نمایندگی 2', url: 'https://programingtrade.sbs' }
+            ]
         };
 
         // Enhanced Security Utilities
@@ -2896,6 +3153,50 @@
             validateFingerprint: (stored) => Security.generateFingerprint() === stored
         };
 
+        // Server Detection and API Endpoints
+        const SERVER_CONFIGS = {
+            'admin.jozveraygan.xyz': {
+                apiPaths: ['/api'],
+                loginEndpoints: ['/api/admin/token']
+            },
+            'programingtrade.sbs': {
+                apiPaths: ['/dashboard/api', '/panel/api', '/admin/api', '/api'],
+                loginEndpoints: [
+                    '/dashboard/api/admin/token',
+                    '/panel/api/admin/token', 
+                    '/admin/api/admin/token',
+                    '/api/admin/token',
+                    '/api/token',
+                    '/token'
+                ]
+            }
+        };
+
+        function getServerConfig(serverUrl) {
+            try {
+                const url = new URL(serverUrl);
+                const hostname = url.hostname;
+                
+                // Find matching config
+                for (const [key, config] of Object.entries(SERVER_CONFIGS)) {
+                    if (hostname.includes(key)) {
+                        return config;
+                    }
+                }
+                
+                // Default config for unknown servers
+                return {
+                    apiPaths: ['/api'],
+                    loginEndpoints: ['/api/admin/token']
+                };
+            } catch (e) {
+                return {
+                    apiPaths: ['/api'],
+                    loginEndpoints: ['/api/admin/token']
+                };
+            }
+        }
+
         // Enhanced Server URL Management
         function getServerUrl() {
             const stored = sessionStorage.getItem(CONFIG.serverUrlKey);
@@ -2925,7 +3226,7 @@
 
         // Enhanced Theme Management
         function initTheme() {
-            const savedTheme = sessionStorage.getItem('toofan_theme');
+            const savedTheme = sessionStorage.getItem('azadi_theme');
             const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
             const theme = savedTheme || (prefersDark ? 'dark' : 'light');
             document.documentElement.setAttribute('data-theme', theme);
@@ -2936,7 +3237,7 @@
         function toggleTheme() {
             const newTheme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
             document.documentElement.setAttribute('data-theme', newTheme);
-            sessionStorage.setItem('toofan_theme', newTheme);
+            sessionStorage.setItem('azadi_theme', newTheme);
             const themeIcon = document.getElementById('themeIcon');
             if (themeIcon) themeIcon.className = newTheme === 'dark' ? 'fas fa-moon' : 'fas fa-sun';
         }
@@ -2946,6 +3247,7 @@
         let serverUrl = '';
         let currentUsername = '';
         let users = [];
+        let testAccounts = []; // Array to store test accounts
         let updateInterval;
         let currentPage = 1;
         let usersPerPage = 20;
@@ -2953,7 +3255,8 @@
         let loginAttempts = 0;
         let sessionFingerprint = '';
         let templateInbounds = []; // Store template user inbounds in a structured way
-        let sectionsLoaded = { dashboard: false, users: false, traffic: false, analytics: false, support: false };
+        let sectionsLoaded = { dashboard: false, users: false, traffic: false, analytics: false, support: false, testAccount: false };
+        let workingApiEndpoints = {}; // Store working endpoints for each server
 
         // Chart instances
         let userStatusChartInstance = null, protocolChartInstance = null, expiryChartInstance = null, dailyTrafficChartInstance = null, userTrafficChartInstance = null;
@@ -3005,6 +3308,15 @@
             showNotification('فرم افزودن کاربر بازنشانی شد! 🔄', 'success');
         }
 
+        function refreshTestAccountSection() {
+            if (!Security.requestLimiter.isAllowed('refresh_test_account')) return showNotification('لطفاً کمی صبر کنید', 'error');
+            showLoading('در حال بروزرسانی اکانت‌های تست...');
+            loadTestAccounts().then(() => {
+                hideLoading();
+                showNotification('بخش اکانت تست بروزرسانی شد! 🔄', 'success');
+            }).catch(() => { hideLoading(); showNotification('خطا در بروزرسانی اکانت‌های تست', 'error'); });
+        }
+
         function refreshTrafficSection() {
             if (!Security.requestLimiter.isAllowed('refresh_traffic')) return showNotification('لطفاً کمی صبر کنید', 'error');
             showLoading('در حال بروزرسانی گزارش ترافیک...');
@@ -3033,61 +3345,6 @@
             showNotification('تنظیمات بروزرسانی شد! 🔄', 'success');
         }
 
-        // Function to load notifications (placeholder for future implementation)
-        function loadNotifications() {
-            const container = document.getElementById('notificationsContent');
-            if (!container) return;
-
-            // Placeholder notifications array (in real implementation, this would come from an API)
-            const notifications = [
-                // Example notification structure:
-                // {
-                //     id: 1,
-                //     type: 'important', // important, success, warning, info
-                //     title: 'اطلاعیه مهم',
-                //     message: 'متن اطلاعیه...',
-                //     date: '1403/08/15',
-                //     isRead: false
-                // }
-            ];
-
-            // Show default message if no notifications
-            if (notifications.length === 0) {
-                container.innerHTML = `
-                    <div class="no-notifications">
-                        <i class="fas fa-bell"></i>
-                        <span>همکاران عزیر به علت بن اکانت ایران فعلا ثبت سفارش نکنید.</span>
-                    </div>
-                `;
-                return;
-            }
-
-            // Render notifications
-            container.innerHTML = '';
-            notifications.forEach(notification => {
-                const notificationEl = document.createElement('div');
-                notificationEl.className = `notification-item ${notification.type}`;
-                notificationEl.innerHTML = `
-                    <div class="notification-header">
-                        <span class="notification-type ${notification.type}">${getNotificationTypeLabel(notification.type)}</span>
-                        <span class="notification-date">${notification.date}</span>
-                    </div>
-                    <div class="notification-text">${Security.sanitizeHtml(notification.message)}</div>
-                `;
-                container.appendChild(notificationEl);
-            });
-        }
-
-        function getNotificationTypeLabel(type) {
-            const labels = {
-                'important': 'مهم',
-                'success': 'موفقیت',
-                'warning': 'هشدار',
-                'info': 'اطلاع'
-            };
-            return labels[type] || 'عادی';
-        }
-
         // Enhanced Initialize Function
         document.addEventListener('DOMContentLoaded', function() {
             try {
@@ -3097,9 +3354,9 @@
                 sessionFingerprint = Security.generateFingerprint();
                 
                 const storedToken = sessionStorage.getItem(CONFIG.tokenKey);
-                const storedUser = sessionStorage.getItem('toofan_username');
-                const loginTime = sessionStorage.getItem('toofan_login_time');
-                const storedFingerprint = sessionStorage.getItem('toofan_fingerprint');
+                const storedUser = sessionStorage.getItem('azadi_username');
+                const loginTime = sessionStorage.getItem('azadi_login_time');
+                const storedFingerprint = sessionStorage.getItem('azadi_fingerprint');
                 
                 if (storedToken && storedUser && loginTime && storedFingerprint) {
                     const sessionAge = Date.now() - parseInt(loginTime);
@@ -3111,7 +3368,6 @@
                             showPanel();
                             checkAndLoadTemplateUser(); // Check for template user
                             loadDashboardData();
-                            loadNotifications(); // Load notifications
                             startAutoUpdate();
                         } else {
                             logout();
@@ -3140,6 +3396,8 @@
             document.getElementById('addUserForm')?.addEventListener('submit', handleAddUser);
             document.getElementById('editUserForm')?.addEventListener('submit', handleEditUser);
             document.getElementById('templateUserForm')?.addEventListener('submit', handleSetTemplateUser);
+            document.getElementById('testAccountForm')?.addEventListener('submit', handleCreateTestAccount);
+            document.getElementById('serverSelect')?.addEventListener('change', handleServerChange);
             
             document.getElementById('username')?.addEventListener('input', () => validateInputStyle('username', 'username'));
             document.getElementById('newUsername')?.addEventListener('input', () => validateInputStyle('newUsername', 'username'));
@@ -3152,13 +3410,47 @@
             inputEl.style.borderColor = (!isValid && inputEl.value.length > 0) ? 'var(--danger-color)' : 'var(--border-color)';
         }
 
-        // Enhanced Authentication
+        function handleServerChange() {
+            const serverSelect = document.getElementById('serverSelect');
+            const customServerGroup = document.getElementById('customServerGroup');
+            const customServerUrl = document.getElementById('customServerUrl');
+            
+            if (serverSelect.value === 'custom') {
+                customServerGroup.classList.remove('hidden');
+                customServerUrl.required = true;
+            } else {
+                customServerGroup.classList.add('hidden');
+                customServerUrl.required = false;
+                customServerUrl.value = '';
+            }
+        }
+
+        // Enhanced Authentication with Smart Endpoint Detection
         async function handleLogin(e) {
             e.preventDefault();
             if (!Security.requestLimiter.isAllowed('login')) return showMessage('loginError', 'تعداد تلاش‌های ورود بیش از حد مجاز');
             
+            const serverSelect = document.getElementById('serverSelect');
+            const customServerUrl = document.getElementById('customServerUrl');
             const username = document.getElementById('username').value.trim();
             const password = document.getElementById('password').value;
+            
+            // Determine server URL
+            let selectedServerUrl;
+            if (serverSelect.value === 'custom') {
+                selectedServerUrl = customServerUrl.value.trim();
+                if (!Security.validateInput(selectedServerUrl, 'url')) {
+                    return showMessage('loginError', 'آدرس سرور دلخواه نامعتبر است');
+                }
+            } else if (serverSelect.value) {
+                selectedServerUrl = serverSelect.value;
+            } else {
+                return showMessage('loginError', 'لطفاً سرور مورد نظر را انتخاب کنید');
+            }
+            
+            // Update global server URL
+            serverUrl = selectedServerUrl;
+            setServerUrl(selectedServerUrl);
             
             if (!Security.validateInput(username, 'username')) return showMessage('loginError', 'نام کاربری نامعتبر است');
             if (!Security.validateInput(password, 'password')) return showMessage('loginError', 'رمز عبور نامعتبر است');
@@ -3169,28 +3461,59 @@
             showLoading('در حال ورود...');
             
             try {
-                const response = await fetch(`${serverUrl}/api/admin/token`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest' },
-                    body: new URLSearchParams({ 'username': username, 'password': password })
-                });
+                const serverConfig = getServerConfig(selectedServerUrl);
+                let successfulEndpoint = null;
+                let response = null;
                 
-                if (response.ok) {
+                // Try all possible login endpoints for this server
+                for (const endpoint of serverConfig.loginEndpoints) {
+                    try {
+                        console.log(`Trying login endpoint: ${selectedServerUrl}${endpoint}`);
+                        
+                        response = await fetch(`${selectedServerUrl}${endpoint}`, {
+                            method: 'POST',
+                            headers: { 
+                                'Content-Type': 'application/x-www-form-urlencoded', 
+                                'X-Requested-With': 'XMLHttpRequest' 
+                            },
+                            body: new URLSearchParams({ 'username': username, 'password': password })
+                        });
+                        
+                        if (response.ok) {
+                            successfulEndpoint = endpoint;
+                            console.log(`Login successful with endpoint: ${endpoint}`);
+                            break;
+                        } else {
+                            console.log(`Login failed with endpoint ${endpoint}: ${response.status}`);
+                        }
+                    } catch (err) {
+                        console.log(`Error with endpoint ${endpoint}:`, err.message);
+                        continue;
+                    }
+                }
+                
+                if (response && response.ok && successfulEndpoint) {
                     const data = await response.json();
                     const encryptedToken = Security.encryptToken(data.access_token);
                     if (encryptedToken) {
                         authToken = data.access_token;
                         currentUsername = username;
+                        
+                        // Store working API base path (remove /admin/token or /token from the endpoint)
+                        const apiBasePath = successfulEndpoint.replace(/\/(admin\/)?token$/, '');
+                        workingApiEndpoints[selectedServerUrl] = apiBasePath || '/api';
+                        sessionStorage.setItem('server_api_base', workingApiEndpoints[selectedServerUrl]);
+                        
                         sessionStorage.setItem(CONFIG.tokenKey, encryptedToken);
-                        sessionStorage.setItem('toofan_username', currentUsername);
-                        sessionStorage.setItem('toofan_login_time', Date.now().toString());
-                        sessionStorage.setItem('toofan_fingerprint', sessionFingerprint);
+                        sessionStorage.setItem('azadi_username', currentUsername);
+                        sessionStorage.setItem('azadi_login_time', Date.now().toString());
+                        sessionStorage.setItem('azadi_fingerprint', sessionFingerprint);
+                        
                         loginAttempts = 0;
                         document.getElementById('loginForm').reset();
                         showPanel();
                         checkAndLoadTemplateUser(); // Check for template user after login
                         loadDashboardData();
-                        loadNotifications(); // Load notifications after login
                         startAutoUpdate();
                         showNotification('ورود موفقیت‌آمیز بود! 🎉', 'success');
                     } else {
@@ -3199,7 +3522,7 @@
                 } else {
                     loginAttempts++;
                     const remaining = CONFIG.maxLoginAttempts - loginAttempts;
-                    showMessage('loginError', `اطلاعات ورود نامعتبر است ${remaining > 0 ? `(${remaining} تلاش باقی مانده)` : ''}`);
+                    showMessage('loginError', `اطلاعات ورود نامعتبر است یا سرور در دسترس نیست ${remaining > 0 ? `(${remaining} تلاش باقی مانده)` : ''}`);
                 }
             } catch (error) {
                 console.error('Login failed:', error);
@@ -3210,7 +3533,7 @@
             hideLoading();
         }
 
-        // --- TEMPLATE USER LOGIC (NEW & FIXED) ---
+        // --- TEMPLATE USER LOGIC ---
         function checkAndLoadTemplateUser() {
             const templateUsername = sessionStorage.getItem(CONFIG.templateUserKey);
             if (templateUsername && Security.validateInput(templateUsername, 'username')) {
@@ -3342,7 +3665,6 @@
             }
             setLoadingState('templateUserForm', 'templateUserBtnText', 'templateUserSpinner', false);
         }
-        // --- END OF TEMPLATE USER LOGIC ---
 
         function logout() {
             Object.keys(sessionStorage).forEach(key => sessionStorage.removeItem(key));
@@ -3350,7 +3672,9 @@
             authToken = '';
             currentUsername = '';
             templateInbounds = [];
-            sectionsLoaded = { dashboard: false, users: false, traffic: false, analytics: false, support: false };
+            testAccounts = [];
+            workingApiEndpoints = {};
+            sectionsLoaded = { dashboard: false, users: false, traffic: false, analytics: false, support: false, testAccount: false };
             document.querySelectorAll('form').forEach(form => form.reset());
             document.getElementById('panelSection').classList.add('hidden');
             document.getElementById('loginSection').classList.remove('hidden');
@@ -3387,6 +3711,7 @@
                     'dashboard': loadDashboardData,
                     'analytics': loadAnalytics,
                     'traffic': loadTrafficData,
+                    'testAccount': loadTestAccounts
                 }[sectionName];
                 
                 if (loadFunction) {
@@ -3401,6 +3726,7 @@
             document.getElementById('mobileOverlay')?.classList.toggle('active');
         }
 
+        // Enhanced API Call with Smart Endpoint Detection
         async function apiCall(endpoint, method = 'GET', data = null) {
             if (!authToken) { logout(); return null; }
             if (!Security.requestLimiter.isAllowed('api_call')) { showNotification('درخواست‌های بیش از حد', 'error'); return null; }
@@ -3412,13 +3738,50 @@
             if (data && method !== 'GET') options.body = JSON.stringify(data);
             
             try {
-                const response = await fetch(`${serverUrl}/api${endpoint}`, options);
-                if (response.status === 401) { logout(); showNotification('جلسه منقضی شده است', 'error'); return null; }
-                if (!response.ok) {
-                    console.error('API call failed:', response.status, await response.text());
-                    return null;
+                const serverConfig = getServerConfig(serverUrl);
+                let successfulResponse = null;
+                
+                // Try stored working endpoint first
+                let tryPaths = [];
+                if (workingApiEndpoints[serverUrl]) {
+                    tryPaths.push(workingApiEndpoints[serverUrl]);
                 }
-                return response.json();
+                
+                // Add all possible paths as fallback
+                tryPaths.push(...serverConfig.apiPaths.filter(path => path !== workingApiEndpoints[serverUrl]));
+                
+                for (const apiPath of tryPaths) {
+                    try {
+                        const fullUrl = `${serverUrl}${apiPath}${endpoint}`;
+                        console.log(`Trying API call: ${fullUrl}`);
+                        
+                        const response = await fetch(fullUrl, options);
+                        
+                        if (response.status === 401) { 
+                            logout(); 
+                            showNotification('جلسه منقضی شده است', 'error'); 
+                            return null; 
+                        }
+                        
+                        if (response.ok) {
+                            // Store working endpoint for future use
+                            workingApiEndpoints[serverUrl] = apiPath;
+                            sessionStorage.setItem('server_api_base', apiPath);
+                            console.log(`API call successful with path: ${apiPath}`);
+                            return response.json();
+                        } else {
+                            console.log(`API call failed with path ${apiPath}: ${response.status}`);
+                        }
+                    } catch (err) {
+                        console.log(`Error with API path ${apiPath}:`, err.message);
+                        continue;
+                    }
+                }
+                
+                // If all attempts failed
+                console.error('All API endpoints failed');
+                return null;
+                
             } catch (error) {
                 console.error('API Error:', error);
                 return null;
@@ -3701,7 +4064,7 @@
                 }
             } catch (error) {
                 console.error('Add user failed:', error);
-                showMessage('addUserError', 'خطای غیرمنتظره رخ داد.');
+                showMessage('addUserError', '');
             }
 
             setLoadingState('addUserForm', 'addUserBtnText', 'addUserSpinner', false);
@@ -3740,6 +4103,204 @@
                 container.innerHTML = `<p style="text-align: center; color: var(--warning-color); padding: 20px;">کانفیگ‌ها هنوز آماده نیستند. لطفاً از بخش "کاربران" بررسی کنید.</p>`;
             }
             document.getElementById('userCreationResult').classList.remove('hidden');
+        }
+
+        // TEST ACCOUNT FUNCTIONS
+        function generateTestAccountUsername() {
+            const timestamp = Date.now().toString().slice(-6);
+            const randomStr = Math.random().toString(36).substring(2, 5);
+            return `test_${randomStr}_${timestamp}`;
+        }
+
+        async function handleCreateTestAccount(e) {
+            e.preventDefault();
+            if (!Security.requestLimiter.isAllowed('create_test_account')) return showMessage('testAccountError', 'لطفاً کمی صبر کنید');
+            
+            if (templateInbounds.length === 0) {
+                return showMessage('testAccountError', 'هیچ اینباند الگویی تنظیم نشده است. لطفاً از بخش تنظیمات یک کاربر الگو انتخاب کنید.');
+            }
+
+            setLoadingState('testAccountForm', 'testAccountBtnText', 'testAccountSpinner', true);
+            hideMessage('testAccountError');
+            hideMessage('testAccountSuccess');
+            document.getElementById('testAccountResult').classList.add('hidden');
+            showLoading('در حال ایجاد اکانت تست...');
+
+            const username = generateTestAccountUsername();
+            const expireDate = new Date();
+            expireDate.setDate(expireDate.getDate() + 1); // 1 day from now
+
+            // Format inbounds and proxies for the API (1GB = 1024*1024*1024 bytes)
+            const inboundsForAPI = {};
+            const proxiesForAPI = {};
+            templateInbounds.forEach(inbound => {
+                if (!inboundsForAPI[inbound.protocol]) inboundsForAPI[inbound.protocol] = [];
+                inboundsForAPI[inbound.protocol].push(inbound.tag);
+                if (!proxiesForAPI[inbound.protocol]) proxiesForAPI[inbound.protocol] = {};
+            });
+
+            const userData = {
+                username,
+                proxies: proxiesForAPI,
+                inbounds: inboundsForAPI,
+                expire: Math.floor(expireDate.getTime() / 1000),
+                data_limit: 1024 * 1024 * 1024, // 1GB
+            };
+
+            try {
+                const result = await apiCall('/user', 'POST', userData);
+                if (result) {
+                    // Add to local test accounts array
+                    testAccounts.push({
+                        username,
+                        created: Date.now(),
+                        expire: userData.expire,
+                        data_limit: userData.data_limit,
+                        used_traffic: 0,
+                        status: 'active'
+                    });
+
+                    showMessage('testAccountSuccess', `اکانت تست ${Security.sanitizeHtml(username)} با موفقیت ایجاد شد.`);
+                    await showTestAccountConfigs(username);
+                    await loadTestAccounts(); // Refresh test accounts
+                    await loadUsers(); // Refresh main users list
+                } else {
+                    showMessage('testAccountError', 'خطا در ایجاد اکانت تست. ممکن است مشکلی در سرور وجود داشته باشد.');
+                }
+            } catch (error) {
+                console.error('Create test account failed:', error);
+                showMessage('testAccountError', '');
+            }
+
+            setLoadingState('testAccountForm', 'testAccountBtnText', 'testAccountSpinner', false);
+            hideLoading();
+        }
+
+        async function showTestAccountConfigs(username) {
+            await new Promise(resolve => setTimeout(resolve, 1500)); // Wait for creation to settle
+            const userData = await apiCall(`/user/${encodeURIComponent(username)}`);
+            const container = document.getElementById('testAccountConfigs');
+            if (!container) return;
+            container.innerHTML = '';
+
+            if (userData && userData.links && userData.links.length > 0) {
+                if (userData.subscription_url) {
+                    container.innerHTML += `
+                        <div class="config-display">
+                            <div class="config-info">
+                                <strong><i class="fas fa-link"></i> لینک سابسکریپشن:</strong>
+                                <button onclick="copyText('${Security.sanitizeHtml(userData.subscription_url)}')" class="form-button success"><i class="fas fa-copy"></i> کپی</button>
+                            </div>
+                            <div class="config-text">${Security.sanitizeHtml(userData.subscription_url)}</div>
+                        </div>`;
+                }
+                userData.links.forEach((link, index) => {
+                    container.innerHTML += `
+                        <div class="config-display">
+                            <div class="config-info">
+                                <strong><i class="fas fa-cog"></i> کانفیگ #${index + 1}:</strong>
+                                <button onclick="copyText('${Security.sanitizeHtml(link)}')" class="form-button success"><i class="fas fa-copy"></i> کپی</button>
+                            </div>
+                            <div class="config-text">${Security.sanitizeHtml(link)}</div>
+                        </div>`;
+                });
+            } else {
+                container.innerHTML = `<p style="text-align: center; color: var(--warning-color); padding: 20px;">کانفیگ‌ها هنوز آماده نیستند. لطفاً کمی صبر کنید.</p>`;
+            }
+            document.getElementById('testAccountResult').classList.remove('hidden');
+        }
+
+        async function loadTestAccounts() {
+            const usersData = await apiCall('/users');
+            if (usersData && usersData.users) {
+                // Filter test accounts (usernames starting with "test_")
+                testAccounts = usersData.users.filter(user => user.username.startsWith('test_'));
+                updateTestAccountStats(testAccounts);
+                renderTestAccountsList(testAccounts);
+            } else {
+                document.getElementById('testAccountsList').innerHTML = `<p style="text-align: center; color: var(--danger-color); padding: 40px;">خطا در بارگذاری اکانت‌های تست</p>`;
+            }
+        }
+
+        function updateTestAccountStats(testAccounts) {
+            const total = testAccounts.length;
+            const active = testAccounts.filter(u => getUserStatus(u) === 'فعال').length;
+            const expired = testAccounts.filter(u => u.expire && new Date(u.expire * 1000) < new Date()).length;
+            const totalTrafficUsed = testAccounts.reduce((sum, u) => sum + (u.used_traffic || 0), 0);
+
+            Security.safeSetContent(document.getElementById('totalTestAccounts'), total);
+            Security.safeSetContent(document.getElementById('activeTestAccounts'), active);
+            Security.safeSetContent(document.getElementById('expiredTestAccounts'), expired);
+            Security.safeSetContent(document.getElementById('testTrafficUsed'), formatBytes(totalTrafficUsed));
+        }
+
+        function renderTestAccountsList(testAccounts) {
+            const container = document.getElementById('testAccountsList');
+            if (!container) return;
+
+            if (testAccounts.length === 0) {
+                container.innerHTML = `<p style="text-align: center; color: var(--text-muted); padding: 60px;">هنوز هیچ اکانت تستی ایجاد نشده است</p>`;
+                return;
+            }
+
+            const table = document.createElement('table');
+            table.className = 'data-table';
+            table.innerHTML = `<thead><tr>
+                <th><i class="fas fa-user"></i> نام کاربری</th>
+                <th><i class="fas fa-info-circle"></i> وضعیت</th>
+                <th><i class="fas fa-download"></i> ترافیک</th>
+                <th><i class="fas fa-calendar"></i> انقضا</th>
+                <th><i class="fas fa-tools"></i> عملیات</th>
+            </tr></thead>`;
+
+            const tbody = document.createElement('tbody');
+            testAccounts.forEach(user => {
+                const status = getUserStatus(user);
+                const statusClass = { 'فعال': 'status-active', 'منقضی شده': 'status-expired', 'ترافیک تمام شده': 'status-limited', 'غیرفعال': 'status-inactive' }[status];
+                const progressPercent = user.data_limit ? Math.min(((user.used_traffic || 0) / user.data_limit) * 100, 100) : 0;
+                const timeRemaining = user.expire ? Math.max(0, Math.ceil((new Date(user.expire * 1000) - new Date()) / (1000 * 60 * 60))) : 0;
+                
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td style="font-weight: 600; color: var(--text-primary);">${Security.sanitizeHtml(user.username)}</td>
+                    <td><span class="status-badge ${statusClass}">${status}</span></td>
+                    <td>
+                        <div>${formatBytes(user.used_traffic || 0)} / ${formatBytes(user.data_limit || 0)}</div>
+                        <div class="progress-bar"><div class="progress-fill" style="width: ${progressPercent}%;"></div></div>
+                    </td>
+                    <td style="color: var(--text-secondary);">
+                        ${user.expire ? new Date(user.expire * 1000).toLocaleDateString('fa-IR') : 'نامحدود'}
+                        ${timeRemaining > 0 ? `<br><small style="color: var(--text-muted);">${timeRemaining} ساعت باقی مانده</small>` : ''}
+                    </td>
+                    <td>
+                        <button class="form-button info" title="مشاهده کانفیگ‌ها" onclick="showUserConfigs('${user.username}')"><i class="fas fa-cog"></i></button>
+                        <button class="form-button danger" title="حذف اکانت تست" onclick="deleteTestAccount('${user.username}')"><i class="fas fa-trash"></i></button>
+                    </td>`;
+                tbody.appendChild(row);
+            });
+            table.appendChild(tbody);
+            container.innerHTML = '';
+            container.appendChild(table);
+        }
+
+        async function deleteTestAccount(username) {
+            if (!confirm(`آیا از حذف اکانت تست "${username}" اطمینان دارید؟`)) return;
+            
+            if (!Security.requestLimiter.isAllowed('delete_test_account')) return showNotification('لطفاً کمی صبر کنید', 'error');
+            
+            showLoading('در حال حذف اکانت تست...');
+            const result = await apiCall(`/user/${encodeURIComponent(username)}`, 'DELETE');
+            hideLoading();
+            
+            if (result) {
+                // Remove from local array
+                testAccounts = testAccounts.filter(u => u.username !== username);
+                showNotification(`اکانت تست ${Security.sanitizeHtml(username)} حذف شد`, 'success');
+                await loadTestAccounts();
+                await loadUsers(); // Refresh main users list
+            } else {
+                showNotification('خطا در حذف اکانت تست', 'error');
+            }
         }
         
         function editUser(username) {
@@ -3836,8 +4397,8 @@
         function saveSettings() {
             const defaultDataLimit = document.getElementById('defaultDataLimit').value;
             const defaultDuration = document.getElementById('defaultDuration').value;
-            sessionStorage.setItem('toofan_default_data_limit', defaultDataLimit);
-            sessionStorage.setItem('toofan_default_duration', defaultDuration);
+            sessionStorage.setItem('azadi_default_data_limit', defaultDataLimit);
+            sessionStorage.setItem('azadi_default_duration', defaultDuration);
             showNotification('تنظیمات با موفقیت ذخیره شد ✅', 'success');
         }
 
@@ -3887,7 +4448,7 @@
         }
         
         // ====================================================================
-        // ======================= NEW IMPLEMENTATION =======================
+        // ======================= TRAFFIC & ANALYTICS SECTIONS =============
         // ====================================================================
 
         async function loadTrafficData() {
@@ -3915,7 +4476,7 @@
                     <div class="traffic-card">
                         <div class="traffic-icon"><i class="fas fa-cloud-upload-alt"></i></div>
                         <div class="traffic-number" id="totalUpload">0 GB</div>
-                        <div class="traffic-label">کل آپلود)</div>
+                        <div class="traffic-label">کل آپلود</div>
                     </div>
                     <div class="traffic-card">
                         <div class="traffic-icon"><i class="fas fa-exchange-alt"></i></div>
@@ -4173,11 +4734,11 @@
             });
         }
 
-        // ======================= END OF NEW IMPLEMENTATION =======================
+        // ======================= END OF IMPLEMENTATION =======================
 
         window.addEventListener('error', (e) => {
             console.error('Application error:', e.error);
-            showNotification('خطای غیرمنتظره رخ داد', 'error');
+            showNotification('', 'error');
         });
         window.addEventListener('unhandledrejection', (e) => {
             console.error('Unhandled promise rejection:', e.reason);
